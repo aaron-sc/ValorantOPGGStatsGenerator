@@ -1,0 +1,16 @@
+{
+"Childish Tengino#1923",
+"HYPERHYPRR#0330",
+"Octuplii#7125",
+"catfish#garb",
+"august8#HAEIN"
+"Childish Tengino#1923": {
+"riot_id": "Childish Tengino#1923",
+"HYPERHYPRR#0330": {
+"riot_id": "HYPERHYPRR#0330",
+"Octuplii#7125": {
+"riot_id": "Octuplii#7125",
+"catfish#garb": {
+"riot_id": "catfish#garb",
+"august8#HAEIN": {
+"riot_id": "august8#HAEIN",

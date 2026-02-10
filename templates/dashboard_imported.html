@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Imported Dashboard · Valorant Tracker{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h1 class="section-title">{{ title or "Imported Dashboard" }}</h1>
+  <div class="subtle">Shared scouting comparison · Created: <span class="kbd">{{ created_ts }}</span></div>
+</div>
+
+<div class="row wrap" style="justify-content:space-between; gap:12px; margin-bottom:12px;">
+  <form method="get" action="{{ url_for('dashboard_view_imported', dash_id=dash_id) }}" class="row wrap" style="gap:10px;">
+    <span class="pill pill-mid">Season</span>
+    <select name="seasonId" onchange="this.form.submit()">
+      {% for label, sid in seasons.items() %}
+        <option value="{{ sid }}" {% if sid == season_id %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </form>
+
+  <div class="row" style="gap:10px;">
+    <a class="btn ghost" href="{{ url_for('dashboard') }}">Back</a>
+    <form method="post" action="{{ url_for('dashboard_delete', dash_id=dash_id) }}" style="margin:0;"
+          onsubmit="return confirm('Delete this imported dashboard?');">
+      <button class="btn danger" type="submit">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">{{ A.team_name }}</h2>
+      <span class="pill pill-good">{{ A.map_rows|length }} maps</span>
+    </div>
+
+    {% if A.map_rows and A.map_rows|length %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th align="left">Map</th>
+              <th>Games</th>
+              <th>Win%</th>
+              <th>KD</th>
+              <th>DMG/R</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in A.map_rows %}
+              <tr>
+                <td class="left strong">{{ r.get('map','') }}</td>
+                <td>{{ r.get('games',0) }}</td>
+                <td>{{ "%.1f"|format(r.get('win_rate_pct',0.0)) }}%</td>
+                <td>{{ "%.2f"|format(r.get('kd',0.0)) }}</td>
+                <td>{{ "%.0f"|format(r.get('dmg_round',0.0)) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="muted">No map data for this season.</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">{{ B.team_name }}</h2>
+      <span class="pill pill-good">{{ B.map_rows|length }} maps</span>
+    </div>
+
+    {% if B.map_rows and B.map_rows|length %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th align="left">Map</th>
+              <th>Games</th>
+              <th>Win%</th>
+              <th>KD</th>
+              <th>DMG/R</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in B.map_rows %}
+              <tr>
+                <td class="left strong">{{ r.get('map','') }}</td>
+                <td>{{ r.get('games',0) }}</td>
+                <td>{{ "%.1f"|format(r.get('win_rate_pct',0.0)) }}%</td>
+                <td>{{ "%.2f"|format(r.get('kd',0.0)) }}</td>
+                <td>{{ "%.0f"|format(r.get('dmg_round',0.0)) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="muted">No map data for this season.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

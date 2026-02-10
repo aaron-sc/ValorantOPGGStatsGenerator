@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}{{ riot_id }} · Player{% endblock %}
+
+{% block content %}
+  <div class="section-head">
+    <div>
+      <h1 class="section-title">{{ riot_id }}</h1>
+      <div class="subtle">
+        {{ team_name }} · Season: <span class="kbd">{{ season_id }}</span>
+        {% if snapshot_updated_ts %} · Updated: <span class="kbd">{{ snapshot_updated_ts }}</span>{% endif %}
+      </div>
+    </div>
+
+    <div class="row wrap" style="justify-content:flex-end; gap:10px;">
+      <form method="get" class="row wrap" style="gap:10px;">
+        <span class="badge">Season</span>
+        <select name="seasonId" onchange="this.form.submit()">
+          {% for label, sid in seasons.items() %}
+            <option value="{{ sid }}" {% if sid == season_id %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
+      <a class="btn ghost" href="{{ url_for('team_view', team_key=team_key, seasonId=season_id) }}">Back</a>
+      {% if profile_url %}<a class="btn secondary" href="{{ profile_url }}" target="_blank">Profile</a>{% endif %}
+      {% if agents_url %}<a class="btn secondary" href="{{ agents_url }}" target="_blank">Agents</a>{% endif %}
+      {% if maps_url %}<a class="btn secondary" href="{{ maps_url }}" target="_blank">Maps</a>{% endif %}
+    </div>
+  </div>
+
+  {% set top = (profile_stats.get('stats_card') or {}).get('top', []) if profile_stats else [] %}
+  {% set breakdown = (profile_stats.get('stats_card') or {}).get('breakdown', []) if profile_stats else [] %}
+  {% set roles = profile_stats.get('roles_card', []) if profile_stats else [] %}
+
+  <div class="grid two">
+    <div class="card">
+      <div class="card-title">
+        <h2 class="h2">Stats</h2>
+        {% if profile_stats and profile_stats.get('note') %}
+          <span class="pill pill-mid">Partial</span>
+        {% endif %}
+      </div>
+
+      {% if top %}
+        <div class="metrics-grid">
+          {% for item in top %}
+            <div class="metric-tile">
+              <div class="muted small clamp-1">{{ item.label }}</div>
+              <div class="strong clamp-1">{{ item.value }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="muted">No stats found.</div>
+      {% endif %}
+
+      {% if breakdown %}
+        <hr class="hr">
+        <div class="metrics-grid">
+          {% for item in breakdown %}
+            <div class="metric-tile">
+              <div class="muted small clamp-1">{{ item.label }}</div>
+              <div class="strong clamp-1">{{ item.value }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="card ">
+      <div class="card-title">
+        <h2 class="h2">Roles</h2>
+        <span class="pill pill-mid">{{ roles|length }} roles</span>
+      </div>
+
+      {% if roles %}
+        <div class="card ">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="left">Role</th>
+                <th class="center">KDA</th>
+                <th class="center">K / D / A</th>
+                <th class="center">W / L</th>
+                <th class="right">Win%</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in roles %}
+                <tr>
+                  <td class="left strong">{{ r.role }}</td>
+                  <td class="center">
+                    <span class="pill {% if r.kda and (r.kda|replace(':1','')|float) >= 1.2 %}pill-good{% else %}pill-mid{% endif %}">
+                      {{ r.kda if r.kda else "—" }}
+                    </span>
+                  </td>
+                  <td class="center subtle">
+                    {% if r.kills is not none %}{{ r.kills }} / {{ r.deaths }} / {{ r.assists }}{% else %}—{% endif %}
+                  </td>
+                  <td class="center subtle">
+                    {% if r.wins is not none %}{{ r.wins }}W / {{ r.losses }}L{% else %}—{% endif %}
+                  </td>
+                  <td class="right">
+                    <span class="pill pill-mid">{{ r.win_rate if r.win_rate else "—" }}</span>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="muted">No role data found.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="grid two" style="margin-top:14px;">
+    <div class="card">
+      <div class="card-title">
+        <h2 class="h2">Agent Pool</h2>
+        <span class="pill pill-mid">{{ agents|length if agents else 0 }} agents</span>
+      </div>
+
+      {% if agents and agents|length %}
+        <div class="card player-stats">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="left">Agent</th>
+                <th class="center">Matches</th>
+                <th class="center">Win%</th>
+                <th class="center">KDA</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in agents %}
+                <tr>
+                  <td class="left strong">{{ a.agent }}</td>
+                  <td class="center">{{ a.matches }}</td>
+                  <td class="center">
+                    <span class="pill {% if a.win_rate_pct >= 55 %}pill-good{% elif a.win_rate_pct <= 45 %}pill-bad{% else %}pill-mid{% endif %}">
+                      {{ "%.1f"|format(a.win_rate_pct) }}%
+                    </span>
+                  </td>
+                  <td class="center"><span>{{ a.kda if a.kda else "—" }}</span></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="muted">No agent data found.</div>
+      {% endif %}
+    </div>
+
+    <div class="card map-card ">
+      <div class="card-title">
+        <h2 class="h2">Maps</h2>
+        <span class="pill pill-mid">{{ maps|length if maps else 0 }} maps</span>
+      </div>
+
+      {% if maps and maps|length %}
+        <div class="card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="left">Map</th>
+                <th class="center">Games</th>
+                <th class="center">Win%</th>
+                <th class="center">W</th>
+                <th class="center">L</th>
+                <th class="center">KD</th>
+                <th class="center">K/R</th>
+                <th class="center">DMG/R</th>
+                <th class="right">Score/R</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for m in maps %}
+                <tr>
+                  <td class="left strong">{{ m.map }}</td>
+                  <td class="center">{{ (m.wins + m.losses) }}</td>
+                  <td class="center">
+                    <span class="pill {% if m.win_rate_pct >= 55 %}pill-good{% elif m.win_rate_pct <= 45 %}pill-bad{% else %}pill-mid{% endif %}">
+                      {{ "%.1f"|format(m.win_rate_pct) }}%
+                    </span>
+                  </td>
+                  <td class="center pos">{{ m.wins }}</td>
+                  <td class="center neg">{{ m.losses }}</td>
+                  <td class="center">{{ "%.2f"|format(m.kd) }}</td>
+                  <td class="center">{{ "%.2f"|format(m.kill_round) }}</td>
+                  <td class="center">{{ "%.1f"|format(m.dmg_round) }}</td>
+                  <td class="right">{{ "%.1f"|format(m.score_round) }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="muted">No map data found.</div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}Home · Valorant Dashboard{% endblock %}
+
+{% block content %}
+<div class="grid two">
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Create Snapshot (Scrape OP.GG)</h2>
+      <span class="badge blue">.txt team file</span>
+    </div>
+
+    <div class="muted">
+      Format (first line = team name):
+      <div class="mono-block">
+        Cyber SEN<br>
+        gigaberry#giga<br>
+        Jer#casey
+      </div>
+    </div>
+
+    <hr class="hr"/>
+
+    <!-- NOTE: no action="/upload" and no onclick -->
+    <form id="snapshotForm" enctype="multipart/form-data" class="row wrap">
+      <input id="snapshotFile" class="file" type="file" name="file" accept=".txt" required />
+      <button class="btn success" type="submit">
+        Upload & Build Snapshot
+      </button>
+    </form>
+
+    <div class="muted" style="margin-top:10px;">
+      This builds ALL players × ALL seasons once, saved server-side as JSON.
+    </div>
+
+    <hr class="hr"/>
+
+    <div class="card-title" style="margin-top:6px;">
+      <h2 class="h2">Import Snapshot</h2>
+      <span class="badge green">.json or .zip</span>
+    </div>
+
+    <form method="post" action="/import" enctype="multipart/form-data" class="row wrap" style="margin-top:10px;">
+      <input class="file" type="file" name="file" accept=".json" />
+      <button class="btn secondary" type="submit">Import .json</button>
+    </form>
+
+    <form method="post" action="/import-zip" enctype="multipart/form-data" class="row wrap" style="margin-top:10px;">
+      <input class="file" type="file" name="file" accept=".zip" />
+      <button class="btn secondary" type="submit">Import .zip</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Saved Teams</h2>
+      <span class="badge green">{{ teams|length }} stored</span>
+    </div>
+
+    <form method="get" action="/" class="row wrap" style="margin-bottom:12px;">
+      <input class="search" type="text" name="q" value="{{ q }}" placeholder="Search team name or key...">
+      <button class="btn secondary" type="submit">Search</button>
+      {% if q %}
+        <a class="btn ghost" href="{{ url_for('index') }}">Clear</a>
+      {% endif %}
+    </form>
+
+    {% if teams %}
+      <div class="list">
+        {% for t in teams %}
+          <div class="list-row">
+            <div class="list-main">
+              <div class="strong clamp-1">{{ t.team_name }}</div>
+              <div class="muted small clamp-1"><span class="kbd">{{ t.team_key }}</span></div>
+              <div class="muted small">
+                {% if t.players %}{{ t.players|length }} players{% else %}{{ t.players_count }} players{% endif %}
+              </div>
+            </div>
+
+            <div class="list-actions">
+              <a class="btn secondary" href="{{ url_for('team_view', team_key=t.team_key, seasonId=default_season) }}">
+                Open
+              </a>
+
+              <form method="post"
+                    action="{{ url_for('team_delete', team_key=t.team_key) }}"
+                    onsubmit="return confirm('Delete snapshot for {{ t.team_name }}? This cannot be undone.');"
+                    style="margin:0;">
+                <button class="btn danger" type="submit" title="Delete snapshot">🗑</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="muted">No snapshots yet — upload a team file or import a snapshot.</div>
+    {% endif %}
+
+    <div class="row" style="margin-top:12px; justify-content:space-between;">
+      <div class="muted">Share snapshots with teammates:</div>
+      <a class="btn secondary" href="{{ url_for('export_zip') }}">Download .zip</a>
+    </div>
+  </div>
+</div>
+<div class="row wrap" style="gap:10px; margin-top:12px;">
+  <a class="btn secondary" href="{{ url_for('compare_picker') }}">Compare Teams</a>
+  <a class="btn secondary" href="{{ url_for('dashboard') }}">Dashboards</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const form = document.getElementById("snapshotForm");
+  const fileInput = document.getElementById("snapshotFile");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!fileInput.files || fileInput.files.length === 0) return;
+
+    showProgress();
+    updateProgress(2, "Uploading team file…");
+
+    const fd = new FormData();
+    fd.append("file", fileInput.files[0]);
+
+    let resp;
+    try {
+      resp = await fetch("/upload_async", { method: "POST", body: fd });
+    } catch (err) {
+      hideProgress();
+      alert("Upload failed: " + err);
+      return;
+    }
+
+    if (!resp.ok) {
+      hideProgress();
+      alert("Upload failed: " + await resp.text());
+      return;
+    }
+
+    const data = await resp.json();
+    const taskId = data.task_id;
+
+    updateProgress(8, "Starting scraper…");
+
+    const evt = new EventSource(`/progress/${taskId}`);
+
+    evt.onmessage = (ev) => {
+      try {
+        const payload = JSON.parse(ev.data);
+        updateProgress(payload.pct ?? 0, payload.msg ?? "Working…");
+
+        if (payload.done) {
+          evt.close();
+          updateProgress(100, "Done! Redirecting…");
+          setTimeout(() => {
+            window.location.href = payload.redirect || data.redirect || "/";
+          }, 600);
+        }
+      } catch (e) {}
+    };
+
+    evt.onerror = () => {
+      evt.close();
+      hideProgress();
+      alert("Lost progress connection. Try refreshing.");
+    };
+  });
+</script>
+{% endblock %}

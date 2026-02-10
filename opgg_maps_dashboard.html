@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OP.GG Valorant Maps Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f1a;
+      --card: #121a2b;
+      --text: #e9eefc;
+      --muted: #a8b3cf;
+      --border: rgba(255,255,255,0.08);
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 0%, #1a2450 0%, transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, #2a124b 0%, transparent 55%),
+                  var(--bg);
+      color: var(--text);
+    }
+    .wrap { max-width: 1100px; margin: 28px auto; padding: 0 16px; }
+    header {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    h1 { font-size: 22px; margin: 0; }
+    .sub { color: var(--muted); font-size: 13px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    .card {
+      background: rgba(18,26,43,0.85);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 14px 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    canvas { width: 100% !important; height: 280px !important; }
+    .table-card { overflow: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    th {
+      position: sticky; top: 0;
+      background: rgba(18,26,43,0.95);
+      color: var(--muted);
+      font-weight: 600;
+    }
+    td.map, th.map { text-align: left; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    .pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>OP.GG Valorant — Maps Stats</h1>
+        <div class="sub">Source: https://op.gg/valorant/profile/%20gigaberry-giga/maps</div>
+      </div>
+      <div class="pill">Generated locally from scraped page HTML</div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Win Rate (%)</h2>
+        <canvas id="winrate"></canvas>
+      </div>
+      <div class="card">
+        <h2>Damage / Round</h2>
+        <canvas id="dmg"></canvas>
+      </div>
+      <div class="card">
+        <h2>Score / Round</h2>
+        <canvas id="score"></canvas>
+      </div>
+      <div class="card">
+        <h2>K/D and Kill / Round</h2>
+        <canvas id="kdkr"></canvas>
+      </div>
+    </div>
+
+    <div class="card table-card" style="margin-top: 12px;">
+      <h2>All Maps (table)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th class="map">Map</th>
+            <th>Win rate</th>
+            <th>Win</th>
+            <th>Lose</th>
+            <th>K/D</th>
+            <th>Kill/Round</th>
+            <th>Dmg/Round</th>
+            <th>Score/Round</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+          <td class="map">Corrode</td>
+          <td>43%</td>
+          <td>3</td>
+          <td>4</td>
+          <td>1.05</td>
+          <td>0.74</td>
+          <td>137</td>
+          <td>201</td>
+        </tr>
+<tr>
+          <td class="map">Pearl</td>
+          <td>38%</td>
+          <td>3</td>
+          <td>5</td>
+          <td>1.12</td>
+          <td>0.78</td>
+          <td>146</td>
+          <td>223</td>
+        </tr>
+<tr>
+          <td class="map">Haven</td>
+          <td>100%</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0.73</td>
+          <td>0.48</td>
+          <td>126</td>
+          <td>164</td>
+        </tr>
+<tr>
+          <td class="map">Bind</td>
+          <td>50%</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1.17</td>
+          <td>0.80</td>
+          <td>144</td>
+          <td>212</td>
+        </tr>
+<tr>
+          <td class="map">Breeze</td>
+          <td>17%</td>
+          <td>1</td>
+          <td>5</td>
+          <td>0.86</td>
+          <td>0.62</td>
+          <td>119</td>
+          <td>177</td>
+        </tr>
+<tr>
+          <td class="map">Split</td>
+          <td>0%</td>
+          <td>0</td>
+          <td>2</td>
+          <td>0.8</td>
+          <td>0.67</td>
+          <td>116</td>
+          <td>181</td>
+        </tr>
+<tr>
+          <td class="map">Abyss</td>
+          <td>0%</td>
+          <td>0</td>
+          <td>3</td>
+          <td>1.4</td>
+          <td>1.04</td>
+          <td>190</td>
+          <td>285</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+  const payload = {"labels": ["Corrode", "Pearl", "Haven", "Bind", "Breeze", "Split", "Abyss"], "win_rate": [43.0, 38.0, 100.0, 50.0, 17.0, 0.0, 0.0], "dmg_round": [137.0, 146.0, 126.0, 144.0, 119.0, 116.0, 190.0], "score_round": [201.0, 223.0, 164.0, 212.0, 177.0, 181.0, 285.0], "kd": [1.05, 1.12, 0.73, 1.17, 0.86, 0.8, 1.4], "kill_round": [0.74, 0.78, 0.48, 0.8, 0.62, 0.67, 1.04], "raw": [{"map": "Corrode", "win_rate_pct": 43.0, "wins": 3, "losses": 4, "kd": 1.05, "kill_round": 0.74, "dmg_round": 137.0, "score_round": 201.0, "win_rate_raw": "43%", "wins_raw": "3", "losses_raw": "4", "kd_raw": "1.05", "kill_round_raw": "0.74", "dmg_round_raw": "137", "score_round_raw": "201"}, {"map": "Pearl", "win_rate_pct": 38.0, "wins": 3, "losses": 5, "kd": 1.12, "kill_round": 0.78, "dmg_round": 146.0, "score_round": 223.0, "win_rate_raw": "38%", "wins_raw": "3", "losses_raw": "5", "kd_raw": "1.12", "kill_round_raw": "0.78", "dmg_round_raw": "146", "score_round_raw": "223"}, {"map": "Haven", "win_rate_pct": 100.0, "wins": 1, "losses": 0, "kd": 0.73, "kill_round": 0.48, "dmg_round": 126.0, "score_round": 164.0, "win_rate_raw": "100%", "wins_raw": "1", "losses_raw": "0", "kd_raw": "0.73", "kill_round_raw": "0.48", "dmg_round_raw": "126", "score_round_raw": "164"}, {"map": "Bind", "win_rate_pct": 50.0, "wins": 1, "losses": 1, "kd": 1.17, "kill_round": 0.8, "dmg_round": 144.0, "score_round": 212.0, "win_rate_raw": "50%", "wins_raw": "1", "losses_raw": "1", "kd_raw": "1.17", "kill_round_raw": "0.80", "dmg_round_raw": "144", "score_round_raw": "212"}, {"map": "Breeze", "win_rate_pct": 17.0, "wins": 1, "losses": 5, "kd": 0.86, "kill_round": 0.62, "dmg_round": 119.0, "score_round": 177.0, "win_rate_raw": "17%", "wins_raw": "1", "losses_raw": "5", "kd_raw": "0.86", "kill_round_raw": "0.62", "dmg_round_raw": "119", "score_round_raw": "177"}, {"map": "Split", "win_rate_pct": 0.0, "wins": 0, "losses": 2, "kd": 0.8, "kill_round": 0.67, "dmg_round": 116.0, "score_round": 181.0, "win_rate_raw": "0%", "wins_raw": "0", "losses_raw": "2", "kd_raw": "0.8", "kill_round_raw": "0.67", "dmg_round_raw": "116", "score_round_raw": "181"}, {"map": "Abyss", "win_rate_pct": 0.0, "wins": 0, "losses": 3, "kd": 1.4, "kill_round": 1.04, "dmg_round": 190.0, "score_round": 285.0, "win_rate_raw": "0%", "wins_raw": "0", "losses_raw": "3", "kd_raw": "1.4", "kill_round_raw": "1.04", "dmg_round_raw": "190", "score_round_raw": "285"}]};
+
+  function mkBarChart(canvasId, label, values) {
+    const ctx = document.getElementById(canvasId);
+    return new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: payload.labels,
+        datasets: [{
+          label,
+          data: values,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#a8b3cf' },
+            grid: { color: 'rgba(255,255,255,0.06)' }
+          },
+          y: {
+            ticks: { color: '#a8b3cf' },
+            grid: { color: 'rgba(255,255,255,0.06)' }
+          }
+        }
+      }
+    });
+  }
+
+  mkBarChart('winrate', 'Win Rate (%)', payload.win_rate);
+  mkBarChart('dmg', 'Dmg / Round', payload.dmg_round);
+  mkBarChart('score', 'Score / Round', payload.score_round);
+
+  // Combo chart (2 datasets)
+  new Chart(document.getElementById('kdkr'), {
+    type: 'bar',
+    data: {
+      labels: payload.labels,
+      datasets: [
+        { label: 'K/D', data: payload.kd, borderWidth: 1 },
+        { label: 'Kill / Round', data: payload.kill_round, borderWidth: 1 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true },
+      },
+      scales: {
+        x: {
+          ticks: { color: '#a8b3cf' },
+          grid: { color: 'rgba(255,255,255,0.06)' }
+        },
+        y: {
+          ticks: { color: '#a8b3cf' },
+          grid: { color: 'rgba(255,255,255,0.06)' }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>

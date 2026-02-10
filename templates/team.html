@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block title %}{{ team_name }} · Team{% endblock %}
+
+{% block content %}
+
+<div class="section-head">
+  <div>
+    <h1 class="section-title">{{ team_name }}</h1>
+    <div class="subtle">
+      Team key: <span class="kbd">{{ team_key }}</span>
+      · Season: <span class="kbd">{{ season_id }}</span>
+      {% if snapshot_updated_ts %} · Updated: <span class="kbd">{{ snapshot_updated_ts }}</span>{% endif %}
+    </div>
+  </div>
+
+  <div class="row wrap" style="justify-content:flex-end; gap:10px;">
+    <form method="get" class="row wrap" style="gap:10px;">
+      <span class="badge">Season</span>
+      <select name="seasonId" onchange="this.form.submit()">
+        {% for label, sid in seasons.items() %}
+          <option value="{{ sid }}" {% if sid == season_id %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </form>
+
+
+    <a class="btn ghost" href="{{ url_for('download_snapshot', team_key=team_key) }}">Download .json</a>
+  </div>
+</div>
+
+<!-- Summary tiles -->
+<div class="grid three">
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Total Games</h2>
+      <span class="pill pill-mid">Season</span>
+    </div>
+    <div class="big">{{ (team_summary.total_games if team_summary else 0) }}</div>
+    <div class="subtle">Across roster for selected season</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Avg DMG / Round</h2>
+      <span class="pill pill-good">Weighted</span>
+    </div>
+    <div class="big">
+      {% if team_summary and team_summary.avg_dmg_round is not none %}
+        {{ "%.1f"|format(team_summary.avg_dmg_round) }}
+      {% else %}
+        0.0
+      {% endif %}
+    </div>
+    <div class="subtle">Weighted by games played</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Top Agent</h2>
+      <span class="pill pill-mid">Matches</span>
+    </div>
+    {% if team_summary and team_summary.top_agent %}
+      <div class="big">{{ team_summary.top_agent.agent }}</div>
+      <div class="subtle">{{ team_summary.top_agent.matches }} matches</div>
+    {% else %}
+      <div class="big">—</div>
+      <div class="subtle">No agent data</div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Best/Worst map row -->
+<div class="grid two" style="margin-top:14px;">
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Best Map</h2>
+      <span class="pill pill-good">Win%</span>
+    </div>
+    {% if team_summary and team_summary.best_map %}
+      <div class="row wrap" style="justify-content:space-between; gap:12px;">
+        <div>
+          <div class="strong">{{ team_summary.best_map.map }}</div>
+          <div class="subtle">{{ team_summary.best_map.games }} games</div>
+        </div>
+        <div class="pill pill-good">{{ "%.1f"|format(team_summary.best_map.win_rate_pct) }}%</div>
+      </div>
+    {% else %}
+      <div class="muted">—</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Worst Map</h2>
+      <span class="pill pill-bad">Win%</span>
+    </div>
+    {% if team_summary and team_summary.worst_map %}
+      <div class="row wrap" style="justify-content:space-between; gap:12px;">
+        <div>
+          <div class="strong">{{ team_summary.worst_map.map }}</div>
+          <div class="subtle">{{ team_summary.worst_map.games }} games</div>
+        </div>
+        <div class="pill pill-bad">{{ "%.1f"|format(team_summary.worst_map.win_rate_pct) }}%</div>
+      </div>
+    {% else %}
+      <div class="muted">—</div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Chart -->
+<div class="section-head" style="margin-top:18px;">
+  <h2 class="section-title">Team Map Graph</h2>
+  <div class="subtle">Win% (bar) + Games (line). <span class="mono">maps={{ map_rows|length }}</span></div>
+</div>
+
+<div class="card chart-card">
+  {% if map_rows and map_rows|length > 0 %}
+    <div class="chart-wrap">
+      <canvas id="mapChart"></canvas>
+    </div>
+    <div class="subtle" style="margin-top:10px;">Tip: Low sample sizes can swing Win% wildly.</div>
+  {% else %}
+    <div class="muted">No map rows available for charting. Try “Update snapshot”.</div>
+  {% endif %}
+</div>
+
+<!-- Map table -->
+<div class="section-head" style="margin-top:18px;">
+  <h2 class="section-title">Team Map Performance</h2>
+  <div class="subtle">Aggregated across roster for selected season.</div>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="left">Map</th>
+          <th class="center">Games</th>
+          <th class="center">W</th>
+          <th class="center">L</th>
+          <th class="center">Win%</th>
+          <th class="center">KD</th>
+          <th class="center">K/R</th>
+          <th class="center">DMG/R</th>
+          <th class="center">Score/R</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in map_rows %}
+          <tr>
+            <td class="left strong">{{ r.get('map','') }}</td>
+            <td class="center">{{ r.get('games', 0) }}</td>
+            <td class="center pos">{{ r.get('wins', 0) }}</td>
+            <td class="center neg">{{ r.get('losses', 0) }}</td>
+            <td class="center">
+              <span class="pill {% if r.get('win_rate_pct',0) >= 55 %}pill-good{% elif r.get('win_rate_pct',0) <= 45 %}pill-bad{% else %}pill-mid{% endif %}">
+                {{ "%.1f"|format(r.get('win_rate_pct', 0.0)) }}%
+              </span>
+            </td>
+            <td class="center">{{ "%.2f"|format(r.get('kd', 0.0)) }}</td>
+            <td class="center">{{ "%.2f"|format(r.get('kill_round', 0.0)) }}</td>
+            <td class="center">{{ "%.0f"|format(r.get('dmg_round', 0.0)) }}</td>
+            <td class="center">{{ "%.0f"|format(r.get('score_round', 0.0)) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Player summary table -->
+<div class="section-head" style="margin-top:18px;">
+  <h2 class="section-title">Roster Summary</h2>
+  <div class="subtle">Season totals per player (weighted by games played).</div>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="left">Player</th>
+          <th class="center">Games</th>
+          <th class="center">Win%</th>
+          <th class="center">KD</th>
+          <th class="center">K/R</th>
+          <th class="center">DMG/R</th>
+          <th class="center">Score/R</th>
+          <th class="right">Open</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in summaries %}
+          <tr>
+            <td class="left">
+              <div class="strong">{{ s.riot_id }}</div>
+              <div class="subtle">
+                {% if s.profile_url %}<a class="link" href="{{ s.profile_url }}" target="_blank">Profile</a>{% endif %}
+                {% if s.maps_url %}{% if s.profile_url %} · {% endif %}<a class="link" href="{{ s.maps_url }}" target="_blank">Maps</a>{% endif %}
+                {% if s.agents_url %}{% if s.profile_url or s.maps_url %} · {% endif %}<a class="link" href="{{ s.agents_url }}" target="_blank">Agents</a>{% endif %}
+              </div>
+            </td>
+            <td class="center">{{ s.games }}</td>
+            <td class="center">
+              <span class="pill {% if s.win_rate_pct >= 55 %}pill-good{% elif s.win_rate_pct <= 45 %}pill-bad{% else %}pill-mid{% endif %}">
+                {{ "%.1f"|format(s.win_rate_pct) }}%
+              </span>
+            </td>
+            <td class="center">{{ "%.2f"|format(s.kd) }}</td>
+            <td class="center">{{ "%.2f"|format(s.kill_round) }}</td>
+            <td class="center">{{ "%.1f"|format(s.dmg_round) }}</td>
+            <td class="center">{{ "%.1f"|format(s.score_round) }}</td>
+            <td class="right">
+              <a class="btn secondary" href="{{ url_for('player_view', team_key=team_key, riot_id=s.riot_id, seasonId=season_id) }}">View</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% if map_rows and map_rows|length > 0 %}
+<script>
+  (function() {
+    const rows = {{ map_rows|tojson }};
+    const labels = rows.map(r => r.map);
+    const win = rows.map(r => Number(r.win_rate_pct || 0));
+    const games = rows.map(r => Number(r.games || 0));
+
+    const ctx = document.getElementById("mapChart").getContext("2d");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            type: "bar",
+            label: "Win%",
+            data: win,
+            yAxisID: "y",
+            borderWidth: 1,
+          },
+          {
+            type: "line",
+            label: "Games",
+            data: games,
+            yAxisID: "y1",
+            tension: 0.3,
+            pointRadius: 3,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" } },
+          y1: { beginAtZero: true, position: "right", grid: { drawOnChartArea: false } }
+        },
+        plugins: {
+          legend: { labels: { color: "#fff" } },
+          tooltip: { callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}${ctx.dataset.label === "Win%" ? "%" : ""}`
+          }}
+        }
+      }
+    });
+  })();
+</script>
+{% endif %}
+{% endblock %}

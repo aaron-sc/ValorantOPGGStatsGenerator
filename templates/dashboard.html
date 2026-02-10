@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Dashboards · Valorant Tracker{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h1 class="section-title">Dashboards</h1>
+  <div class="subtle">Browse saved team snapshots or compare teams for scouting insights.</div>
+</div>
+
+<div class="grid two">
+  <!-- Saved Teams -->
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Saved Teams</h2>
+      <span class="pill pill-good">{{ teams|length }} teams</span>
+    </div>
+
+    {% if teams %}
+      <div class="list">
+        {% for t in teams %}
+          <div class="list-row">
+            <div class="list-main">
+              <div class="strong clamp-1">{{ t.team_name }}</div>
+              <div class="muted small"><span class="kbd">{{ t.team_key }}</span></div>
+              <div class="muted small">{{ t.players_count }} players</div>
+            </div>
+
+            <div class="list-actions">
+              <a class="btn secondary"
+                 href="{{ url_for('team_view', team_key=t.team_key, seasonId=default_season) }}">
+                View
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="muted">No snapshots available.</div>
+    {% endif %}
+  </div>
+
+  <!-- Compare + Import -->
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Compare Teams</h2>
+      <span class="pill pill-mid">Scouting</span>
+    </div>
+
+    <p class="subtle">
+      Compare two teams across maps and performance metrics.
+      Generates quick scouting notes.
+    </p>
+
+    <a class="btn success" href="{{ url_for('compare_picker') }}">Start Comparison</a>
+
+    <hr class="hr">
+
+    <h3 class="h3">Import Comparison Dashboard</h3>
+    <p class="subtle">Upload a .zip with two team JSON snapshots.</p>
+
+    <form method="post" action="{{ url_for('dashboard_import_zip') }}" enctype="multipart/form-data" class="row wrap">
+
+      <input class="file" type="file" name="file" accept=".zip" required>
+      <button class="btn secondary" type="submit">Import Dashboard</button>
+    </form>
+
+    {% if dashboards is defined and dashboards %}
+      <hr class="hr">
+      <h3 class="h3">Imported Dashboards</h3>
+      <div class="list">
+        {% for d in dashboards %}
+          <div class="list-row">
+            <div class="list-main">
+              <div class="strong clamp-1">{{ d.title }}</div>
+              <div class="muted small clamp-1">
+                {{ d.team_a_name }} vs {{ d.team_b_name }}
+              </div>
+              <div class="muted small">
+                {% if d.created_ts %}{{ d.created_ts }}{% else %}—{% endif %}
+              </div>
+            </div>
+            <div class="list-actions">
+              <a class="btn secondary" href="{{ url_for('dashboard_view_imported', dash_id=d.dash_id) }}">Open</a>
+              <form method="post" action="{{ url_for('dashboard_delete', dash_id=d.dash_id) }}" style="margin:0;"
+                    onsubmit="return confirm('Delete this imported dashboard?');">
+                <button class="btn danger" type="submit" title="Delete">🗑</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

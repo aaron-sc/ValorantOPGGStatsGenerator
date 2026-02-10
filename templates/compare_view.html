@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Team Comparison · Valorant Tracker{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h1 class="section-title">Team Comparison</h1>
+  <div class="subtle">
+    {{ team_a.team_name }} vs {{ team_b.team_name }}
+  </div>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <h2 class="h2">{{ team_a.team_name }}</h2>
+    <div class="metrics-grid">
+      <div class="metric-tile">
+        <div class="muted">Total Games</div>
+        <div class="strong">{{ team_a.summary.total_games }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Avg DMG/R</div>
+        <div class="strong">{{ "%.1f"|format(team_a.summary.avg_dmg_round) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Top Map</div>
+        <div class="strong">
+          {% if team_a.summary.best_map %}{{ team_a.summary.best_map.map }}{% else %}—{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="h2">{{ team_b.team_name }}</h2>
+    <div class="metrics-grid">
+      <div class="metric-tile">
+        <div class="muted">Total Games</div>
+        <div class="strong">{{ team_b.summary.total_games }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Avg DMG/R</div>
+        <div class="strong">{{ "%.1f"|format(team_b.summary.avg_dmg_round) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Top Map</div>
+        <div class="strong">
+          {% if team_b.summary.best_map %}{{ team_b.summary.best_map.map }}{% else %}—{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="card-title">
+    <h2 class="h2">Scouting Insights</h2>
+    <span class="pill pill-mid">Auto-generated</span>
+  </div>
+
+  {% if insights %}
+    <ul class="insight-list">
+      {% for i in insights %}
+        <li class="insight-item">
+          <span class="pill {{ i.level }}">{{ i.tag }}</span>
+          <span>{{ i.text }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="muted">No insights generated.</div>
+  {% endif %}
+</div>
+
+<div class="row" style="margin-top:16px;">
+  <a class="btn secondary" href="{{ url_for('export_comparison', compare_id=compare_id) }}">
+    Export Dashboard (.zip)
+  </a>
+  <a class="btn ghost" href="{{ url_for('compare_picker') }}">Back</a>
+</div>
+{% endblock %}

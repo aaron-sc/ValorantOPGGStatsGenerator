@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Compare Teams · Valorant Tracker{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h1 class="section-title">Compare Teams</h1>
+  <div class="subtle">Select two teams to generate a scouting comparison.</div>
+</div>
+
+<form method="get" action="{{ url_for('compare_run') }}">
+  <div class="grid two">
+    <div class="card">
+      <h2 class="h2">Team A</h2>
+      <select name="a" required>
+        {% for t in teams %}
+          <option value="{{ t.team_key }}">{{ t.team_name }} ({{ t.team_key }})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="card">
+      <h2 class="h2">Team B</h2>
+      <select name="b" required>
+        {% for t in teams %}
+          <option value="{{ t.team_key }}">{{ t.team_name }} ({{ t.team_key }})</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h2 class="h2">Season</h2>
+    <select name="seasonId" required>
+      {% for label, sid in seasons.items() %}
+        <option value="{{ sid }}" {% if sid == default_season %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="row" style="margin-top:16px;">
+    <button class="btn success" type="submit">Compare Teams</button>
+    <a class="btn ghost" href="{{ url_for('dashboard') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

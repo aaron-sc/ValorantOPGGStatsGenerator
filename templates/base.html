@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Valorant Tracker{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">VALO TRACKER</div>
+    <div class="nav-actions">
+      <button class="btn secondary" onclick="history.back()">← Back</button>
+      <a href="/" class="btn secondary">Home</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+</footer>
+
+<!-- Progress Overlay -->
+<div class="progress-overlay" id="progressOverlay">
+  <div class="progress-card">
+    <div class="progress-title">Scraping OP.GG…</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="subtle" style="margin-top:10px;" id="progressText">
+      Initializing…
+    </div>
+  </div>
+</div>
+
+<script>
+function showProgress() {
+  document.getElementById("progressOverlay").style.display = "flex";
+}
+
+function updateProgress(pct, text) {
+  document.getElementById("progressFill").style.width = pct + "%";
+  if (text) document.getElementById("progressText").innerText = text;
+}
+
+function hideProgress() {
+  document.getElementById("progressOverlay").style.display = "none";
+}
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

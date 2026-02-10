@@ -1,0 +1,1692 @@
+import io
+import json
+import os
+import re
+import shutil
+import threading
+import time
+import zipfile
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple
+import math
+import hashlib
+from datetime import datetime
+from bs4 import BeautifulSoup
+from flask import (
+    Flask,
+    abort,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    send_file,
+    url_for,
+)
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+
+# ============================================================
+# Paths / App
+# ============================================================
+APP_DIR = Path(__file__).parent
+DATA_DIR = APP_DIR / "data"
+UPLOAD_DIR = DATA_DIR / "uploads"
+SNAPSHOT_DIR = DATA_DIR / "snapshots"
+TMP_DIR = DATA_DIR / "tmp"
+
+for d in (DATA_DIR, UPLOAD_DIR, SNAPSHOT_DIR, TMP_DIR):
+    d.mkdir(parents=True, exist_ok=True)
+
+app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10MB
+
+# ============================================================
+# Seasons
+# ============================================================
+SEASONS: Dict[str, str] = {
+    "V26 - ACT 1": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+    "V25 - ACT 6": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+    # "V25 - ACT 5": "5adc33fa-4f30-2899-f131-6fba64c5dd3a",
+    # "V25 - ACT 3": "aef237a0-494d-3a14-a1c8-ec8de84e309c",
+}
+DEFAULT_SEASON_ID = SEASONS["V26 - ACT 1"]
+
+# ============================================================
+# Snapshot helpers
+# ============================================================
+def snapshot_path(team_key: str) -> Path:
+    return SNAPSHOT_DIR / f"{team_key}.json"
+
+def to_float(x, default=0.0):
+    """
+    Robust float parser for messy scraped values like:
+    None, "None", "", "—", "-", "27.1%", "1,234", "  12.3  "
+    """
+    try:
+        if x is None:
+            return default
+        if isinstance(x, (int, float)):
+            return float(x)
+        s = str(x).strip()
+        if not s or s.lower() in {"none", "null", "nan", "—", "-", "n/a"}:
+            return default
+        s = s.replace("%", "").replace(",", "")
+        return float(s)
+    except Exception:
+        return default
+
+def to_int(x, default=0):
+    try:
+        if x is None:
+            return default
+        if isinstance(x, int):
+            return int(x)
+        if isinstance(x, float):
+            return int(x)
+        s = str(x).strip().replace(",", "")
+        if not s or s.lower() in {"none", "null", "—", "-", "n/a"}:
+            return default
+        return int(float(s))
+    except Exception:
+        return default
+
+def load_snapshot(team_key: str) -> dict:
+    p = snapshot_path(team_key)
+    if not p.exists():
+        return {}
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def save_snapshot(team_key: str, snap: dict) -> None:
+    snapshot_path(team_key).write_text(json.dumps(snap, indent=2), encoding="utf-8")
+
+
+def list_snapshots() -> List[Dict[str, Any]]:
+    out = []
+    for p in SNAPSHOT_DIR.glob("*.json"):
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        out.append(
+            {
+                "team_key": data.get("team_key") or p.stem,
+                "team_name": data.get("team_name") or p.stem,
+                "players": data.get("players") or [],
+                "players_count": len(data.get("players") or []),
+                "updated_ts": data.get("updated_ts"),
+            }
+        )
+    out.sort(key=lambda x: (x.get("updated_ts") or 0), reverse=True)
+    return out
+
+DASHBOARD_DIR = DATA_DIR / "dashboards"
+DASHBOARD_DIR.mkdir(parents=True, exist_ok=True)
+
+def _now_iso():
+    return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+
+def _safe_div(a, b):
+    return a / b if b else 0.0
+
+def _weighted_avg(items, key, wkey="games"):
+    num = 0.0
+    den = 0
+    for it in items:
+        w = int(it.get(wkey, 0))
+        num += float(it.get(key, 0.0)) * w
+        den += w
+    return _safe_div(num, den)
+
+def _stdev(values):
+    if not values:
+        return 0.0
+    m = sum(values) / len(values)
+    var = sum((v - m) ** 2 for v in values) / len(values)
+    return math.sqrt(var)
+
+def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
+    """
+    Returns a rich summary suitable for scouting + comparisons.
+    """
+    team_key = snap.get("team_key")
+    team_name = snap.get("team_name") or team_key
+    roster = snap.get("players") or []
+    season_block = (snap.get("data") or {}).get(season_id, {}) or {}
+
+    # --- Aggregate maps across roster ---
+    players_maps = {}
+    for rid in roster:
+        entry = season_block.get(rid) or {}
+        players_maps[rid] = entry.get("maps") or []
+
+    team_agg = aggregate_team_maps(players_maps)  # your existing function
+    map_rows = team_agg.get("by_map") or []
+
+    total_games = sum(int(r.get("games", 0)) for r in map_rows)
+    avg_win = _weighted_avg(map_rows, "win_rate_pct", "games")
+    avg_kd = _weighted_avg(map_rows, "kd", "games")
+    avg_dmg = _weighted_avg(map_rows, "dmg_round", "games")
+    avg_score = _weighted_avg(map_rows, "score_round", "games")
+
+    # “Pool breadth”: how many maps above N games
+    map_min_games = 5
+    stable_maps = [r for r in map_rows if int(r.get("games", 0)) >= map_min_games]
+    stable_map_count = len(stable_maps)
+
+    # Volatility: stdev of map win% weighted-ish by sample size filter
+    win_rates = [float(r.get("win_rate_pct", 0.0)) for r in stable_maps]
+    win_volatility = _stdev(win_rates)
+
+    best_map = max(map_rows, key=lambda r: (r.get("win_rate_pct", 0.0), r.get("games", 0)), default=None)
+    worst_map = min(map_rows, key=lambda r: (r.get("win_rate_pct", 999.0), -r.get("games", 0)), default=None)
+
+    # --- Player-level rollups (from maps) ---
+    players = []
+    for rid in roster:
+        entry = season_block.get(rid) or {}
+        maps = entry.get("maps") or []
+        wins = sum(int(m.get("wins", 0)) for m in maps)
+        losses = sum(int(m.get("losses", 0)) for m in maps)
+        games = wins + losses
+        win = _safe_div(wins, games) * 100.0
+
+        # weighted perf from maps
+        w_kd = w_kr = w_dmg = w_score = 0.0
+        gsum = 0
+        for m in maps:
+            g = int(m.get("wins", 0)) + int(m.get("losses", 0))
+            if g <= 0:
+                continue
+            gsum += g
+            w_kd += float(m.get("kd", 0.0)) * g
+            w_kr += float(m.get("kill_round", 0.0)) * g
+            w_dmg += float(m.get("dmg_round", 0.0)) * g
+            w_score += float(m.get("score_round", 0.0)) * g
+
+        players.append({
+            "riot_id": rid,
+            "games": games,
+            "win_rate_pct": win,
+            "kd": _safe_div(w_kd, gsum),
+            "kill_round": _safe_div(w_kr, gsum),
+            "dmg_round": _safe_div(w_dmg, gsum),
+            "score_round": _safe_div(w_score, gsum),
+        })
+
+    players.sort(key=lambda p: (p["games"], p["score_round"]), reverse=True)
+
+    # “Carry index” (simple scouting heuristic): score_round * kd * log(games+1)
+    for p in players:
+        p["impact_index"] = float(p["score_round"]) * max(0.5, float(p["kd"])) * math.log(p["games"] + 1.0)
+
+    top_impact = sorted(players, key=lambda p: p["impact_index"], reverse=True)[:3]
+
+    # --- Agents aggregation across roster ---
+    # Expect each entry["agents"] list of dicts with agent, matches, win_rate, kda, acs, dmg_round, etc.
+    agent_rows = []
+    for rid in roster:
+        entry = season_block.get(rid) or {}
+        for a in (entry.get("agents") or []):
+            agent = a.get("agent") or a.get("name") or ""
+            if not agent:
+                continue
+            # matches might be "12" or int
+            try:
+                matches = int(str(a.get("matches", 0)).replace(",", "").strip())
+            except Exception:
+                matches = 0
+            agent_rows.append({
+                "agent": agent,
+                "matches": to_int(a.get("matches", 0)),
+                "win_rate": to_float(a.get("win_rate", 0.0)),
+                "kda": str(a.get("kda", "")).strip(),
+                "acs": to_float(a.get("acs", 0.0)),
+                "dmg_round": to_float(a.get("dmg_round", 0.0)),
+            })
+    # aggregate by agent
+    by_agent = {}
+    for r in agent_rows:
+        k = r["agent"]
+        if k not in by_agent:
+            by_agent[k] = {"agent": k, "matches": 0, "sum_win": 0.0, "sum_acs": 0.0, "sum_dmg": 0.0}
+        by_agent[k]["matches"] += r["matches"]
+        by_agent[k]["sum_win"] += r["win_rate"] * r["matches"]
+        by_agent[k]["sum_acs"] += r["acs"] * r["matches"]
+        by_agent[k]["sum_dmg"] += r["dmg_round"] * r["matches"]
+
+    agents_agg = []
+    for k, v in by_agent.items():
+        m = v["matches"]
+        agents_agg.append({
+            "agent": k,
+            "matches": m,
+            "win_rate": _safe_div(v["sum_win"], m),
+            "acs": _safe_div(v["sum_acs"], m),
+            "dmg_round": _safe_div(v["sum_dmg"], m),
+        })
+    agents_agg.sort(key=lambda x: x["matches"], reverse=True)
+    top_agents = agents_agg[:5]
+
+    # Role balance (best-effort) from profile_stats roles_card if present
+    role_counts = {}
+    for rid in roster:
+        entry = season_block.get(rid) or {}
+        roles = (entry.get("profile_stats") or {}).get("roles_card") or []
+        for rr in roles:
+            role = rr.get("role")
+            if not role:
+                continue
+            # role share might exist as "62%" in rr["rate"] or similar; if not, count appearances
+            role_counts[role] = role_counts.get(role, 0) + 1
+
+    return {
+        "team_key": team_key,
+        "team_name": team_name,
+        "season_id": season_id,
+        "roster": roster,
+        "map_rows": map_rows,
+        "players": players,
+        "agents": agents_agg,
+        "summary": {
+            "total_games": total_games,
+            "avg_win_rate_pct": avg_win,
+            "avg_kd": avg_kd,
+            "avg_dmg_round": avg_dmg,
+            "avg_score_round": avg_score,
+            "stable_map_count": stable_map_count,
+            "win_volatility": win_volatility,
+            "best_map": best_map,
+            "worst_map": worst_map,
+        },
+        "top_impact_players": top_impact,
+        "top_agents": top_agents,
+        "role_balance": role_counts,
+    }
+
+def generate_comparison_insights(A: dict, B: dict) -> list:
+    """
+    Returns list[ {level, tag, text} ] for templates.
+    level: pill-good | pill-mid | pill-bad (reuse your CSS)
+    """
+    insights = []
+
+    aS = A["summary"]
+    bS = B["summary"]
+
+    def add(level, tag, text):
+        insights.append({"level": level, "tag": tag, "text": text})
+
+    # Sample size / confidence
+    min_games = min(aS["total_games"], bS["total_games"])
+    if min_games < 20:
+        add("pill-bad", "Confidence",
+            f"Low sample size: {A['team_name']} has {aS['total_games']} games and {B['team_name']} has {bS['total_games']}. Treat win% as volatile.")
+    elif min_games < 50:
+        add("pill-mid", "Confidence",
+            f"Moderate sample size: {A['team_name']} {aS['total_games']} games vs {B['team_name']} {bS['total_games']}. Win% still swings on map pool.")
+    else:
+        add("pill-good", "Confidence",
+            f"Solid sample size: {A['team_name']} {aS['total_games']} games vs {B['team_name']} {bS['total_games']}. Trends are more trustworthy.")
+
+    # Map pool breadth
+    if aS["stable_map_count"] > bS["stable_map_count"] + 1:
+        add("pill-good", "Map Pool", f"{A['team_name']} looks more battle-tested: {aS['stable_map_count']} maps with ≥5 games vs {bS['stable_map_count']}.")
+    elif bS["stable_map_count"] > aS["stable_map_count"] + 1:
+        add("pill-good", "Map Pool", f"{B['team_name']} looks more battle-tested: {bS['stable_map_count']} maps with ≥5 games vs {aS['stable_map_count']}.")
+    else:
+        add("pill-mid", "Map Pool", f"Similar map pool breadth (≥5 games): {A['team_name']} {aS['stable_map_count']} vs {B['team_name']} {bS['stable_map_count']}.")
+
+    # Consistency (win volatility)
+    if aS["win_volatility"] + 4 < bS["win_volatility"]:
+        add("pill-good", "Consistency",
+            f"{A['team_name']} is more consistent across maps (win% volatility {aS['win_volatility']:.1f} vs {bS['win_volatility']:.1f}).")
+    elif bS["win_volatility"] + 4 < aS["win_volatility"]:
+        add("pill-good", "Consistency",
+            f"{B['team_name']} is more consistent across maps (win% volatility {bS['win_volatility']:.1f} vs {aS['win_volatility']:.1f}).")
+    else:
+        add("pill-mid", "Consistency",
+            f"Map-to-map consistency is similar (volatility: {A['team_name']} {aS['win_volatility']:.1f} vs {B['team_name']} {bS['win_volatility']:.1f}).")
+
+    # Core performance (weighted)
+    def perf_delta(metric, pretty, good_if_positive=True):
+        da = float(aS.get(metric, 0.0))
+        db = float(bS.get(metric, 0.0))
+        diff = da - db
+        if abs(diff) < 1e-6:
+            add("pill-mid", pretty, f"Even on {pretty.lower()} ({da:.2f} vs {db:.2f}).")
+            return
+        lead = A["team_name"] if diff > 0 else B["team_name"]
+        valA = f"{da:.2f}" if "pct" not in metric else f"{da:.1f}%"
+        valB = f"{db:.2f}" if "pct" not in metric else f"{db:.1f}%"
+        mag = abs(diff)
+        level = "pill-mid"
+        if mag >= (5.0 if "pct" in metric else 0.10):
+            level = "pill-good"
+        add(level, pretty, f"{lead} leads on {pretty.lower()} ({valA} vs {valB}).")
+
+    perf_delta("avg_win_rate_pct", "Win Rate")
+    perf_delta("avg_kd", "K/D")
+    perf_delta("avg_dmg_round", "DMG/R")
+    perf_delta("avg_score_round", "Score/R")
+
+    # Map-specific head-to-head: biggest win% gaps on shared maps
+    a_by_map = {r.get("map"): r for r in A["map_rows"]}
+    b_by_map = {r.get("map"): r for r in B["map_rows"]}
+    shared = [m for m in a_by_map.keys() if m in b_by_map and m]
+    deltas = []
+    for m in shared:
+        ra, rb = a_by_map[m], b_by_map[m]
+        ga, gb = int(ra.get("games", 0)), int(rb.get("games", 0))
+        if ga < 3 or gb < 3:
+            continue
+        deltas.append((m, float(ra.get("win_rate_pct", 0.0)) - float(rb.get("win_rate_pct", 0.0)), ga, gb))
+    deltas.sort(key=lambda x: abs(x[1]), reverse=True)
+
+    if deltas:
+        m, d, ga, gb = deltas[0]
+        lead = A["team_name"] if d > 0 else B["team_name"]
+        add("pill-good", "Map Edge",
+            f"Biggest shared-map edge: {lead} on {m} (win% gap {abs(d):.1f} pts; samples {ga}g vs {gb}g).")
+    else:
+        add("pill-mid", "Map Edge",
+            "No strong shared-map advantage found (or too few games on shared maps).")
+
+    # Player impact concentration: is one team carried by 1-2 players?
+    def impact_concentration(team):
+        ps = team["players"]
+        top = sorted(ps, key=lambda p: p.get("impact_index", 0.0), reverse=True)
+        if not top:
+            return 0.0
+        total = sum(p.get("impact_index", 0.0) for p in top) or 1.0
+        top2 = sum(p.get("impact_index", 0.0) for p in top[:2])
+        return (top2 / total) * 100.0
+
+    a_conc = impact_concentration(A)
+    b_conc = impact_concentration(B)
+    if a_conc > b_conc + 10:
+        add("pill-mid", "Reliance",
+            f"{A['team_name']} is more top-heavy (top-2 impact share ~{a_conc:.0f}% vs {b_conc:.0f}%). Target their stars to swing rounds.")
+    elif b_conc > a_conc + 10:
+        add("pill-mid", "Reliance",
+            f"{B['team_name']} is more top-heavy (top-2 impact share ~{b_conc:.0f}% vs {a_conc:.0f}%). Target their stars to swing rounds.")
+    else:
+        add("pill-good", "Reliance",
+            f"Similar impact distribution (top-2 share: {A['team_name']} ~{a_conc:.0f}%, {B['team_name']} ~{b_conc:.0f}%).")
+
+    # Agent identity: top agents overlap?
+    a_agents = [x["agent"] for x in A.get("top_agents", [])]
+    b_agents = [x["agent"] for x in B.get("top_agents", [])]
+    overlap = [x for x in a_agents if x in b_agents]
+    if overlap:
+        add("pill-mid", "Agent Meta",
+            f"Both teams share key agent comfort picks: {', '.join(overlap[:3])}{'…' if len(overlap)>3 else ''}.")
+    else:
+        add("pill-good", "Agent Meta",
+            "Top agent pools differ — higher chance of comp mismatch and exploitable utility gaps.")
+
+    return insights
+
+def save_comparison_dashboard(A_snap: dict, B_snap: dict, season_id: str, A_summary: dict, B_summary: dict, insights: list) -> dict:
+    """
+    Persist a dashboard JSON on disk. Returns metadata.
+    """
+    base = f"{A_summary['team_key']}|{B_summary['team_key']}|{season_id}|{_now_iso()}"
+    dash_id = hashlib.sha1(base.encode("utf-8")).hexdigest()[:12]
+    payload = {
+        "dash_id": dash_id,
+        "created_ts": _now_iso(),
+        "season_id": season_id,
+        "team_a_key": A_summary["team_key"],
+        "team_b_key": B_summary["team_key"],
+        "team_a_name": A_summary["team_name"],
+        "team_b_name": B_summary["team_name"],
+        "A": A_summary,
+        "B": B_summary,
+        "insights": insights,
+    }
+    (DASHBOARD_DIR / f"{dash_id}.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return payload
+# ============================================================
+# Team file parsing (first line = team name)
+# ============================================================
+def parse_team_upload(text: str) -> Tuple[str, List[str]]:
+    """
+    First non-empty line = team name
+    Remaining lines = riot IDs in format name#tag
+    """
+    lines = [ln.strip() for ln in text.splitlines()]
+    lines = [ln for ln in lines if ln and not ln.startswith("//") and not ln.startswith("# ")]
+    if not lines:
+        return ("Unnamed Team", [])
+
+    team_name = lines[0].strip()
+    ids: List[str] = []
+    for raw in lines[1:]:
+        line = raw.strip()
+        if line.count("#") != 1:
+            continue
+        name, tag = line.split("#", 1)
+        name, tag = name.strip(), tag.strip()
+        if not name or not tag:
+            continue
+        ids.append(f"{name}#{tag}")
+
+    # unique preserve order
+    seen = set()
+    out = []
+    for x in ids:
+        if x not in seen:
+            seen.add(x)
+            out.append(x)
+    return (team_name, out)
+
+
+def team_key_from_ids(team_name: str, team_ids: List[str]) -> str:
+    base = team_name.strip() + "-" + "-".join(team_ids)
+    return re.sub(r"[^a-zA-Z0-9_-]+", "_", base)[:120] or "team"
+
+
+# ============================================================
+# URL builders
+# ============================================================
+def riot_to_opgg_slug(riot_id: str) -> str:
+    name, tag = riot_id.split("#", 1)
+    return f"{name}-{tag}"
+
+
+def opgg_profile_url_from_slug(slug: str, season_id: str) -> str:
+    return f"https://op.gg/valorant/profile/{slug}?seasonId={season_id}"
+
+
+def opgg_maps_url_from_slug(slug: str, season_id: str) -> str:
+    return f"https://op.gg/valorant/profile/{slug}/maps?seasonId={season_id}"
+
+
+def opgg_agents_url_from_slug(slug: str, season_id: str) -> str:
+    return f"https://op.gg/valorant/profile/{slug}/agents?seasonId={season_id}"
+
+
+# ============================================================
+# Parsing helpers
+# ============================================================
+def text_clean(el) -> str:
+    if not el:
+        return ""
+    return el.get_text(" ", strip=True)
+
+
+def to_float(s: str) -> float:
+    if s is None:
+        return 0.0
+    s = str(s).strip().replace("%", "").replace(",", "")
+    try:
+        return float(s)
+    except Exception:
+        return 0.0
+
+
+def to_int(s: str) -> int:
+    if s is None:
+        return 0
+    s = str(s).strip().replace(",", "")
+    try:
+        return int(float(s))
+    except Exception:
+        return 0
+
+
+# ============================================================
+# Scrapers (Playwright)
+# ============================================================
+def _goto_with_delay(page, url: str, extra_wait_ms: int = 5000) -> None:
+    page.goto(url, wait_until="domcontentloaded")
+    # your request: always give it time to hydrate
+    page.wait_for_timeout(extra_wait_ms)
+
+
+def scrape_maps_page(context, url: str, debug_prefix: str) -> List[Dict[str, Any]]:
+    page = context.new_page()
+    try:
+        _goto_with_delay(page, url, extra_wait_ms=5000)
+        # lazy render assist
+        page.mouse.wheel(0, 1200)
+        page.wait_for_timeout(1200)
+
+        # wait for any table
+        selectors = [
+            "table tbody tr",
+            "table",
+            "th:has-text('Maps')",
+            "button:has-text('Win rate')",
+        ]
+        last_err = None
+        for sel in selectors:
+            try:
+                page.wait_for_selector(sel, timeout=25_000)
+                break
+            except PlaywrightTimeoutError as e:
+                last_err = e
+        else:
+            Path(f"{debug_prefix}.html").write_text(page.content(), encoding="utf-8")
+            page.screenshot(path=f"{debug_prefix}.png", full_page=True)
+            raise RuntimeError(
+                f"Timed out waiting for OP.GG maps table. Saved {debug_prefix}.png/.html"
+            ) from last_err
+
+        html = page.content()
+    finally:
+        try:
+            page.close()
+        except Exception:
+            pass
+
+    soup = BeautifulSoup(html, "html.parser")
+
+    # find maps table robustly by headers text
+    table = None
+    for t in soup.find_all("table"):
+        hdr = t.get_text(" ", strip=True)
+        if "Maps" in hdr and ("Win rate" in hdr or "Win" in hdr) and ("Dmg/Round" in hdr or "Dmg/R" in hdr):
+            table = t
+            break
+    if table is None:
+        Path(f"{debug_prefix}_parsed.html").write_text(html, encoding="utf-8")
+        raise RuntimeError(f"Maps table not found. Saved {debug_prefix}_parsed.html")
+
+    rows: List[Dict[str, Any]] = []
+    for tr in table.select("tbody tr"):
+        if "ad" in (tr.get("class") or []):
+            continue
+        tds = tr.find_all("td")
+        if len(tds) < 8:
+            continue
+
+        map_span = tds[0].select_one("span.truncate")
+        map_name = map_span.get_text(strip=True) if map_span else text_clean(tds[0])
+
+        def clean(i: int) -> str:
+            return text_clean(tds[i])
+
+        rows.append(
+            {
+                "map": map_name,
+                "win_rate": clean(1),
+                "wins": clean(2),
+                "losses": clean(3),
+                "kd": clean(4),
+                "kill_round": clean(5),
+                "dmg_round": clean(6),
+                "score_round": clean(7),
+            }
+        )
+
+    return rows
+
+
+def scrape_agents_page(context, url: str, debug_prefix: str) -> List[Dict[str, Any]]:
+    page = context.new_page()
+    try:
+        _goto_with_delay(page, url, extra_wait_ms=5000)
+        page.mouse.wheel(0, 1200)
+        page.wait_for_timeout(1000)
+
+        # basic wait: any table or list rows
+        selectors = [
+            "table tbody tr",
+            "tbody tr",
+            "main",
+        ]
+        for sel in selectors:
+            try:
+                page.wait_for_selector(sel, timeout=25_000)
+                break
+            except PlaywrightTimeoutError:
+                continue
+
+        html = page.content()
+    finally:
+        try:
+            page.close()
+        except Exception:
+            pass
+
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Heuristic: agent rows usually have an image + agent name and stat columns.
+    # We'll scrape any table rows that look like agent tables.
+    agents: List[Dict[str, Any]] = []
+
+    for t in soup.find_all("table"):
+        txt = t.get_text(" ", strip=True).lower()
+        if "agent" not in txt and "agents" not in txt:
+            # still might be agent table (OP.GG varies); we’ll keep scanning
+            pass
+
+        for tr in t.select("tbody tr"):
+            tds = tr.find_all(["td", "th"])
+            if len(tds) < 4:
+                continue
+
+            # Try to find agent name inside row (common: a strong span or link text)
+            agent_name = ""
+            # prefer first cell text without numbers
+            first = text_clean(tds[0])
+            agent_name = first
+
+            row_text = text_clean(tr)
+            # crude filters to avoid unrelated tables
+            if not agent_name or len(agent_name) > 40:
+                continue
+            if "map" in row_text.lower():
+                continue
+
+            nums = re.findall(r"[\d.]+%?|[\d.]+:\d+", row_text)
+            if len(nums) < 3:
+                continue
+
+            # Best-effort mapping (because OP.GG columns can move)
+            agents.append(
+                {
+                    "agent": agent_name,
+                    "matches": None,
+                    "win_rate": None,
+                    "kda": None,
+                    "acs": None,
+                    "dmg_round": None,
+                    "raw": row_text,
+                }
+            )
+
+        if agents:
+            break
+
+    return agents
+
+
+def parse_profile_stats_and_roles(html: str) -> Dict[str, Any]:
+    """
+    Parses the "Stats" card (top metrics + breakdown) and "Roles" card.
+    Avoids Tailwind bracket class selectors that break soupsieve.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    out: Dict[str, Any] = {"stats_card": {"top": [], "breakdown": []}, "roles_card": []}
+
+    # Find "Stats" card by h3 text
+    stats_card = None
+    for h3 in soup.find_all(["h3", "h2"]):
+        if h3.get_text(strip=True).lower() == "stats":
+            stats_card = h3.find_parent("div")
+            break
+
+    if stats_card:
+        # In your sample: first UL has 6 items; second UL is breakdown (head/body/leg + kills/deaths/assists)
+        uls = stats_card.find_all("ul")
+        if len(uls) >= 1:
+            items = []
+            for li in uls[0].find_all("li"):
+                spans = li.find_all("span")
+                if len(spans) >= 2:
+                    label = spans[0].get_text(" ", strip=True)
+                    value = spans[1].get_text(" ", strip=True)
+                    items.append({"label": label, "value": value})
+            out["stats_card"]["top"] = items
+
+        if len(uls) >= 2:
+            items2 = []
+            for li in uls[1].find_all("li"):
+                spans = li.find_all("span")
+                if len(spans) >= 2:
+                    label = spans[0].get_text(" ", strip=True)
+                    value = spans[1].get_text(" ", strip=True)
+                    items2.append({"label": label, "value": value})
+            out["stats_card"]["breakdown"] = items2
+
+    # Find "Roles" card by h3 text
+    roles_card = None
+    for h3 in soup.find_all(["h3", "h2"]):
+        if h3.get_text(strip=True).lower() == "roles":
+            roles_card = h3.find_parent("div")
+            break
+
+    roles: List[Dict[str, Any]] = []
+    if roles_card:
+        # rows are <li> elements
+        for li in roles_card.find_all("li"):
+            row_text = li.get_text(" ", strip=True)
+            if not row_text:
+                continue
+
+            # Role name: usually the first bold-ish label (we’ll pick first short token line)
+            # Better: find the first div that contains role name "Sentinel/Duelist/Initiator/Controller"
+            role_name = ""
+            for cand in ["Sentinel", "Duelist", "Initiator", "Controller"]:
+                if cand.lower() in row_text.lower():
+                    role_name = cand
+                    break
+            if not role_name:
+                continue
+
+            # KDA appears like "1.38:1 KDA"
+            m_kda = re.search(r"(\d+(?:\.\d+)?\s*:\s*\d+)\s*KDA", row_text, re.IGNORECASE)
+            kda = m_kda.group(1).replace(" ", "") if m_kda else ""
+
+            # K/D/A counts: "185 / 171 / 51"
+            m_kda_counts = re.search(r"(\d+)\s*/\s*(\d+)\s*/\s*(\d+)", row_text)
+            kills = int(m_kda_counts.group(1)) if m_kda_counts else None
+            deaths = int(m_kda_counts.group(2)) if m_kda_counts else None
+            assists = int(m_kda_counts.group(3)) if m_kda_counts else None
+
+            # W/L: "10W / 3L"
+            m_wl = re.search(r"(\d+)\s*W\s*/\s*(\d+)\s*L", row_text, re.IGNORECASE)
+            wins = int(m_wl.group(1)) if m_wl else None
+            losses = int(m_wl.group(2)) if m_wl else None
+
+            # Role %: "62%" near role label line, but might collide with win%
+            # We'll pick first percent after role name occurrence
+            role_pct = ""
+            try:
+                idx = row_text.lower().index(role_name.lower())
+                tail = row_text[idx:]
+                m_pct = re.search(r"(\d+)%", tail)
+                role_pct = (m_pct.group(1) + "%") if m_pct else ""
+            except Exception:
+                role_pct = ""
+
+            roles.append(
+                {
+                    "role": role_name,
+                    "role_pct": role_pct,
+                    "kda": kda,
+                    "kills": kills,
+                    "deaths": deaths,
+                    "assists": assists,
+                    "wins": wins,
+                    "losses": losses,
+                }
+            )
+
+    out["roles_card"] = roles
+    return out
+
+
+def scrape_profile_page(
+    context,
+    url: str,
+    debug_prefix: str,
+) -> Dict[str, Any]:
+    page = context.new_page()
+    try:
+        _goto_with_delay(page, url, extra_wait_ms=5000)
+        page.mouse.wheel(0, 1200)
+        page.wait_for_timeout(1200)
+
+        # Don’t hard-fail on exact selector; just try to ensure content exists
+        try:
+            page.wait_for_selector("main", timeout=20_000)
+        except PlaywrightTimeoutError:
+            pass
+
+        html = page.content()
+    finally:
+        try:
+            page.close()
+        except Exception:
+            pass
+
+    try:
+        return parse_profile_stats_and_roles(html)
+    except Exception as e:
+        Path(f"{debug_prefix}.html").write_text(html, encoding="utf-8")
+        raise RuntimeError(f"Failed parsing profile page. Saved {debug_prefix}.html") from e
+
+
+def normalize_maps(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    out = []
+    for r in rows:
+        out.append(
+            {
+                "map": r.get("map", ""),
+                "win_rate_pct": to_float(r.get("win_rate", "")),
+                "wins": to_int(r.get("wins", "")),
+                "losses": to_int(r.get("losses", "")),
+                "kd": to_float(r.get("kd", "")),
+                "kill_round": to_float(r.get("kill_round", "")),
+                "dmg_round": to_float(r.get("dmg_round", "")),
+                "score_round": to_float(r.get("score_round", "")),
+                "raw": r,
+            }
+        )
+    return out
+
+
+# ============================================================
+# Aggregation / Insights
+# ============================================================
+def aggregate_team_maps(players_maps: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Any]:
+    by_map: Dict[str, Dict[str, Any]] = {}
+
+    for riot_id, rows in players_maps.items():
+        for r in rows:
+            m = r.get("map") or ""
+            if not m:
+                continue
+            games = int(r.get("wins", 0)) + int(r.get("losses", 0))
+            if games <= 0:
+                continue
+
+            if m not in by_map:
+                by_map[m] = {
+                    "map": m,
+                    "games": 0,
+                    "wins": 0,
+                    "losses": 0,
+                    "sum_kd": 0.0,
+                    "sum_kr": 0.0,
+                    "sum_dmg": 0.0,
+                    "sum_score": 0.0,
+                }
+
+            by_map[m]["games"] += games
+            by_map[m]["wins"] += int(r.get("wins", 0))
+            by_map[m]["losses"] += int(r.get("losses", 0))
+
+            by_map[m]["sum_kd"] += float(r.get("kd", 0.0)) * games
+            by_map[m]["sum_kr"] += float(r.get("kill_round", 0.0)) * games
+            by_map[m]["sum_dmg"] += float(r.get("dmg_round", 0.0)) * games
+            by_map[m]["sum_score"] += float(r.get("score_round", 0.0)) * games
+
+    rows = []
+    for m, v in by_map.items():
+        g = v["games"]
+        rows.append(
+            {
+                "map": m,
+                "games": g,
+                "wins": v["wins"],
+                "losses": v["losses"],
+                "win_rate_pct": (v["wins"] / g * 100.0) if g else 0.0,
+                "kd": (v["sum_kd"] / g) if g else 0.0,
+                "kill_round": (v["sum_kr"] / g) if g else 0.0,
+                "dmg_round": (v["sum_dmg"] / g) if g else 0.0,
+                "score_round": (v["sum_score"] / g) if g else 0.0,
+            }
+        )
+
+    rows.sort(key=lambda x: x["games"], reverse=True)
+    return {"by_map": rows}
+
+
+# ============================================================
+# Progress task system (SSE)
+# ============================================================
+@dataclass
+class TaskState:
+    pct: int = 0
+    msg: str = "Queued…"
+    done: bool = False
+    error: Optional[str] = None
+    redirect: Optional[str] = None
+
+
+TASKS: Dict[str, TaskState] = {}
+
+
+def _new_task_id() -> str:
+    return f"t{int(time.time() * 1000)}_{os.getpid()}_{len(TASKS)+1}"
+
+
+def set_task(task_id: str, pct: int, msg: str) -> None:
+    st = TASKS.get(task_id)
+    if not st:
+        return
+    st.pct = max(0, min(100, int(pct)))
+    st.msg = msg
+
+
+def finish_task(task_id: str, redirect_url: str) -> None:
+    st = TASKS.get(task_id)
+    if not st:
+        return
+    st.pct = 100
+    st.msg = "Done."
+    st.done = True
+    st.redirect = redirect_url
+
+
+def fail_task(task_id: str, err: str) -> None:
+    st = TASKS.get(task_id)
+    if not st:
+        return
+    st.error = err
+    st.msg = err
+    st.done = True
+    st.pct = max(st.pct, 5)
+
+
+# ============================================================
+# Snapshot Builder (ALL players × ALL seasons)
+# ============================================================
+def build_team_snapshot(
+    team_key: str,
+    team_name: str,
+    team_ids: List[str],
+    polite_sleep: float = 0.8,
+    progress_cb: Optional[Callable[[int, str], None]] = None,
+) -> dict:
+    total_steps = max(1, len(team_ids) * len(SEASONS) * 3)  # profile+maps+agents
+    done_steps = 0
+
+    def bump(msg: str):
+        nonlocal done_steps
+        done_steps += 1
+        pct = int((done_steps / total_steps) * 90) + 5  # 5..95 during work
+        if progress_cb:
+            progress_cb(pct, msg)
+
+    snap: Dict[str, Any] = {
+        "team_key": team_key,
+        "team_name": team_name,
+        "updated_ts": int(time.time()),
+        "players": team_ids,
+        "seasons": SEASONS,
+        "data": {},
+    }
+
+    with sync_playwright() as p:
+        browser = None
+        context = None
+        try:
+            browser = p.chromium.launch(
+                headless=False,
+                args=["--start-maximized", "--disable-blink-features=AutomationControlled"],
+            )
+            context = browser.new_context(viewport=None, locale="en-US")
+            context.set_default_timeout(40_000)
+
+            for season_label, season_id in SEASONS.items():
+                snap["data"][season_id] = {}
+
+                for riot_id in team_ids:
+                    slug = riot_to_opgg_slug(riot_id)
+                    profile_url = opgg_profile_url_from_slug(slug, season_id)
+                    maps_url = opgg_maps_url_from_slug(slug, season_id)
+                    agents_url = opgg_agents_url_from_slug(slug, season_id)
+
+                    pref = f"{team_key}_{riot_id.replace('#','_')}_{season_id}"
+
+                    bump(f"[{season_label}] {riot_id}: profile…")
+                    profile_stats = scrape_profile_page(
+                        context,
+                        profile_url,
+                        debug_prefix=f"profile_{pref}",
+                    )
+
+                    bump(f"[{season_label}] {riot_id}: maps…")
+                    maps_raw = scrape_maps_page(
+                        context,
+                        maps_url,
+                        debug_prefix=f"maps_{pref}",
+                    )
+                    maps = normalize_maps(maps_raw)
+
+                    bump(f"[{season_label}] {riot_id}: agents…")
+                    agents = scrape_agents_page(
+                        context,
+                        agents_url,
+                        debug_prefix=f"agents_{pref}",
+                    )
+
+                    snap["data"][season_id][riot_id] = {
+                        "season_label": season_label,
+                        "season_id": season_id,
+                        "riot_id": riot_id,
+                        "slug": slug,
+                        "profile_url": profile_url,
+                        "maps_url": maps_url,
+                        "agents_url": agents_url,
+                        "profile_stats": profile_stats,
+                        "maps": maps,
+                        "agents": agents,
+                    }
+
+                    time.sleep(polite_sleep)
+
+        finally:
+            try:
+                if context:
+                    context.close()
+            except Exception:
+                pass
+            try:
+                if browser:
+                    browser.close()
+            except Exception:
+                pass
+
+    return snap
+
+
+DASHBOARD_DIR = APP_DIR / "data" / "dashboards"
+DASHBOARD_DIR.mkdir(parents=True, exist_ok=True)
+
+def dashboard_path(dash_id: str) -> Path:
+    return DASHBOARD_DIR / f"{dash_id}.json"
+
+def load_dashboard(dash_id: str) -> dict:
+    p = dashboard_path(dash_id)
+    if not p.exists():
+        return {}
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+def save_dashboard(dash_id: str, data: dict) -> None:
+    dashboard_path(dash_id).write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+# ============================================================
+# Routes
+# ============================================================
+@app.context_processor
+def inject_globals():
+    return {
+        "seasons": SEASONS,
+        "default_season": DEFAULT_SEASON_ID,
+    }
+@app.get("/")
+def index():
+    q = (request.args.get("q") or "").strip().lower()
+    teams = list_snapshots()
+
+    if q:
+        teams = [
+            t for t in teams
+            if q in (t.get("team_name", "").lower()) or q in (t.get("team_key", "").lower())
+        ]
+
+    return render_template(
+        "index.html",
+        teams=teams,
+        q=request.args.get("q") or "",
+        seasons=SEASONS,
+        default_season=DEFAULT_SEASON_ID,
+    )
+
+
+@app.post("/upload")
+def upload():
+    """
+    Non-JS fallback: build synchronously (visible Chromium).
+    Your index.html calls showProgress() on click; live updates require /upload_async + SSE.
+    """
+    if "file" not in request.files:
+        return redirect(url_for("index"))
+
+    f = request.files["file"]
+    if not f or not f.filename:
+        return redirect(url_for("index"))
+
+    text = f.read().decode("utf-8", errors="replace")
+    team_name, team_ids = parse_team_upload(text)
+    if not team_ids:
+        abort(400, "No valid riot IDs found. Use first line team name, then name#tag lines.")
+
+    team_key = team_key_from_ids(team_name, team_ids)
+    (UPLOAD_DIR / f"{team_key}.txt").write_text("\n".join([team_name] + team_ids), encoding="utf-8")
+
+    snap = build_team_snapshot(team_key, team_name, team_ids, polite_sleep=0.8)
+    save_snapshot(team_key, snap)
+
+    return redirect(url_for("team_view", team_key=team_key, seasonId=DEFAULT_SEASON_ID))
+
+
+@app.post("/upload_async")
+def upload_async():
+    """
+    JS/SSE-friendly: start background scraper and return task_id + redirect.
+    """
+    if "file" not in request.files:
+        abort(400, "Missing file")
+    f = request.files["file"]
+    if not f or not f.filename:
+        abort(400, "Missing filename")
+
+    text = f.read().decode("utf-8", errors="replace")
+    team_name, team_ids = parse_team_upload(text)
+    if not team_ids:
+        abort(400, "No valid riot IDs found. Use one per line like name#tag (first line team name).")
+
+    team_key = team_key_from_ids(team_name, team_ids)
+    (UPLOAD_DIR / f"{team_key}.txt").write_text("\n".join([team_name] + team_ids), encoding="utf-8")
+
+    task_id = _new_task_id()
+    TASKS[task_id] = TaskState(pct=2, msg="Starting…")
+
+    def worker():
+        try:
+            set_task(task_id, 5, "Launching Chromium…")
+            snap = build_team_snapshot(
+                team_key,
+                team_name,
+                team_ids,
+                polite_sleep=0.8,
+                progress_cb=lambda pct, msg: set_task(task_id, pct, msg),
+            )
+            save_snapshot(team_key, snap)
+            finish_task(task_id, url_for("team_view", team_key=team_key, seasonId=DEFAULT_SEASON_ID))
+        except Exception as e:
+            fail_task(task_id, str(e))
+
+    threading.Thread(target=worker, daemon=True).start()
+
+    return jsonify(
+        {
+            "task_id": task_id,
+            "redirect": url_for("team_view", team_key=team_key, seasonId=DEFAULT_SEASON_ID),
+        }
+    )
+
+
+@app.get("/progress/<task_id>")
+def progress(task_id: str):
+    """
+    Server-Sent Events stream: emits {"pct":..,"msg":..,"done":..,"redirect":..}
+    """
+    if task_id not in TASKS:
+        abort(404)
+
+    def gen():
+        last = None
+        while True:
+            st = TASKS.get(task_id)
+            if not st:
+                break
+
+            payload = {
+                "pct": st.pct,
+                "msg": st.msg,
+                "done": st.done,
+                "redirect": st.redirect,
+                "error": st.error,
+            }
+            txt = json.dumps(payload)
+            if txt != last:
+                yield f"data: {txt}\n\n"
+                last = txt
+
+            if st.done:
+                break
+            time.sleep(0.25)
+
+    return app.response_class(gen(), mimetype="text/event-stream")
+
+
+@app.get("/team/<team_key>")
+def team_view(team_key: str):
+    season_id = request.args.get("seasonId") or DEFAULT_SEASON_ID
+    snap = load_snapshot(team_key)
+    if not snap:
+        abort(404)
+
+    if season_id not in (snap.get("data") or {}):
+        season_id = DEFAULT_SEASON_ID
+
+    team_name = snap.get("team_name") or team_key
+    team_ids = snap.get("players") or []
+    season_block = (snap.get("data") or {}).get(season_id, {})
+
+    players_maps = {}
+    for rid in team_ids:
+        entry = season_block.get(rid) or {}
+        players_maps[rid] = entry.get("maps") or []
+
+    team_agg = aggregate_team_maps(players_maps)
+    map_rows = team_agg.get("by_map") or []
+
+    # Safe team_summary so templates never crash
+    total_games = sum(int(r.get("games", 0)) for r in map_rows)
+    avg_dmg = (
+        sum(float(r.get("dmg_round", 0.0)) * int(r.get("games", 0)) for r in map_rows) / total_games
+        if total_games else 0.0
+    )
+    best_map = max(map_rows, key=lambda r: (r.get("win_rate_pct", 0.0), r.get("games", 0)), default=None)
+    worst_map = min(map_rows, key=lambda r: (r.get("win_rate_pct", 999.0), -r.get("games", 0)), default=None)
+
+    team_summary = {
+        "total_games": total_games,
+        "avg_dmg_round": avg_dmg,
+        "best_map": best_map,
+        "worst_map": worst_map,
+    }
+
+    # Per-player summaries (roster table)
+    summaries = []
+    for rid in team_ids:
+        entry = season_block.get(rid) or {}
+        maps = entry.get("maps") or []
+
+        wins = sum(int(m.get("wins", 0)) for m in maps)
+        losses = sum(int(m.get("losses", 0)) for m in maps)
+        games = wins + losses
+        win_rate = (wins / games * 100.0) if games else 0.0
+
+        total_g = 0
+        w_kd = w_kr = w_dmg = w_score = 0.0
+        for m in maps:
+            g = int(m.get("wins", 0)) + int(m.get("losses", 0))
+            if g <= 0:
+                continue
+            total_g += g
+            w_kd += float(m.get("kd", 0.0)) * g
+            w_kr += float(m.get("kill_round", 0.0)) * g
+            w_dmg += float(m.get("dmg_round", 0.0)) * g
+            w_score += float(m.get("score_round", 0.0)) * g
+
+        summaries.append({
+            "riot_id": rid,
+            "games": games,
+            "wins": wins,
+            "losses": losses,
+            "win_rate_pct": win_rate,
+            "kd": (w_kd / total_g) if total_g else 0.0,
+            "kill_round": (w_kr / total_g) if total_g else 0.0,
+            "dmg_round": (w_dmg / total_g) if total_g else 0.0,
+            "score_round": (w_score / total_g) if total_g else 0.0,
+            "profile_url": entry.get("profile_url"),
+        })
+
+    summaries.sort(key=lambda x: x["games"], reverse=True)
+
+    return render_template(
+        "team.html",
+        team_key=team_key,
+        team_name=team_name,
+        seasons=SEASONS,
+        season_id=season_id,
+        team_ids=team_ids,
+        summaries=summaries,
+        team_agg=team_agg,
+        map_rows=map_rows,
+        team_summary=team_summary,
+        snapshot_updated_ts=snap.get("updated_ts"),
+    )
+
+
+@app.get("/team/<team_key>/player/<riot_id>")
+def player_view(team_key: str, riot_id: str):
+    season_id = request.args.get("seasonId") or DEFAULT_SEASON_ID
+    snap = load_snapshot(team_key)
+    if not snap:
+        abort(404)
+
+    team_name = snap.get("team_name") or team_key
+    team_ids = snap.get("players") or []
+    if riot_id not in team_ids:
+        abort(404)
+
+    if season_id not in (snap.get("data") or {}):
+        season_id = DEFAULT_SEASON_ID
+
+    entry = (snap.get("data") or {}).get(season_id, {}).get(riot_id) or {}
+
+    return render_template(
+        "player.html",
+        team_key=team_key,
+        team_name=team_name,
+        riot_id=riot_id,
+        seasons=SEASONS,
+        season_id=season_id,
+        profile_url=entry.get("profile_url"),
+        agents_url=entry.get("agents_url"),
+        maps_url=entry.get("maps_url"),
+        profile_stats=entry.get("profile_stats") or {},
+        agents=entry.get("agents") or [],
+        maps=entry.get("maps") or [],
+        snapshot_updated_ts=snap.get("updated_ts"),
+    )
+
+
+@app.post("/team/<team_key>/update")
+def team_update(team_key: str):
+    snap = load_snapshot(team_key)
+    if not snap:
+        abort(404)
+
+    team_name = snap.get("team_name") or team_key
+    team_ids = snap.get("players") or []
+    if not team_ids:
+        abort(400, "No players in snapshot.")
+
+    snap2 = build_team_snapshot(team_key, team_name, team_ids, polite_sleep=0.8)
+    save_snapshot(team_key, snap2)
+
+    season_id = request.args.get("seasonId") or DEFAULT_SEASON_ID
+    return redirect(url_for("team_view", team_key=team_key, seasonId=season_id))
+
+
+@app.post("/team/<team_key>/delete")
+def team_delete(team_key: str):
+    p = snapshot_path(team_key)
+    if p.exists():
+        p.unlink()
+    txt = UPLOAD_DIR / f"{team_key}.txt"
+    if txt.exists():
+        txt.unlink()
+    return redirect(url_for("index"))
+
+
+@app.get("/team/<team_key>/snapshot.json")
+def download_snapshot(team_key: str):
+    p = snapshot_path(team_key)
+    if not p.exists():
+        abort(404)
+    return send_file(p, as_attachment=True)
+
+@app.post("/dashboard/<dash_id>/delete")
+def dashboard_delete(dash_id: str):
+    """
+    This endpoint name MUST match url_for('dashboard_delete', dash_id=...)
+    """
+    p = dashboard_path(dash_id)
+    if p.exists():
+        p.unlink()
+    return redirect(url_for("dashboard"))
+
+@app.get("/dashboard/view/<dash_id>")
+def dashboard_view_imported(dash_id: str):
+    dash = load_dashboard(dash_id)
+    if not dash:
+        abort(404)
+
+    season_id = (request.args.get("seasonId") or "").strip() or DEFAULT_SEASON_ID
+
+    def pick_two_snaps(d: dict):
+        # 1) Preferred keys
+        a = d.get("team_a_snapshot")
+        b = d.get("team_b_snapshot")
+        if a and b:
+            return a, b
+
+        # 2) Common alternatives
+        for ka, kb in [
+            ("A", "B"),
+            ("snap_a", "snap_b"),
+            ("snapshot_a", "snapshot_b"),
+            ("teamA", "teamB"),
+            ("team_a", "team_b"),
+        ]:
+            a = d.get(ka)
+            b = d.get(kb)
+            if a and b:
+                return a, b
+
+        # 3) If stored as a list/dict of teams
+        teams = d.get("teams")
+        if isinstance(teams, list) and len(teams) >= 2:
+            if isinstance(teams[0], dict) and isinstance(teams[1], dict):
+                return teams[0], teams[1]
+
+        snaps = d.get("snapshots")
+        if isinstance(snaps, dict) and len(snaps) >= 2:
+            vals = list(snaps.values())
+            if isinstance(vals[0], dict) and isinstance(vals[1], dict):
+                return vals[0], vals[1]
+
+        return None, None
+
+    snap_a, snap_b = pick_two_snaps(dash)
+    if not snap_a or not snap_b:
+        abort(400, "Imported dashboard is missing team snapshots.")
+
+    A = summarize_team_snapshot(snap_a, season_id)
+    B = summarize_team_snapshot(snap_b, season_id)
+
+    return render_template(
+        "dashboard_imported.html",
+        dash_id=dash_id,
+        title=dash.get("title"),
+        created_ts=dash.get("created_ts"),
+        season_id=season_id,
+        A=A,
+        B=B,
+    )
+
+@app.post("/import")
+def import_snapshot_json():
+    if "file" not in request.files:
+        abort(400, "Missing file")
+    f = request.files["file"]
+    if not f or not f.filename:
+        abort(400, "Missing filename")
+    if not f.filename.lower().endswith(".json"):
+        abort(400, "Upload a .json snapshot")
+
+    data = json.loads(f.read().decode("utf-8", errors="replace"))
+    team_key = data.get("team_key")
+    if not team_key:
+        abort(400, "Invalid snapshot: missing team_key")
+
+    save_snapshot(team_key, data)
+    return redirect(url_for("team_view", team_key=team_key, seasonId=DEFAULT_SEASON_ID))
+
+
+@app.post("/import-zip")
+def import_snapshot_zip():
+    if "file" not in request.files:
+        abort(400, "Missing file")
+    f = request.files["file"]
+    if not f or not f.filename:
+        abort(400, "Missing filename")
+    if not f.filename.lower().endswith(".zip"):
+        abort(400, "Upload a .zip")
+
+    b = io.BytesIO(f.read())
+    imported = 0
+    last_key = None
+
+    with zipfile.ZipFile(b, "r") as z:
+        for name in z.namelist():
+            if not name.lower().endswith(".json"):
+                continue
+            raw = z.read(name)
+            try:
+                data = json.loads(raw.decode("utf-8", errors="replace"))
+            except Exception:
+                continue
+            team_key = data.get("team_key")
+            if not team_key:
+                continue
+            save_snapshot(team_key, data)
+            imported += 1
+            last_key = team_key
+
+    if imported <= 0:
+        abort(400, "No valid snapshot .json files found in zip.")
+
+    return redirect(url_for("team_view", team_key=last_key, seasonId=DEFAULT_SEASON_ID))
+
+
+@app.get("/export_zip")
+def export_zip():
+    """
+    Exports ALL saved snapshots as a single zip for sharing.
+    """
+    mem = io.BytesIO()
+    with zipfile.ZipFile(mem, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        for p in SNAPSHOT_DIR.glob("*.json"):
+            z.write(p, arcname=p.name)
+    mem.seek(0)
+    return send_file(mem, mimetype="application/zip", as_attachment=True, download_name="snapshots.zip")
+
+
+# -------------------------
+# Dashboard
+# -------------------------
+
+
+@app.get("/dashboard")
+def dashboard():
+    teams = list_snapshots()
+    dashboards = []
+    for p in DASHBOARD_DIR.glob("*.json"):
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+            dashboards.append({
+                "dash_id": d.get("dash_id"),
+                "title": f"{d.get('team_a_name','A')} vs {d.get('team_b_name','B')}",
+                "team_a_name": d.get("team_a_name"),
+                "team_b_name": d.get("team_b_name"),
+                "created_ts": d.get("created_ts"),
+            })
+        except Exception:
+            continue
+    dashboards.sort(key=lambda x: x.get("created_ts") or 0, reverse=True)
+
+    return render_template(
+        "dashboard.html",
+        teams=teams,
+        dashboards=dashboards,
+        seasons=SEASONS,
+        default_season=DEFAULT_SEASON_ID,
+    )
+
+
+@app.get("/dashboards")
+def dashboards_alias():
+    return redirect(url_for("dashboard"))
+
+
+@app.post("/dashboard/import-zip")
+def dashboard_import_zip():
+    if "file" not in request.files:
+        abort(400, "Missing file")
+    f = request.files["file"]
+    if not f or not f.filename:
+        abort(400, "Missing filename")
+    if not f.filename.lower().endswith(".zip"):
+        abort(400, "Upload a .zip")
+
+    b = io.BytesIO(f.read())
+    snaps = []
+
+    with zipfile.ZipFile(b, "r") as z:
+        for name in z.namelist():
+            if not name.lower().endswith(".json"):
+                continue
+            try:
+                data = json.loads(z.read(name).decode("utf-8", errors="replace"))
+            except Exception:
+                continue
+            # team snapshots should have team_key
+            if isinstance(data, dict) and data.get("team_key"):
+                snaps.append(data)
+
+    if len(snaps) < 2:
+        abort(400, "Zip must contain at least TWO team snapshot .json files.")
+
+    # pick first two (or add logic to choose specific ones)
+    snap_a, snap_b = snaps[0], snaps[1]
+
+    dash_id = uuid.uuid4().hex[:10]
+    title = f"{snap_a.get('team_name') or snap_a.get('team_key')} vs {snap_b.get('team_name') or snap_b.get('team_key')}"
+
+    dash = {
+        "title": title,
+        "created_ts": int(time.time()),
+        "team_a_snapshot": snap_a,
+        "team_b_snapshot": snap_b,
+    }
+    save_dashboard(dash_id, dash)
+
+    return redirect(url_for("dashboard_view_imported", dash_id=dash_id))
+
+    if not dash or not dash.get("dash_id"):
+        abort(400, "dashboard.json missing from zip (or invalid).")
+
+    (DASHBOARD_DIR / f"{dash['dash_id']}.json").write_text(json.dumps(dash, indent=2), encoding="utf-8")
+    return redirect(url_for("dashboard_view_imported", dash_id=dash["dash_id"]))
+
+
+# -------------------------
+# Compare
+# -------------------------
+
+@app.get("/compare")
+def compare_picker():
+    teams = list_snapshots()
+    return render_template(
+        "compare_picker.html",
+        teams=teams,
+        seasons=SEASONS,
+        default_season=DEFAULT_SEASON_ID,
+    )
+
+
+@app.get("/compare/run")
+def compare_run():
+    """
+    /compare/run?a=<team_key>&b=<team_key>&seasonId=<season_id>
+    """
+    a = (request.args.get("a") or "").strip()
+    b = (request.args.get("b") or "").strip()
+    season_id = request.args.get("seasonId") or DEFAULT_SEASON_ID
+
+    if not a or not b or a == b:
+        abort(400, "Pick two different teams to compare.")
+
+    snap_a = load_snapshot(a)
+    snap_b = load_snapshot(b)
+    if not snap_a or not snap_b:
+        abort(404, "One or both snapshots not found.")
+
+    if season_id not in (snap_a.get("data") or {}):
+        season_id = DEFAULT_SEASON_ID
+    if season_id not in (snap_b.get("data") or {}):
+        season_id = DEFAULT_SEASON_ID
+
+    A = summarize_team_snapshot(snap_a, season_id)
+    B = summarize_team_snapshot(snap_b, season_id)
+    insights = generate_comparison_insights(A, B)
+    dash = save_comparison_dashboard(snap_a, snap_b, season_id, A, B, insights)
+
+    return render_template(
+        "compare_view.html",
+        season_id=season_id,
+        seasons=SEASONS,
+        team_a=A,
+        team_b=B,
+        insights=insights,
+        compare_id=dash["dash_id"],
+    )
+
+
+@app.get("/compare/export/<compare_id>")
+def export_comparison(compare_id: str):
+    dash_path = DASHBOARD_DIR / f"{compare_id}.json"
+    if not dash_path.exists():
+        abort(404)
+
+    dash = json.loads(dash_path.read_text(encoding="utf-8"))
+    a_key = dash.get("team_a_key")
+    b_key = dash.get("team_b_key")
+
+    a_path = snapshot_path(a_key) if a_key else None
+    b_path = snapshot_path(b_key) if b_key else None
+    if not a_path or not a_path.exists() or not b_path or not b_path.exists():
+        abort(400, "Missing one or both team snapshots required for export.")
+
+    mem = io.BytesIO()
+    with zipfile.ZipFile(mem, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        z.writestr("dashboard.json", dash_path.read_text(encoding="utf-8"))
+        z.writestr(f"teamA_{a_key}.json", a_path.read_text(encoding="utf-8"))
+        z.writestr(f"teamB_{b_key}.json", b_path.read_text(encoding="utf-8"))
+
+    mem.seek(0)
+    return send_file(mem, mimetype="application/zip", as_attachment=True, download_name=f"comparison_{compare_id}.zip")
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)

@@ -46,8 +46,7 @@ app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10MB
 SEASONS: Dict[str, str] = {
     "V26 - ACT 1": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
     "V25 - ACT 6": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
-    # "V25 - ACT 5": "5adc33fa-4f30-2899-f131-6fba64c5dd3a",
-    # "V25 - ACT 3": "aef237a0-494d-3a14-a1c8-ec8de84e309c",
+    "V25 - ACT 5": "5adc33fa-4f30-2899-f131-6fba64c5dd3a",
 }
 DEFAULT_SEASON_ID = SEASONS["V26 - ACT 1"]
 
@@ -656,47 +655,99 @@ def scrape_agents_page(context, url: str, debug_prefix: str) -> List[Dict[str, A
 
     soup = BeautifulSoup(html, "html.parser")
 
-    # Heuristic: agent rows usually have an image + agent name and stat columns.
-    # We'll scrape any table rows that look like agent tables.
+    # Heuristic: agent rows usually have stat columns like
+    # Agent | Matches | Win% | KDA | K/D | ACS | Dmg/R
     agents: List[Dict[str, Any]] = []
 
     for t in soup.find_all("table"):
-        txt = t.get_text(" ", strip=True).lower()
-        if "agent" not in txt and "agents" not in txt:
-            # still might be agent table (OP.GG varies); we’ll keep scanning
-            pass
+        rows = t.select("tbody tr")
+        if not rows:
+            continue
 
-        for tr in t.select("tbody tr"):
+        for tr in rows:
             tds = tr.find_all(["td", "th"])
-            if len(tds) < 4:
+            if len(tds) < 3:
                 continue
 
-            # Try to find agent name inside row (common: a strong span or link text)
-            agent_name = ""
-            # prefer first cell text without numbers
-            first = text_clean(tds[0])
-            agent_name = first
-
-            row_text = text_clean(tr)
-            # crude filters to avoid unrelated tables
-            if not agent_name or len(agent_name) > 40:
-                continue
-            if "map" in row_text.lower():
+            cells = [text_clean(td) for td in tds]
+            if len(cells) < 3:
                 continue
 
-            nums = re.findall(r"[\d.]+%?|[\d.]+:\d+", row_text)
-            if len(nums) < 3:
+            # Expect matches in col 2 and a % in col 3.
+            if "%" not in cells[2] or not re.search(r"\d", cells[1]):
                 continue
 
-            # Best-effort mapping (because OP.GG columns can move)
+            agent_name = cells[0]
+            if not agent_name or len(agent_name) > 60:
+                continue
+
+            win_rate_pct = to_float(cells[2])
+            kda = None
+            if len(cells) >= 4:
+                m = re.search(r"(\d+(?:\.\d+)?)\s*:\s*1", cells[3])
+                if m:
+                    kda = f"{m.group(1)}:1"
+                elif cells[3]:
+                    kda = cells[3]
+
             agents.append(
                 {
                     "agent": agent_name,
-                    "matches": None,
-                    "win_rate": None,
-                    "kda": None,
-                    "acs": None,
-                    "dmg_round": None,
+                    "matches": to_int(cells[1]),
+                    "win_rate": win_rate_pct,
+                    "win_rate_pct": win_rate_pct,
+                    "kda": kda,
+                    "kd": to_float(cells[4]) if len(cells) > 4 else None,
+                    "acs": to_float(cells[5]) if len(cells) > 5 else None,
+                    "dmg_round": to_float(cells[6]) if len(cells) > 6 else None,
+                    "raw": " ".join([c for c in cells if c]),
+                }
+            )
+
+        if agents:
+            break
+
+    if agents:
+        return agents
+
+    # Fallback: best-effort parse from row text if the table layout changed.
+    for t in soup.find_all("table"):
+        for tr in t.select("tbody tr"):
+            row_text = text_clean(tr)
+            if not row_text:
+                continue
+            # crude filters to avoid unrelated tables
+            if "map" in row_text.lower():
+                continue
+
+            m = re.search(r"(\d+)\s+(\d+(?:\.\d+)?)%", row_text)
+            if not m:
+                continue
+
+            agent_name = row_text.split(m.group(0))[0].strip()
+            if not agent_name or len(agent_name) > 60:
+                continue
+
+            kda = None
+            m_kda = re.search(r"(\d+(?:\.\d+)?)\s*:\s*1", row_text)
+            if m_kda:
+                kda = f"{m_kda.group(1)}:1"
+
+            nums = [to_float(n) for n in re.findall(r"\d+(?:\.\d+)?", row_text.replace(",", ""))]
+            kd = nums[-3] if len(nums) >= 3 else None
+            acs = nums[-2] if len(nums) >= 2 else None
+            dmg_round = nums[-1] if len(nums) >= 1 else None
+
+            agents.append(
+                {
+                    "agent": agent_name,
+                    "matches": to_int(m.group(1)),
+                    "win_rate": to_float(m.group(2)),
+                    "win_rate_pct": to_float(m.group(2)),
+                    "kda": kda,
+                    "kd": kd,
+                    "acs": acs,
+                    "dmg_round": dmg_round,
                     "raw": row_text,
                 }
             )
@@ -721,9 +772,21 @@ def parse_profile_stats_and_roles(html: str) -> Dict[str, Any]:
         if h3.get_text(strip=True).lower() == "stats":
             stats_card = h3.find_parent("div")
             break
+    if stats_card is None:
+        # Fallback for newer OP.GG layout: card with Dmg/round + KDA rows
+        best = None
+        best_len = 10**9
+        for div in soup.find_all("div"):
+            txt = div.get_text(" ", strip=True)
+            if "Stats" in txt and "Dmg/round" in txt and "KDA" in txt:
+                l = len(txt)
+                if l < best_len:
+                    best_len = l
+                    best = div
+        stats_card = best
 
     if stats_card:
-        # In your sample: first UL has 6 items; second UL is breakdown (head/body/leg + kills/deaths/assists)
+        # In older layout: first UL has 6 items; second UL is breakdown.
         uls = stats_card.find_all("ul")
         if len(uls) >= 1:
             items = []
@@ -745,23 +808,88 @@ def parse_profile_stats_and_roles(html: str) -> Dict[str, Any]:
                     items2.append({"label": label, "value": value})
             out["stats_card"]["breakdown"] = items2
 
+        if not out["stats_card"]["top"] and not out["stats_card"]["breakdown"]:
+            # Fallback: gather all li rows in the card.
+            items = []
+            for li in stats_card.find_all("li"):
+                spans = li.find_all("span")
+                if len(spans) >= 2:
+                    label = spans[0].get_text(" ", strip=True)
+                    value = spans[1].get_text(" ", strip=True)
+                    if label and value:
+                        items.append({"label": label, "value": value})
+            if items:
+                if len(items) > 6:
+                    out["stats_card"]["top"] = items[:6]
+                    out["stats_card"]["breakdown"] = items[6:]
+                else:
+                    out["stats_card"]["top"] = items
+
+    if not out["stats_card"]["top"] and not out["stats_card"]["breakdown"]:
+        # If we latched onto a menu header, retry with content-based search.
+        best = None
+        best_len = 10**9
+        for div in soup.find_all("div"):
+            txt = div.get_text(" ", strip=True)
+            if "Stats" in txt and "Dmg/round" in txt and "KDA" in txt:
+                l = len(txt)
+                if l < best_len:
+                    best_len = l
+                    best = div
+        if best:
+            items = []
+            for li in best.find_all("li"):
+                spans = li.find_all("span")
+                if len(spans) >= 2:
+                    label = spans[0].get_text(" ", strip=True)
+                    value = spans[1].get_text(" ", strip=True)
+                    if label and value:
+                        items.append({"label": label, "value": value})
+            if items:
+                if len(items) > 6:
+                    out["stats_card"]["top"] = items[:6]
+                    out["stats_card"]["breakdown"] = items[6:]
+                else:
+                    out["stats_card"]["top"] = items
+
     # Find "Roles" card by h3 text
     roles_card = None
     for h3 in soup.find_all(["h3", "h2"]):
         if h3.get_text(strip=True).lower() == "roles":
             roles_card = h3.find_parent("div")
             break
+    if roles_card is None:
+        # Fallback for newer OP.GG layout
+        best = None
+        best_len = 10**9
+        for div in soup.find_all("div"):
+            txt = div.get_text(" ", strip=True)
+            if txt.startswith("Roles") and "KDA" in txt and "W / L" in txt:
+                l = len(txt)
+                if l < best_len:
+                    best_len = l
+                    best = div
+        if best is None:
+            for div in soup.find_all("div"):
+                txt = div.get_text(" ", strip=True)
+                if txt.startswith("Roles") and "KDA" in txt:
+                    l = len(txt)
+                    if l < best_len:
+                        best_len = l
+                        best = div
+        roles_card = best
 
     roles: List[Dict[str, Any]] = []
-    if roles_card:
-        # rows are <li> elements
-        for li in roles_card.find_all("li"):
+    def _parse_roles(card):
+        parsed: List[Dict[str, Any]] = []
+        if not card:
+            return parsed
+        for li in card.find_all("li"):
             row_text = li.get_text(" ", strip=True)
             if not row_text:
                 continue
 
-            # Role name: usually the first bold-ish label (we’ll pick first short token line)
-            # Better: find the first div that contains role name "Sentinel/Duelist/Initiator/Controller"
+            # Role name: usually the first bold-ish label
             role_name = ""
             for cand in ["Sentinel", "Duelist", "Initiator", "Controller"]:
                 if cand.lower() in row_text.lower():
@@ -784,9 +912,12 @@ def parse_profile_stats_and_roles(html: str) -> Dict[str, Any]:
             m_wl = re.search(r"(\d+)\s*W\s*/\s*(\d+)\s*L", row_text, re.IGNORECASE)
             wins = int(m_wl.group(1)) if m_wl else None
             losses = int(m_wl.group(2)) if m_wl else None
+            win_rate = ""
+            m_wr = re.search(r"(\d+)%\s*\d+\s*W\s*/\s*\d+\s*L", row_text, re.IGNORECASE)
+            if m_wr:
+                win_rate = m_wr.group(1) + "%"
 
-            # Role %: "62%" near role label line, but might collide with win%
-            # We'll pick first percent after role name occurrence
+            # Role %: "62%" near role label line
             role_pct = ""
             try:
                 idx = row_text.lower().index(role_name.lower())
@@ -796,7 +927,7 @@ def parse_profile_stats_and_roles(html: str) -> Dict[str, Any]:
             except Exception:
                 role_pct = ""
 
-            roles.append(
+            parsed.append(
                 {
                     "role": role_name,
                     "role_pct": role_pct,
@@ -806,8 +937,24 @@ def parse_profile_stats_and_roles(html: str) -> Dict[str, Any]:
                     "assists": assists,
                     "wins": wins,
                     "losses": losses,
+                    "win_rate": win_rate,
                 }
             )
+        return parsed
+
+    roles = _parse_roles(roles_card)
+    if not roles:
+        # Retry with content-based search if header-based selection failed.
+        best = None
+        best_len = 10**9
+        for div in soup.find_all("div"):
+            txt = div.get_text(" ", strip=True)
+            if txt.startswith("Roles") and "KDA" in txt:
+                l = len(txt)
+                if l < best_len:
+                    best_len = l
+                    best = div
+        roles = _parse_roles(best)
 
     out["roles_card"] = roles
     return out
@@ -860,6 +1007,67 @@ def normalize_maps(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 "raw": r,
             }
         )
+    return out
+
+
+def normalize_agents(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for r in rows or []:
+        agent = r.get("agent") or r.get("name") or ""
+        raw = r.get("raw") or ""
+
+        matches = r.get("matches")
+        win_rate_pct = r.get("win_rate_pct")
+        win_rate = r.get("win_rate")
+        kda = r.get("kda")
+        kd = r.get("kd")
+        acs = r.get("acs")
+        dmg_round = r.get("dmg_round")
+
+        if (matches in (None, "", 0)) or win_rate_pct is None:
+            if raw:
+                m = re.search(r"(\d+)\s+(\d+(?:\.\d+)?)%", raw)
+                if m:
+                    if matches in (None, "", 0):
+                        matches = to_int(m.group(1))
+                    if win_rate_pct is None:
+                        win_rate_pct = to_float(m.group(2))
+
+        if win_rate_pct is None:
+            win_rate_pct = to_float(win_rate)
+
+        matches = to_int(matches)
+        win_rate_pct = to_float(win_rate_pct)
+
+        if not kda and raw:
+            m = re.search(r"(\d+(?:\.\d+)?)\s*:\s*1", raw)
+            if m:
+                kda = f"{m.group(1)}:1"
+
+        if raw and (kd in (None, "") or acs in (None, "") or dmg_round in (None, "")):
+            nums = [to_float(n) for n in re.findall(r"\d+(?:\.\d+)?", raw.replace(",", ""))]
+            if len(nums) >= 3:
+                if kd in (None, ""):
+                    kd = nums[-3]
+                if acs in (None, ""):
+                    acs = nums[-2]
+                if dmg_round in (None, ""):
+                    dmg_round = nums[-1]
+
+        out.append(
+            {
+                "agent": agent,
+                "matches": matches,
+                "win_rate": win_rate_pct,
+                "win_rate_pct": win_rate_pct,
+                "kda": kda,
+                "kd": kd,
+                "acs": acs,
+                "dmg_round": dmg_round,
+                "raw": raw,
+            }
+        )
+
     return out
 
 
@@ -974,10 +1182,12 @@ def build_team_snapshot(
     team_key: str,
     team_name: str,
     team_ids: List[str],
+    seasons: Optional[Dict[str, str]] = None,
     polite_sleep: float = 0.8,
     progress_cb: Optional[Callable[[int, str], None]] = None,
 ) -> dict:
-    total_steps = max(1, len(team_ids) * len(SEASONS) * 3)  # profile+maps+agents
+    seasons = seasons or SEASONS
+    total_steps = max(1, len(team_ids) * len(seasons) * 3)  # profile+maps+agents
     done_steps = 0
 
     def bump(msg: str):
@@ -992,7 +1202,7 @@ def build_team_snapshot(
         "team_name": team_name,
         "updated_ts": int(time.time()),
         "players": team_ids,
-        "seasons": SEASONS,
+        "seasons": seasons,
         "data": {},
     }
 
@@ -1007,7 +1217,7 @@ def build_team_snapshot(
             context = browser.new_context(viewport=None, locale="en-US")
             context.set_default_timeout(40_000)
 
-            for season_label, season_id in SEASONS.items():
+            for season_label, season_id in seasons.items():
                 snap["data"][season_id] = {}
 
                 for riot_id in team_ids:
@@ -1039,6 +1249,7 @@ def build_team_snapshot(
                         agents_url,
                         debug_prefix=f"agents_{pref}",
                     )
+                    agents = normalize_agents(agents)
 
                     snap["data"][season_id][riot_id] = {
                         "season_label": season_label,
@@ -1097,6 +1308,26 @@ def inject_globals():
         "seasons": SEASONS,
         "default_season": DEFAULT_SEASON_ID,
     }
+
+
+@app.errorhandler(400)
+def bad_request(error):
+    message = getattr(error, "description", "Bad request.")
+    return render_template(
+        "error.html",
+        code=400,
+        title="Bad Request",
+        message=message,
+    ), 400
+
+
+def _resolve_season_id(requested: str, snap: dict) -> str:
+    data = snap.get("data") or {}
+    if requested in data:
+        return requested
+    if data:
+        return next(iter(data.keys()))
+    return DEFAULT_SEASON_ID
 @app.get("/")
 def index():
     q = (request.args.get("q") or "").strip().lower()
@@ -1135,13 +1366,20 @@ def upload():
     if not team_ids:
         abort(400, "No valid riot IDs found. Use first line team name, then name#tag lines.")
 
+    season_ids = request.form.getlist("season_id")
+    season_ids = [sid for sid in season_ids if sid in SEASONS.values()]
+    if not season_ids:
+        abort(400, "Select at least one season to scrape.")
+    seasons = {label: sid for label, sid in SEASONS.items() if sid in season_ids}
+    default_season_id = next(iter(seasons.values()))
+
     team_key = team_key_from_ids(team_name, team_ids)
     (UPLOAD_DIR / f"{team_key}.txt").write_text("\n".join([team_name] + team_ids), encoding="utf-8")
 
-    snap = build_team_snapshot(team_key, team_name, team_ids, polite_sleep=0.8)
+    snap = build_team_snapshot(team_key, team_name, team_ids, seasons=seasons, polite_sleep=0.8)
     save_snapshot(team_key, snap)
 
-    return redirect(url_for("team_view", team_key=team_key, seasonId=DEFAULT_SEASON_ID))
+    return redirect(url_for("team_view", team_key=team_key, seasonId=default_season_id))
 
 
 @app.post("/upload_async")
@@ -1160,6 +1398,13 @@ def upload_async():
     if not team_ids:
         abort(400, "No valid riot IDs found. Use one per line like name#tag (first line team name).")
 
+    season_ids = request.form.getlist("season_id")
+    season_ids = [sid for sid in season_ids if sid in SEASONS.values()]
+    if not season_ids:
+        abort(400, "Select at least one season to scrape.")
+    seasons = {label: sid for label, sid in SEASONS.items() if sid in season_ids}
+    default_season_id = next(iter(seasons.values()))
+
     team_key = team_key_from_ids(team_name, team_ids)
     (UPLOAD_DIR / f"{team_key}.txt").write_text("\n".join([team_name] + team_ids), encoding="utf-8")
 
@@ -1173,11 +1418,12 @@ def upload_async():
                 team_key,
                 team_name,
                 team_ids,
+                seasons=seasons,
                 polite_sleep=0.8,
                 progress_cb=lambda pct, msg: set_task(task_id, pct, msg),
             )
             save_snapshot(team_key, snap)
-            finish_task(task_id, url_for("team_view", team_key=team_key, seasonId=DEFAULT_SEASON_ID))
+            finish_task(task_id, url_for("team_view", team_key=team_key, seasonId=default_season_id))
         except Exception as e:
             fail_task(task_id, str(e))
 
@@ -1186,7 +1432,7 @@ def upload_async():
     return jsonify(
         {
             "task_id": task_id,
-            "redirect": url_for("team_view", team_key=team_key, seasonId=DEFAULT_SEASON_ID),
+            "redirect": url_for("team_view", team_key=team_key, seasonId=default_season_id),
         }
     )
 
@@ -1227,13 +1473,11 @@ def progress(task_id: str):
 
 @app.get("/team/<team_key>")
 def team_view(team_key: str):
-    season_id = request.args.get("seasonId") or DEFAULT_SEASON_ID
     snap = load_snapshot(team_key)
     if not snap:
         abort(404)
 
-    if season_id not in (snap.get("data") or {}):
-        season_id = DEFAULT_SEASON_ID
+    season_id = _resolve_season_id(request.args.get("seasonId") or DEFAULT_SEASON_ID, snap)
 
     team_name = snap.get("team_name") or team_key
     team_ids = snap.get("players") or []
@@ -1305,7 +1549,7 @@ def team_view(team_key: str):
         "team.html",
         team_key=team_key,
         team_name=team_name,
-        seasons=SEASONS,
+        seasons=snap.get("seasons") or SEASONS,
         season_id=season_id,
         team_ids=team_ids,
         summaries=summaries,
@@ -1318,7 +1562,6 @@ def team_view(team_key: str):
 
 @app.get("/team/<team_key>/player/<riot_id>")
 def player_view(team_key: str, riot_id: str):
-    season_id = request.args.get("seasonId") or DEFAULT_SEASON_ID
     snap = load_snapshot(team_key)
     if not snap:
         abort(404)
@@ -1328,23 +1571,24 @@ def player_view(team_key: str, riot_id: str):
     if riot_id not in team_ids:
         abort(404)
 
-    if season_id not in (snap.get("data") or {}):
-        season_id = DEFAULT_SEASON_ID
+    season_id = _resolve_season_id(request.args.get("seasonId") or DEFAULT_SEASON_ID, snap)
 
     entry = (snap.get("data") or {}).get(season_id, {}).get(riot_id) or {}
+
+    agents = normalize_agents(entry.get("agents") or [])
 
     return render_template(
         "player.html",
         team_key=team_key,
         team_name=team_name,
         riot_id=riot_id,
-        seasons=SEASONS,
+        seasons=snap.get("seasons") or SEASONS,
         season_id=season_id,
         profile_url=entry.get("profile_url"),
         agents_url=entry.get("agents_url"),
         maps_url=entry.get("maps_url"),
         profile_stats=entry.get("profile_stats") or {},
-        agents=entry.get("agents") or [],
+        agents=agents,
         maps=entry.get("maps") or [],
         snapshot_updated_ts=snap.get("updated_ts"),
     )
@@ -1361,7 +1605,13 @@ def team_update(team_key: str):
     if not team_ids:
         abort(400, "No players in snapshot.")
 
-    snap2 = build_team_snapshot(team_key, team_name, team_ids, polite_sleep=0.8)
+    snap2 = build_team_snapshot(
+        team_key,
+        team_name,
+        team_ids,
+        seasons=snap.get("seasons") or SEASONS,
+        polite_sleep=0.8,
+    )
     save_snapshot(team_key, snap2)
 
     season_id = request.args.get("seasonId") or DEFAULT_SEASON_ID

@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Home · Valorant Dashboard{% endblock %}
+﻿{% extends "base.html" %}
+{% block title %}Home Â· Valorant Dashboard{% endblock %}
 
 {% block content %}
 <div class="grid two">
@@ -22,14 +22,60 @@
 
     <!-- NOTE: no action="/upload" and no onclick -->
     <form id="snapshotForm" enctype="multipart/form-data" class="row wrap">
-      <input id="snapshotFile" class="file" type="file" name="file" accept=".txt" required />
-      <button class="btn success" type="submit">
-        Upload & Build Snapshot
-      </button>
+      <input id="snapshotFile" class="file-hidden" type="file" name="file" accept=".txt" required />
+
+      <label for="snapshotFile" class="dropzone" id="dropzone">
+        <div class="dropzone-title">Drop your team file here</div>
+        <div class="dropzone-sub">or click to browse (.txt)</div>
+      </label>
+
+      <div class="file-meta" id="fileMeta">No file selected.</div>
+      <div class="file-preview" id="filePreview"></div>
+
+      <div class="row wrap">
+        <button class="btn success" type="submit">Choose Seasons & Upload</button>
+        <button class="btn ghost" type="button" id="clearFile">Clear</button>
+        <a class="btn secondary" href="{{ url_for('static', filename='sample_team.txt') }}" download>Download sample</a>
+      </div>
     </form>
 
     <div class="muted" style="margin-top:10px;">
-      This builds ALL players × ALL seasons once, saved server-side as JSON.
+      This builds ALL players — selected seasons once, saved server-side as JSON.
+    </div>
+
+    <div class="modal-overlay" id="seasonModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-title">Choose Seasons To Scrape</div>
+        <div class="muted">Pick one or more seasons. We will only scrape these.</div>
+
+        <div class="modal-toolbar">
+          <div class="row wrap" style="gap:8px;">
+            <button class="btn ghost" type="button" id="seasonSelectAll">Select all</button>
+            <button class="btn ghost" type="button" id="seasonClear">Clear</button>
+            <div class="muted small" id="seasonCount"></div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="seasonRemember" checked />
+            <span>Remember my choice</span>
+          </label>
+        </div>
+
+        <div class="season-picks">
+          {% for label, sid in seasons.items() %}
+            <label class="season-label">
+              <input class="season-check" type="checkbox" value="{{ sid }}" {% if sid == default_season %}checked{% endif %} />
+              <span>{{ label }}</span>
+            </label>
+          {% endfor %}
+        </div>
+
+        <div class="modal-error" id="seasonError"></div>
+
+        <div class="modal-actions">
+          <button class="btn ghost" type="button" id="seasonCancel">Cancel</button>
+          <button class="btn success" type="button" id="seasonConfirm">Continue</button>
+        </div>
+      </div>
     </div>
 
     <hr class="hr"/>
@@ -57,8 +103,10 @@
     </div>
 
     <form method="get" action="/" class="row wrap" style="margin-bottom:12px;">
-      <input class="search" type="text" name="q" value="{{ q }}" placeholder="Search team name or key...">
+      <input id="teamSearch" class="search" type="text" name="q" value="{{ q }}" placeholder="Search team name or key...">
       <button class="btn secondary" type="submit">Search</button>
+      <button class="btn ghost" type="button" id="toggleFavorites">Favorites</button>
+      <span class="muted small" id="teamCount"></span>
       {% if q %}
         <a class="btn ghost" href="{{ url_for('index') }}">Clear</a>
       {% endif %}
@@ -67,7 +115,7 @@
     {% if teams %}
       <div class="list">
         {% for t in teams %}
-          <div class="list-row">
+          <div class="list-row" data-team-name="{{ t.team_name }}" data-team-key="{{ t.team_key }}">
             <div class="list-main">
               <div class="strong clamp-1">{{ t.team_name }}</div>
               <div class="muted small clamp-1"><span class="kbd">{{ t.team_key }}</span></div>
@@ -77,6 +125,17 @@
             </div>
 
             <div class="list-actions">
+              <button class="icon-btn star-btn" type="button" data-team-key="{{ t.team_key }}" title="Pin team" aria-pressed="false">
+                <svg viewBox="0 0 24 24" class="icon icon-star" aria-hidden="true">
+                  <path d="M12 3l2.9 6 6.6.6-5 4.3 1.5 6.5L12 17l-6 3.4 1.5-6.5-5-4.3 6.6-.6z"></path>
+                </svg>
+              </button>
+              <button class="icon-btn" type="button" data-copy="{{ t.team_key }}" title="Copy team key">
+                <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
+                  <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                  <rect x="5" y="5" width="10" height="10" rx="2"></rect>
+                </svg>
+              </button>
               <a class="btn secondary" href="{{ url_for('team_view', team_key=t.team_key, seasonId=default_season) }}">
                 Open
               </a>
@@ -85,14 +144,22 @@
                     action="{{ url_for('team_delete', team_key=t.team_key) }}"
                     onsubmit="return confirm('Delete snapshot for {{ t.team_name }}? This cannot be undone.');"
                     style="margin:0;">
-                <button class="btn danger" type="submit" title="Delete snapshot">🗑</button>
+                <button class="icon-btn danger" type="submit" title="Delete snapshot" aria-label="Delete snapshot">
+                  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4h8v2"></path>
+                    <path d="M6 6l1 14h10l1-14"></path>
+                    <path d="M10 10v6"></path>
+                    <path d="M14 10v6"></path>
+                  </svg>
+                </button>
               </form>
             </div>
           </div>
         {% endfor %}
       </div>
     {% else %}
-      <div class="muted">No snapshots yet — upload a team file or import a snapshot.</div>
+      <div class="muted">No snapshots yet - upload a team file or import a snapshot.</div>
     {% endif %}
 
     <div class="row" style="margin-top:12px; justify-content:space-between;">
@@ -109,18 +176,190 @@
 
 {% block scripts %}
 <script>
+  const FAVORITES_KEY = "valo_favorites";
+  const SEASON_KEY = "valo_seasons";
+  const SEASON_REMEMBER_KEY = "valo_seasons_remember";
+
   const form = document.getElementById("snapshotForm");
   const fileInput = document.getElementById("snapshotFile");
+  const dropzone = document.getElementById("dropzone");
+  const fileMeta = document.getElementById("fileMeta");
+  const filePreview = document.getElementById("filePreview");
+  const clearFile = document.getElementById("clearFile");
 
-  form.addEventListener("submit", async (e) => {
+  const seasonModal = document.getElementById("seasonModal");
+  const seasonConfirm = document.getElementById("seasonConfirm");
+  const seasonCancel = document.getElementById("seasonCancel");
+  const seasonError = document.getElementById("seasonError");
+  const seasonSelectAll = document.getElementById("seasonSelectAll");
+  const seasonClear = document.getElementById("seasonClear");
+  const seasonRemember = document.getElementById("seasonRemember");
+  const seasonCount = document.getElementById("seasonCount");
+
+  const teamSearch = document.getElementById("teamSearch");
+  const toggleFavorites = document.getElementById("toggleFavorites");
+  const teamCount = document.getElementById("teamCount");
+  const list = document.querySelector(".list");
+
+  function formatBytes(bytes) {
+    if (!bytes && bytes !== 0) return "";
+    const units = ["B", "KB", "MB", "GB"];
+    let i = 0;
+    let val = bytes;
+    while (val >= 1024 && i < units.length - 1) {
+      val /= 1024;
+      i += 1;
+    }
+    return `${val.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+  }
+
+  function parseTeamText(text) {
+    const raw = text.split(/\r?\n/).map((l) => l.trim());
+    const lines = raw.filter((l) => l && !l.startsWith("//") && !l.startsWith("# "));
+    if (!lines.length) return { teamName: "Unnamed Team", ids: [], invalid: 0, duplicates: 0 };
+
+    const teamName = lines[0];
+    const ids = [];
+    const seen = new Set();
+    let invalid = 0;
+    let duplicates = 0;
+
+    for (const rawLine of lines.slice(1)) {
+      if (rawLine.split("#").length !== 2) {
+        invalid += 1;
+        continue;
+      }
+      const [name, tag] = rawLine.split("#").map((s) => s.trim());
+      if (!name || !tag) {
+        invalid += 1;
+        continue;
+      }
+      const id = `${name}#${tag}`;
+      if (seen.has(id)) {
+        duplicates += 1;
+        continue;
+      }
+      seen.add(id);
+      ids.push(id);
+    }
+
+    return { teamName, ids, invalid, duplicates };
+  }
+
+  function renderPreview(info) {
+    filePreview.innerHTML = "";
+    if (!info) return;
+
+    const chip = (text, cls) => {
+      const el = document.createElement("div");
+      el.className = cls ? `preview-chip ${cls}` : "preview-chip";
+      el.textContent = text;
+      return el;
+    };
+
+    filePreview.appendChild(chip(`Team: ${info.teamName}`));
+    filePreview.appendChild(chip(`${info.ids.length} player IDs`));
+    if (info.invalid) filePreview.appendChild(chip(`${info.invalid} invalid lines`, "warn"));
+    if (info.duplicates) filePreview.appendChild(chip(`${info.duplicates} duplicates`, "warn"));
+  }
+
+  async function handleFileChange() {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) {
+      fileMeta.textContent = "No file selected.";
+      filePreview.innerHTML = "";
+      return;
+    }
+
+    fileMeta.textContent = `${file.name}  -  ${formatBytes(file.size)}`;
+    try {
+      const text = await file.text();
+      const info = parseTeamText(text);
+      renderPreview(info);
+    } catch (err) {
+      renderPreview(null);
+    }
+  }
+
+  fileInput.addEventListener("change", handleFileChange);
+  clearFile.addEventListener("click", () => {
+    fileInput.value = "";
+    handleFileChange();
+  });
+
+  dropzone.addEventListener("dragover", (e) => {
     e.preventDefault();
-    if (!fileInput.files || fileInput.files.length === 0) return;
+    dropzone.classList.add("drag");
+  });
+  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("drag");
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    fileInput.files = dt.files;
+    handleFileChange();
+  });
 
+  function openSeasonModal() {
+    seasonError.textContent = "";
+    seasonModal.classList.add("open");
+    seasonModal.setAttribute("aria-hidden", "false");
+    syncSeasonCount();
+  }
+
+  function closeSeasonModal() {
+    seasonModal.classList.remove("open");
+    seasonModal.setAttribute("aria-hidden", "true");
+  }
+
+  function getSelectedSeasons() {
+    return Array.from(seasonModal.querySelectorAll(".season-check"))
+      .filter((c) => c.checked)
+      .map((c) => c.value);
+  }
+
+  function syncSeasonCount() {
+    const count = getSelectedSeasons().length;
+    seasonCount.textContent = `${count} selected`;
+  }
+
+  function applySavedSeasons() {
+    const remember = localStorage.getItem(SEASON_REMEMBER_KEY);
+    const saved = localStorage.getItem(SEASON_KEY);
+    seasonRemember.checked = remember !== "false";
+    if (saved && seasonRemember.checked) {
+      const ids = new Set(JSON.parse(saved));
+      seasonModal.querySelectorAll(".season-check").forEach((c) => {
+        c.checked = ids.has(c.value);
+      });
+    }
+    syncSeasonCount();
+  }
+
+  seasonModal.querySelectorAll(".season-check").forEach((c) => {
+    c.addEventListener("change", syncSeasonCount);
+  });
+
+  seasonSelectAll.addEventListener("click", () => {
+    seasonModal.querySelectorAll(".season-check").forEach((c) => (c.checked = true));
+    syncSeasonCount();
+  });
+
+  seasonClear.addEventListener("click", () => {
+    seasonModal.querySelectorAll(".season-check").forEach((c) => (c.checked = false));
+    syncSeasonCount();
+  });
+
+  async function startUpload(selectedSeasons) {
     showProgress();
-    updateProgress(2, "Uploading team file…");
+    updateProgress(2, "Uploading team file...");
 
     const fd = new FormData();
     fd.append("file", fileInput.files[0]);
+    selectedSeasons.forEach((sid) => fd.append("season_id", sid));
 
     let resp;
     try {
@@ -140,18 +379,18 @@
     const data = await resp.json();
     const taskId = data.task_id;
 
-    updateProgress(8, "Starting scraper…");
+    updateProgress(8, "Starting scraper...");
 
     const evt = new EventSource(`/progress/${taskId}`);
 
     evt.onmessage = (ev) => {
       try {
         const payload = JSON.parse(ev.data);
-        updateProgress(payload.pct ?? 0, payload.msg ?? "Working…");
+        updateProgress(payload.pct ?? 0, payload.msg ?? "Working...");
 
         if (payload.done) {
           evt.close();
-          updateProgress(100, "Done! Redirecting…");
+          updateProgress(100, "Done! Redirecting...");
           setTimeout(() => {
             window.location.href = payload.redirect || data.redirect || "/";
           }, 600);
@@ -164,6 +403,137 @@
       hideProgress();
       alert("Lost progress connection. Try refreshing.");
     };
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!fileInput.files || fileInput.files.length === 0) {
+      showToast("Choose a team file first.");
+      return;
+    }
+    openSeasonModal();
   });
+
+  seasonConfirm.addEventListener("click", () => {
+    const selected = getSelectedSeasons();
+    if (selected.length === 0) {
+      seasonError.textContent = "Select at least one season to scrape.";
+      return;
+    }
+    if (seasonRemember.checked) {
+      localStorage.setItem(SEASON_KEY, JSON.stringify(selected));
+      localStorage.setItem(SEASON_REMEMBER_KEY, "true");
+    } else {
+      localStorage.setItem(SEASON_REMEMBER_KEY, "false");
+      localStorage.removeItem(SEASON_KEY);
+    }
+    closeSeasonModal();
+    startUpload(selected);
+  });
+
+  seasonCancel.addEventListener("click", closeSeasonModal);
+
+  seasonModal.addEventListener("click", (e) => {
+    if (e.target === seasonModal) closeSeasonModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && seasonModal.classList.contains("open")) {
+      closeSeasonModal();
+    }
+  });
+
+  // Favorites + Copy + Filter
+  let favoritesOnly = false;
+  let favorites = new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]"));
+
+  function applyFavorites() {
+    if (!list) return;
+    const rows = Array.from(list.querySelectorAll(".list-row"));
+    rows.forEach((row, idx) => {
+      if (!row.dataset.order) row.dataset.order = String(idx);
+      const key = row.dataset.teamKey;
+      const isFav = favorites.has(key);
+      row.classList.toggle("is-fav", isFav);
+      const star = row.querySelector(".star-btn");
+      if (star) {
+        star.classList.toggle("is-fav", isFav);
+        star.setAttribute("aria-pressed", isFav ? "true" : "false");
+      }
+    });
+
+    rows.sort((a, b) => {
+      const aFav = favorites.has(a.dataset.teamKey);
+      const bFav = favorites.has(b.dataset.teamKey);
+      if (aFav !== bFav) return aFav ? -1 : 1;
+      return Number(a.dataset.order) - Number(b.dataset.order);
+    });
+    rows.forEach((row) => list.appendChild(row));
+    filterTeams();
+  }
+
+  function filterTeams() {
+    if (!list) return;
+    const q = (teamSearch?.value || "").trim().toLowerCase();
+    let visible = 0;
+    const rows = Array.from(list.querySelectorAll(".list-row"));
+    rows.forEach((row) => {
+      const key = row.dataset.teamKey || "";
+      const name = row.dataset.teamName || "";
+      const isFav = favorites.has(key);
+      const match = !q || key.toLowerCase().includes(q) || name.toLowerCase().includes(q);
+      const show = match && (!favoritesOnly || isFav);
+      row.style.display = show ? "" : "none";
+      if (show) visible += 1;
+    });
+    if (teamCount) {
+      teamCount.textContent = `${visible}/${rows.length} shown`;
+    }
+  }
+
+  if (toggleFavorites) {
+    toggleFavorites.addEventListener("click", () => {
+      favoritesOnly = !favoritesOnly;
+      toggleFavorites.classList.toggle("active", favoritesOnly);
+      toggleFavorites.textContent = favoritesOnly ? "Favorites Only" : "Favorites";
+      filterTeams();
+    });
+  }
+
+  if (teamSearch) {
+    teamSearch.addEventListener("input", filterTeams);
+  }
+
+  if (list) {
+    list.addEventListener("click", async (e) => {
+      const star = e.target.closest(".star-btn");
+      if (star) {
+        const key = star.dataset.teamKey;
+        if (!key) return;
+        if (favorites.has(key)) favorites.delete(key);
+        else favorites.add(key);
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favorites)));
+        applyFavorites();
+        showToast(favorites.has(key) ? "Pinned team" : "Unpinned team");
+        return;
+      }
+
+      const copyBtn = e.target.closest("[data-copy]");
+      if (copyBtn) {
+        const key = copyBtn.getAttribute("data-copy");
+        if (!key) return;
+        try {
+          await navigator.clipboard.writeText(key);
+          showToast("Team key copied");
+        } catch (err) {
+          showToast("Copy failed");
+        }
+      }
+    });
+  }
+
+  applySavedSeasons();
+  applyFavorites();
+  filterTeams();
 </script>
 {% endblock %}

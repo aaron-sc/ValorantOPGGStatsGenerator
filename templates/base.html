@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Valorant Tracker{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -24,6 +27,16 @@
 
 <footer class="site-footer">
 </footer>
+
+<!-- Floating actions -->
+<button class="floating-btn" id="toTop" title="Back to top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 5l6 6-1.4 1.4L13 9.8V19h-2V9.8L7.4 12.4 6 11z"></path>
+  </svg>
+</button>
+
+<!-- Toast -->
+<div class="toast" id="toast" aria-live="polite"></div>
 
 <!-- Progress Overlay -->
 <div class="progress-overlay" id="progressOverlay">
@@ -50,6 +63,116 @@ function updateProgress(pct, text) {
 
 function hideProgress() {
   document.getElementById("progressOverlay").style.display = "none";
+}
+
+function showToast(msg) {
+  const el = document.getElementById("toast");
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.classList.remove("show"), 1600);
+}
+
+function _parseSortableValue(text) {
+  if (text === null || text === undefined) return { num: NaN, text: "" };
+  let t = String(text).replace(/\u2014|\u2013/g, "").trim();
+  if (!t) return { num: NaN, text: "" };
+
+  // Handle time like "7h 6m"
+  const hm = t.match(/(\d+)\s*h\s*(\d+)?\s*m?/i);
+  if (hm) {
+    const hours = parseInt(hm[1], 10) || 0;
+    const mins = parseInt(hm[2] || "0", 10) || 0;
+    return { num: hours * 60 + mins, text: t.toLowerCase() };
+  }
+
+  // Handle ratios like "1.54:1"
+  if (t.includes(":")) {
+    const left = t.split(":")[0];
+    const ratioNum = parseFloat(left.replace(/[^0-9.\-]/g, ""));
+    if (!Number.isNaN(ratioNum)) return { num: ratioNum, text: t.toLowerCase() };
+  }
+
+  const m = t.replace(/,/g, "").match(/-?\d+(\.\d+)?/);
+  if (m) return { num: parseFloat(m[0]), text: t.toLowerCase() };
+  return { num: NaN, text: t.toLowerCase() };
+}
+
+function _getCellSortValue(cell) {
+  if (!cell) return { num: NaN, text: "" };
+  const override = cell.getAttribute("data-sort-value");
+  if (override !== null) return _parseSortableValue(override);
+  return _parseSortableValue(cell.textContent);
+}
+
+function makeTablesSortable() {
+  document.querySelectorAll("table").forEach((table) => {
+    const thead = table.tHead;
+    const tbody = table.tBodies && table.tBodies[0];
+    if (!thead || !tbody) return;
+
+    const headers = Array.from(thead.querySelectorAll("th"));
+    if (!headers.length) return;
+
+    headers.forEach((th, idx) => {
+      th.classList.add("sortable");
+      th.addEventListener("click", () => {
+        const dir = th.dataset.sortDir === "asc" ? "desc" : "asc";
+        headers.forEach((h) => {
+          if (h !== th) {
+            h.dataset.sortDir = "";
+            h.classList.remove("sorted-asc", "sorted-desc");
+          }
+        });
+        th.dataset.sortDir = dir;
+        th.classList.toggle("sorted-asc", dir === "asc");
+        th.classList.toggle("sorted-desc", dir === "desc");
+
+        const rows = Array.from(tbody.rows).map((row, i) => ({ row, i }));
+        rows.sort((a, b) => {
+          const aCell = a.row.cells[idx];
+          const bCell = b.row.cells[idx];
+          const av = _getCellSortValue(aCell);
+          const bv = _getCellSortValue(bCell);
+
+          const aNum = av.num;
+          const bNum = bv.num;
+          const aNumOk = !Number.isNaN(aNum);
+          const bNumOk = !Number.isNaN(bNum);
+
+          if (aNumOk && bNumOk) {
+            if (aNum === bNum) return a.i - b.i;
+            return dir === "asc" ? aNum - bNum : bNum - aNum;
+          }
+          if (aNumOk !== bNumOk) {
+            return dir === "asc"
+              ? (aNumOk ? -1 : 1)
+              : (aNumOk ? 1 : -1);
+          }
+
+          const cmp = av.text.localeCompare(bv.text);
+          return cmp === 0 ? a.i - b.i : (dir === "asc" ? cmp : -cmp);
+        });
+
+        rows.forEach(({ row }) => tbody.appendChild(row));
+      });
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", makeTablesSortable);
+
+// Floating "back to top"
+const toTop = document.getElementById("toTop");
+if (toTop) {
+  const toggleToTop = () => {
+    if (window.scrollY > 240) toTop.classList.add("show");
+    else toTop.classList.remove("show");
+  };
+  window.addEventListener("scroll", toggleToTop, { passive: true });
+  toggleToTop();
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 }
 </script>
 

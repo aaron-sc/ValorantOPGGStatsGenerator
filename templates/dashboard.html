@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Dashboards · Valorant Tracker{% endblock %}
+﻿{% extends "base.html" %}
+{% block title %}Dashboards Â· Valorant Tracker{% endblock %}
 
 {% block content %}
 <div class="section-head">
@@ -76,14 +76,22 @@
                 {{ d.team_a_name }} vs {{ d.team_b_name }}
               </div>
               <div class="muted small">
-                {% if d.created_ts %}{{ d.created_ts }}{% else %}—{% endif %}
+                {% if d.created_ts %}{{ d.created_ts }}{% else %}-{% endif %}
               </div>
             </div>
             <div class="list-actions">
               <a class="btn secondary" href="{{ url_for('dashboard_view_imported', dash_id=d.dash_id) }}">Open</a>
               <form method="post" action="{{ url_for('dashboard_delete', dash_id=d.dash_id) }}" style="margin:0;"
                     onsubmit="return confirm('Delete this imported dashboard?');">
-                <button class="btn danger" type="submit" title="Delete">🗑</button>
+                <button class="icon-btn danger" type="submit" title="Delete" aria-label="Delete dashboard">
+                  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4h8v2"></path>
+                    <path d="M6 6l1 14h10l1-14"></path>
+                    <path d="M10 10v6"></path>
+                    <path d="M14 10v6"></path>
+                  </svg>
+                </button>
               </form>
             </div>
           </div>
@@ -93,3 +101,4 @@
   </div>
 </div>
 {% endblock %}
+

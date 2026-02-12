@@ -1,0 +1,5115 @@
+{
+  "team_key": "USC_Cardinal-Zzz_RS5-USC_Zundga_0824-ondoerae_love-Axio_1658-NUT_rodney_moon-shadowgoober1_thorn-khoyster_freak",
+  "team_name": "USC Cardinal",
+  "updated_ts": 1770789632,
+  "players": [
+    "Zzz#RS5",
+    "USC Zundga#0824",
+    "ondoerae#love",
+    "Axio#1658",
+    "NUT rodney#moon",
+    "shadowgoober1#thorn",
+    "khoyster#freak"
+  ],
+  "seasons": {
+    "V26 - ACT 1": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+    "V25 - ACT 6": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2"
+  },
+  "data": {
+    "3ea2b318-423b-cf86-25da-7cbb0eefbe2d": {
+      "Zzz#RS5": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "Zzz#RS5",
+        "slug": "Zzz-RS5",
+        "profile_url": "https://op.gg/valorant/profile/Zzz-RS5?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/Zzz-RS5/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/Zzz-RS5/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "142.1"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.03"
+              },
+              {
+                "label": "KDA",
+                "value": "1.32:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "220.26"
+              },
+              {
+                "label": "Most kills match",
+                "value": "35"
+              },
+              {
+                "label": "Time played",
+                "value": "112h 24m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "29.03% (2,988)"
+              },
+              {
+                "label": "Kills",
+                "value": "3,528"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "64.71% (6,660)"
+              },
+              {
+                "label": "Deaths",
+                "value": "3,432"
+              },
+              {
+                "label": "Legshots",
+                "value": "6.26% (644)"
+              },
+              {
+                "label": "Assists",
+                "value": "1,000"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Duelist",
+              "role_pct": "45%",
+              "kda": "1.23:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 47,
+              "losses": 51,
+              "win_rate": "48%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "35%",
+              "kda": "1.44:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 44,
+              "losses": 33,
+              "win_rate": "57%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "13%",
+              "kda": "1.39:1",
+              "kills": 420,
+              "deaths": 462,
+              "assists": 224,
+              "wins": 13,
+              "losses": 16,
+              "win_rate": "45%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "7%",
+              "kda": "1.23:1",
+              "kills": 239,
+              "deaths": 231,
+              "assists": 46,
+              "wins": 7,
+              "losses": 8,
+              "win_rate": "47%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Split",
+            "win_rate_pct": 50.0,
+            "wins": 19,
+            "losses": 19,
+            "kd": 0.96,
+            "kill_round": 0.74,
+            "dmg_round": 137.0,
+            "score_round": 212.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "50%",
+              "wins": "19",
+              "losses": "19",
+              "kd": "0.96",
+              "kill_round": "0.74",
+              "dmg_round": "137",
+              "score_round": "212"
+            }
+          },
+          {
+            "map": "Breeze",
+            "win_rate_pct": 65.0,
+            "wins": 17,
+            "losses": 9,
+            "kd": 1.15,
+            "kill_round": 0.82,
+            "dmg_round": 151.0,
+            "score_round": 230.0,
+            "raw": {
+              "map": "Breeze",
+              "win_rate": "65%",
+              "wins": "17",
+              "losses": "9",
+              "kd": "1.15",
+              "kill_round": "0.82",
+              "dmg_round": "151",
+              "score_round": "230"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 57.0,
+            "wins": 17,
+            "losses": 13,
+            "kd": 1.1,
+            "kill_round": 0.82,
+            "dmg_round": 150.0,
+            "score_round": 230.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "57%",
+              "wins": "17",
+              "losses": "13",
+              "kd": "1.1",
+              "kill_round": "0.82",
+              "dmg_round": "150",
+              "score_round": "230"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 46.0,
+            "wins": 16,
+            "losses": 19,
+            "kd": 0.97,
+            "kill_round": 0.74,
+            "dmg_round": 132.0,
+            "score_round": 209.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "46%",
+              "wins": "16",
+              "losses": "19",
+              "kd": "0.97",
+              "kill_round": "0.74",
+              "dmg_round": "132",
+              "score_round": "209"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 50.0,
+            "wins": 16,
+            "losses": 16,
+            "kd": 1.11,
+            "kill_round": 0.82,
+            "dmg_round": 146.0,
+            "score_round": 228.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "50%",
+              "wins": "16",
+              "losses": "16",
+              "kd": "1.11",
+              "kill_round": "0.82",
+              "dmg_round": "146",
+              "score_round": "228"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 37.0,
+            "wins": 13,
+            "losses": 22,
+            "kd": 0.97,
+            "kill_round": 0.77,
+            "dmg_round": 139.0,
+            "score_round": 218.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "37%",
+              "wins": "13",
+              "losses": "22",
+              "kd": "0.97",
+              "kill_round": "0.77",
+              "dmg_round": "139",
+              "score_round": "218"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 57.0,
+            "wins": 13,
+            "losses": 10,
+            "kd": 0.99,
+            "kill_round": 0.77,
+            "dmg_round": 145.0,
+            "score_round": 219.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "57%",
+              "wins": "13",
+              "losses": "10",
+              "kd": "0.99",
+              "kill_round": "0.77",
+              "dmg_round": "145",
+              "score_round": "219"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Sova Initiator",
+            "matches": 39,
+            "win_rate": 64.0,
+            "win_rate_pct": 64.0,
+            "kda": "1.46:1",
+            "kd": 1.1,
+            "acs": 143.0,
+            "dmg_round": 210.0,
+            "raw": "Sova Initiator 39 64% 1.46:1 613 / 570 / 220 1.1 143 210"
+          },
+          {
+            "agent": "Jett Duelist",
+            "matches": 35,
+            "win_rate": 49.0,
+            "win_rate_pct": 49.0,
+            "kda": "1.26:1",
+            "kd": 1.1,
+            "acs": 155.0,
+            "dmg_round": 244.0,
+            "raw": "Jett Duelist 35 49% 1.26:1 618 / 560 / 90 1.1 155 244"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 26,
+            "win_rate": 42.0,
+            "win_rate_pct": 42.0,
+            "kda": "1.34:1",
+            "kd": 0.9,
+            "acs": 138.0,
+            "dmg_round": 214.0,
+            "raw": "Clove Controller 26 42% 1.34:1 366 / 421 / 197 0.9 138 214"
+          },
+          {
+            "agent": "Waylay Duelist",
+            "matches": 25,
+            "win_rate": 52.0,
+            "win_rate_pct": 52.0,
+            "kda": "1.15:1",
+            "kd": 1.0,
+            "acs": 136.0,
+            "dmg_round": 219.0,
+            "raw": "Waylay Duelist 25 52% 1.15:1 397 / 412 / 77 1.0 136 219"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 18,
+            "win_rate": 44.0,
+            "win_rate_pct": 44.0,
+            "kda": "1.33:1",
+            "kd": 1.0,
+            "acs": 134.0,
+            "dmg_round": 209.0,
+            "raw": "Fade Initiator 18 44% 1.33:1 279 / 268 / 77 1.0 134 209"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 17,
+            "win_rate": 47.0,
+            "win_rate_pct": 47.0,
+            "kda": "1.22:1",
+            "kd": 1.0,
+            "acs": 153.0,
+            "dmg_round": 241.0,
+            "raw": "Raze Duelist 17 47% 1.22:1 308 / 299 / 58 1.0 153 241"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 17,
+            "win_rate": 53.0,
+            "win_rate_pct": 53.0,
+            "kda": "1.48:1",
+            "kd": 1.0,
+            "acs": 122.0,
+            "dmg_round": 188.0,
+            "raw": "Skye Initiator 17 53% 1.48:1 254 / 254 / 122 1.0 122 188"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 11,
+            "win_rate": 45.0,
+            "win_rate_pct": 45.0,
+            "kda": "1.33:1",
+            "kd": 1.1,
+            "acs": 148.0,
+            "dmg_round": 230.0,
+            "raw": "Reyna Duelist 11 45% 1.33:1 193 / 174 / 38 1.1 148 230"
+          },
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 11,
+            "win_rate": 55.0,
+            "win_rate_pct": 55.0,
+            "kda": "1.13:1",
+            "kd": 0.9,
+            "acs": 128.0,
+            "dmg_round": 196.0,
+            "raw": "Chamber Sentinel 11 55% 1.13:1 154 / 164 / 31 0.9 128 196"
+          },
+          {
+            "agent": "Yoru Duelist",
+            "matches": 6,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.24:1",
+            "kd": 1.1,
+            "acs": 151.0,
+            "dmg_round": 238.0,
+            "raw": "Yoru Duelist 6 33% 1.24:1 106 / 98 / 16 1.1 151 238"
+          },
+          {
+            "agent": "Neon Duelist",
+            "matches": 4,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.06:1",
+            "kd": 0.9,
+            "acs": 127.0,
+            "dmg_round": 206.0,
+            "raw": "Neon Duelist 4 50% 1.06:1 57 / 65 / 12 0.9 127 206"
+          },
+          {
+            "agent": "Sage Sentinel",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.65:1",
+            "kd": 1.4,
+            "acs": 186.0,
+            "dmg_round": 293.0,
+            "raw": "Sage Sentinel 2 50% 1.65:1 43 / 31 / 8 1.4 186 293"
+          },
+          {
+            "agent": "Astra Controller",
+            "matches": 2,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.00:1",
+            "kd": 1.5,
+            "acs": 164.0,
+            "dmg_round": 253.0,
+            "raw": "Astra Controller 2 100% 2.00:1 35 / 24 / 13 1.5 164 253"
+          },
+          {
+            "agent": "Tejo Initiator",
+            "matches": 2,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.83:1",
+            "kd": 1.3,
+            "acs": 159.0,
+            "dmg_round": 249.0,
+            "raw": "Tejo Initiator 2 100% 1.83:1 32 / 24 / 12 1.3 159 249"
+          },
+          {
+            "agent": "Veto Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.18:1",
+            "kd": 1.1,
+            "acs": 147.0,
+            "dmg_round": 227.0,
+            "raw": "Veto Sentinel 1 0% 1.18:1 24 / 22 / 2 1.1 147 227"
+          },
+          {
+            "agent": "Cypher Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.64:1",
+            "kd": 1.3,
+            "acs": 188.0,
+            "dmg_round": 303.0,
+            "raw": "Cypher Sentinel 1 0% 1.64:1 18 / 14 / 5 1.3 188 303"
+          },
+          {
+            "agent": "Omen Controller",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.94:1",
+            "kd": 1.1,
+            "acs": 138.0,
+            "dmg_round": 218.0,
+            "raw": "Omen Controller 1 0% 1.94:1 19 / 17 / 14 1.1 138 218"
+          },
+          {
+            "agent": "KAY/O Initiator",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.33:1",
+            "kd": 0.8,
+            "acs": 110.0,
+            "dmg_round": 163.0,
+            "raw": "KAY/O Initiator 1 0% 1.33:1 12 / 15 / 8 0.8 110 163"
+          }
+        ]
+      },
+      "USC Zundga#0824": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "USC Zundga#0824",
+        "slug": "USC Zundga-0824",
+        "profile_url": "https://op.gg/valorant/profile/USC Zundga-0824?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/USC Zundga-0824/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/USC Zundga-0824/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "139.5"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.03"
+              },
+              {
+                "label": "KDA",
+                "value": "1.39:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "203.19"
+              },
+              {
+                "label": "Most kills match",
+                "value": "23"
+              },
+              {
+                "label": "Time played",
+                "value": "16h 6m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "36.46% (400)"
+              },
+              {
+                "label": "Kills",
+                "value": "459"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "59.16% (649)"
+              },
+              {
+                "label": "Deaths",
+                "value": "445"
+              },
+              {
+                "label": "Legshots",
+                "value": "4.38% (48)"
+              },
+              {
+                "label": "Assists",
+                "value": "158"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Initiator",
+              "role_pct": "87%",
+              "kda": "1.34:1",
+              "kills": 397,
+              "deaths": 397,
+              "assists": 136,
+              "wins": 11,
+              "losses": 15,
+              "win_rate": "42%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "7%",
+              "kda": "1.70:1",
+              "kills": 39,
+              "deaths": 33,
+              "assists": 17,
+              "wins": 2,
+              "losses": 0,
+              "win_rate": "100%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "3%",
+              "kda": "1.58:1",
+              "kills": 15,
+              "deaths": 12,
+              "assists": 4,
+              "wins": 1,
+              "losses": 0,
+              "win_rate": "100%"
+            },
+            {
+              "role": "Duelist",
+              "role_pct": "3%",
+              "kda": "3.00:1",
+              "kills": 8,
+              "deaths": 3,
+              "assists": 1,
+              "wins": 1,
+              "losses": 0,
+              "win_rate": "100%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Bind",
+            "win_rate_pct": 57.0,
+            "wins": 4,
+            "losses": 3,
+            "kd": 1.08,
+            "kill_round": 0.72,
+            "dmg_round": 131.0,
+            "score_round": 195.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "57%",
+              "wins": "4",
+              "losses": "3",
+              "kd": "1.08",
+              "kill_round": "0.72",
+              "dmg_round": "131",
+              "score_round": "195"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 60.0,
+            "wins": 3,
+            "losses": 2,
+            "kd": 0.91,
+            "kill_round": 0.63,
+            "dmg_round": 127.0,
+            "score_round": 183.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "60%",
+              "wins": "3",
+              "losses": "2",
+              "kd": "0.91",
+              "kill_round": "0.63",
+              "dmg_round": "127",
+              "score_round": "183"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 40.0,
+            "wins": 2,
+            "losses": 3,
+            "kd": 1.09,
+            "kill_round": 0.81,
+            "dmg_round": 151.0,
+            "score_round": 223.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "40%",
+              "wins": "2",
+              "losses": "3",
+              "kd": "1.09",
+              "kill_round": "0.81",
+              "dmg_round": "151",
+              "score_round": "223"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 40.0,
+            "wins": 2,
+            "losses": 3,
+            "kd": 1.12,
+            "kill_round": 0.81,
+            "dmg_round": 165.0,
+            "score_round": 239.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "40%",
+              "wins": "2",
+              "losses": "3",
+              "kd": "1.12",
+              "kill_round": "0.81",
+              "dmg_round": "165",
+              "score_round": "239"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 50.0,
+            "wins": 2,
+            "losses": 2,
+            "kd": 0.91,
+            "kill_round": 0.61,
+            "dmg_round": 117.0,
+            "score_round": 174.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "50%",
+              "wins": "2",
+              "losses": "2",
+              "kd": "0.91",
+              "kill_round": "0.61",
+              "dmg_round": "117",
+              "score_round": "174"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 100.0,
+            "wins": 1,
+            "losses": 0,
+            "kd": 1.1,
+            "kill_round": 0.85,
+            "dmg_round": 193.0,
+            "score_round": 259.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "100%",
+              "wins": "1",
+              "losses": "0",
+              "kd": "1.1",
+              "kill_round": "0.85",
+              "dmg_round": "193",
+              "score_round": "259"
+            }
+          },
+          {
+            "map": "Breeze",
+            "win_rate_pct": 33.0,
+            "wins": 1,
+            "losses": 2,
+            "kd": 1.02,
+            "kill_round": 0.65,
+            "dmg_round": 131.0,
+            "score_round": 188.0,
+            "raw": {
+              "map": "Breeze",
+              "win_rate": "33%",
+              "wins": "1",
+              "losses": "2",
+              "kd": "1.02",
+              "kill_round": "0.65",
+              "dmg_round": "131",
+              "score_round": "188"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Sova Initiator",
+            "matches": 22,
+            "win_rate": 45.0,
+            "win_rate_pct": 45.0,
+            "kda": "1.36:1",
+            "kd": 1.0,
+            "acs": 141.0,
+            "dmg_round": 204.0,
+            "raw": "Sova Initiator 22 45% 1.36:1 343 / 337 / 116 1.0 141 204"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 4,
+            "win_rate": 25.0,
+            "win_rate_pct": 25.0,
+            "kda": "1.23:1",
+            "kd": 0.9,
+            "acs": 108.0,
+            "dmg_round": 165.0,
+            "raw": "Skye Initiator 4 25% 1.23:1 54 / 60 / 20 0.9 108 165"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 2,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.70:1",
+            "kd": 1.2,
+            "acs": 166.0,
+            "dmg_round": 243.0,
+            "raw": "Clove Controller 2 100% 1.70:1 39 / 33 / 17 1.2 166 243"
+          },
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.58:1",
+            "kd": 1.3,
+            "acs": 156.0,
+            "dmg_round": 237.0,
+            "raw": "Chamber Sentinel 1 100% 1.58:1 15 / 12 / 4 1.3 156 237"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "3.00:1",
+            "kd": 2.7,
+            "acs": 231.0,
+            "dmg_round": 300.0,
+            "raw": "Reyna Duelist 1 100% 3.00:1 8 / 3 / 1 2.7 231 300"
+          }
+        ]
+      },
+      "ondoerae#love": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "ondoerae#love",
+        "slug": "ondoerae-love",
+        "profile_url": "https://op.gg/valorant/profile/ondoerae-love?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/ondoerae-love/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/ondoerae-love/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "151.7"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.07"
+              },
+              {
+                "label": "KDA",
+                "value": "1.37:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "232.17"
+              },
+              {
+                "label": "Most kills match",
+                "value": "21"
+              },
+              {
+                "label": "Time played",
+                "value": "2h 16m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "22.99% (60)"
+              },
+              {
+                "label": "Kills",
+                "value": "72"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "67.82% (177)"
+              },
+              {
+                "label": "Deaths",
+                "value": "67"
+              },
+              {
+                "label": "Legshots",
+                "value": "9.2% (24)"
+              },
+              {
+                "label": "Assists",
+                "value": "20"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Duelist",
+              "role_pct": "50%",
+              "kda": "1.33:1",
+              "kills": 39,
+              "deaths": 39,
+              "assists": 13,
+              "wins": 1,
+              "losses": 1,
+              "win_rate": "50%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "25%",
+              "kda": "1.86:1",
+              "kills": 20,
+              "deaths": 14,
+              "assists": 6,
+              "wins": 1,
+              "losses": 0,
+              "win_rate": "100%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "25%",
+              "kda": "1.00:1",
+              "kills": 13,
+              "deaths": 14,
+              "assists": 1,
+              "wins": 0,
+              "losses": 1,
+              "win_rate": "0%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Split",
+            "win_rate_pct": 100.0,
+            "wins": 1,
+            "losses": 0,
+            "kd": 1.43,
+            "kill_round": 1.0,
+            "dmg_round": 178.0,
+            "score_round": 281.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "100%",
+              "wins": "1",
+              "losses": "0",
+              "kd": "1.43",
+              "kill_round": "1.00",
+              "dmg_round": "178",
+              "score_round": "281"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 100.0,
+            "wins": 1,
+            "losses": 0,
+            "kd": 1.11,
+            "kill_round": 0.75,
+            "dmg_round": 149.0,
+            "score_round": 215.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "100%",
+              "wins": "1",
+              "losses": "0",
+              "kd": "1.11",
+              "kill_round": "0.75",
+              "dmg_round": "149",
+              "score_round": "215"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 0.0,
+            "wins": 0,
+            "losses": 1,
+            "kd": 0.93,
+            "kill_round": 0.72,
+            "dmg_round": 121.0,
+            "score_round": 203.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "0%",
+              "wins": "0",
+              "losses": "1",
+              "kd": "0.93",
+              "kill_round": "0.72",
+              "dmg_round": "121",
+              "score_round": "203"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 0.0,
+            "wins": 0,
+            "losses": 1,
+            "kd": 0.9,
+            "kill_round": 0.75,
+            "dmg_round": 156.0,
+            "score_round": 233.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "0%",
+              "wins": "0",
+              "losses": "1",
+              "kd": "0.9",
+              "kill_round": "0.75",
+              "dmg_round": "156",
+              "score_round": "233"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Yoru Duelist",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.42:1",
+            "kd": 1.1,
+            "acs": 149.0,
+            "dmg_round": 215.0,
+            "raw": "Yoru Duelist 1 100% 1.42:1 21 / 19 / 6 1.1 149 215"
+          },
+          {
+            "agent": "Viper Controller",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.86:1",
+            "kd": 1.4,
+            "acs": 178.0,
+            "dmg_round": 281.0,
+            "raw": "Viper Controller 1 100% 1.86:1 20 / 14 / 6 1.4 178 281"
+          },
+          {
+            "agent": "Phoenix Duelist",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.25:1",
+            "kd": 0.9,
+            "acs": 156.0,
+            "dmg_round": 233.0,
+            "raw": "Phoenix Duelist 1 0% 1.25:1 18 / 20 / 7 0.9 156 233"
+          },
+          {
+            "agent": "Veto Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.00:1",
+            "kd": 0.9,
+            "acs": 121.0,
+            "dmg_round": 203.0,
+            "raw": "Veto Sentinel 1 0% 1.00:1 13 / 14 / 1 0.9 121 203"
+          }
+        ]
+      },
+      "Axio#1658": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "Axio#1658",
+        "slug": "Axio-1658",
+        "profile_url": "https://op.gg/valorant/profile/Axio-1658?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/Axio-1658/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/Axio-1658/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "146.2"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.16"
+              },
+              {
+                "label": "KDA",
+                "value": "1.41:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "221.63"
+              },
+              {
+                "label": "Most kills match",
+                "value": "36"
+              },
+              {
+                "label": "Time played",
+                "value": "60h 47m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "27.57% (1,274)"
+              },
+              {
+                "label": "Kills",
+                "value": "1,885"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "68.56% (3,168)"
+              },
+              {
+                "label": "Deaths",
+                "value": "1,631"
+              },
+              {
+                "label": "Legshots",
+                "value": "3.87% (179)"
+              },
+              {
+                "label": "Assists",
+                "value": "410"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Sentinel",
+              "role_pct": "50%",
+              "kda": "1.50:1",
+              "kills": 22,
+              "deaths": 780,
+              "assists": 145,
+              "wins": 31,
+              "losses": 25,
+              "win_rate": "55%"
+            },
+            {
+              "role": "Duelist",
+              "role_pct": "39%",
+              "kda": "1.37:1",
+              "kills": 694,
+              "deaths": 636,
+              "assists": 179,
+              "wins": 25,
+              "losses": 17,
+              "win_rate": "58%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "5%",
+              "kda": "1.18:1",
+              "kills": 97,
+              "deaths": 117,
+              "assists": 41,
+              "wins": 2,
+              "losses": 3,
+              "win_rate": "33%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "5%",
+              "kda": "1.19:1",
+              "kills": 72,
+              "deaths": 98,
+              "assists": 45,
+              "wins": 5,
+              "losses": 1,
+              "win_rate": "83%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Pearl",
+            "win_rate_pct": 84.0,
+            "wins": 16,
+            "losses": 3,
+            "kd": 1.19,
+            "kill_round": 0.79,
+            "dmg_round": 143.0,
+            "score_round": 217.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "84%",
+              "wins": "16",
+              "losses": "3",
+              "kd": "1.19",
+              "kill_round": "0.79",
+              "dmg_round": "143",
+              "score_round": "217"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 50.0,
+            "wins": 11,
+            "losses": 11,
+            "kd": 1.14,
+            "kill_round": 0.79,
+            "dmg_round": 147.0,
+            "score_round": 221.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "50%",
+              "wins": "11",
+              "losses": "11",
+              "kd": "1.14",
+              "kill_round": "0.79",
+              "dmg_round": "147",
+              "score_round": "221"
+            }
+          },
+          {
+            "map": "Breeze",
+            "win_rate_pct": 53.0,
+            "wins": 9,
+            "losses": 7,
+            "kd": 1.1,
+            "kill_round": 0.77,
+            "dmg_round": 141.0,
+            "score_round": 215.0,
+            "raw": {
+              "map": "Breeze",
+              "win_rate": "53%",
+              "wins": "9",
+              "losses": "7",
+              "kd": "1.1",
+              "kill_round": "0.77",
+              "dmg_round": "141",
+              "score_round": "215"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 67.0,
+            "wins": 8,
+            "losses": 3,
+            "kd": 1.09,
+            "kill_round": 0.81,
+            "dmg_round": 150.0,
+            "score_round": 223.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "67%",
+              "wins": "8",
+              "losses": "3",
+              "kd": "1.09",
+              "kill_round": "0.81",
+              "dmg_round": "150",
+              "score_round": "223"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 54.0,
+            "wins": 7,
+            "losses": 6,
+            "kd": 1.29,
+            "kill_round": 0.86,
+            "dmg_round": 157.0,
+            "score_round": 238.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "54%",
+              "wins": "7",
+              "losses": "6",
+              "kd": "1.29",
+              "kill_round": "0.86",
+              "dmg_round": "157",
+              "score_round": "238"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 43.0,
+            "wins": 6,
+            "losses": 8,
+            "kd": 1.18,
+            "kill_round": 0.84,
+            "dmg_round": 155.0,
+            "score_round": 237.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "43%",
+              "wins": "6",
+              "losses": "8",
+              "kd": "1.18",
+              "kill_round": "0.84",
+              "dmg_round": "155",
+              "score_round": "237"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 43.0,
+            "wins": 6,
+            "losses": 8,
+            "kd": 1.11,
+            "kill_round": 0.72,
+            "dmg_round": 134.0,
+            "score_round": 203.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "43%",
+              "wins": "6",
+              "losses": "8",
+              "kd": "1.11",
+              "kill_round": "0.72",
+              "dmg_round": "134",
+              "score_round": "203"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 56,
+            "win_rate": 55.0,
+            "win_rate_pct": 55.0,
+            "kda": "1.50:1",
+            "kd": 1.3,
+            "acs": 153.0,
+            "dmg_round": 234.0,
+            "raw": "Chamber Sentinel 56 55% 1.50:1 1,022 / 780 / 145 1.3 153 234"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 26,
+            "win_rate": 62.0,
+            "win_rate_pct": 62.0,
+            "kda": "1.50:1",
+            "kd": 1.2,
+            "acs": 149.0,
+            "dmg_round": 226.0,
+            "raw": "Reyna Duelist 26 62% 1.50:1 438 / 373 / 121 1.2 149 226"
+          },
+          {
+            "agent": "Jett Duelist",
+            "matches": 9,
+            "win_rate": 67.0,
+            "win_rate_pct": 67.0,
+            "kda": "1.23:1",
+            "kd": 1.0,
+            "acs": 142.0,
+            "dmg_round": 210.0,
+            "raw": "Jett Duelist 9 67% 1.23:1 144 / 139 / 27 1.0 142 210"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 5,
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "kda": "1.19:1",
+            "kd": 0.8,
+            "acs": 133.0,
+            "dmg_round": 203.0,
+            "raw": "Clove Controller 5 40% 1.19:1 73 / 93 / 38 0.8 133 203"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 4,
+            "win_rate": 75.0,
+            "win_rate_pct": 75.0,
+            "kda": "1.11:1",
+            "kd": 0.7,
+            "acs": 102.0,
+            "dmg_round": 154.0,
+            "raw": "Sova Initiator 4 75% 1.11:1 48 / 70 / 30 0.7 102 154"
+          },
+          {
+            "agent": "Waylay Duelist",
+            "matches": 4,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.13:1",
+            "kd": 0.8,
+            "acs": 111.0,
+            "dmg_round": 172.0,
+            "raw": "Waylay Duelist 4 50% 1.13:1 51 / 61 / 18 0.8 111 172"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 3,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.21:1",
+            "kd": 1.0,
+            "acs": 163.0,
+            "dmg_round": 244.0,
+            "raw": "Raze Duelist 3 33% 1.21:1 50 / 48 / 8 1.0 163 244"
+          },
+          {
+            "agent": "Viper Controller",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.13:1",
+            "kd": 1.0,
+            "acs": 143.0,
+            "dmg_round": 218.0,
+            "raw": "Viper Controller 1 0% 1.13:1 24 / 24 / 3 1.0 143 218"
+          },
+          {
+            "agent": "Tejo Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.33:1",
+            "kd": 1.4,
+            "acs": 176.0,
+            "dmg_round": 221.0,
+            "raw": "Tejo Initiator 1 100% 2.33:1 13 / 9 / 8 1.4 176 221"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "0.95:1",
+            "kd": 0.6,
+            "acs": 104.0,
+            "dmg_round": 152.0,
+            "raw": "Fade Initiator 1 100% 0.95:1 11 / 19 / 7 0.6 104 152"
+          },
+          {
+            "agent": "Yoru Duelist",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.07:1",
+            "kd": 0.7,
+            "acs": 96.0,
+            "dmg_round": 147.0,
+            "raw": "Yoru Duelist 1 0% 1.07:1 11 / 15 / 5 0.7 96 147"
+          }
+        ]
+      },
+      "NUT rodney#moon": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "NUT rodney#moon",
+        "slug": "NUT rodney-moon",
+        "profile_url": "https://op.gg/valorant/profile/NUT rodney-moon?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/NUT rodney-moon/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/NUT rodney-moon/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "147.6"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.14"
+              },
+              {
+                "label": "KDA",
+                "value": "1.36:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "229.94"
+              },
+              {
+                "label": "Most kills match",
+                "value": "30"
+              },
+              {
+                "label": "Time played",
+                "value": "19h 21m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "27.47% (500)"
+              },
+              {
+                "label": "Kills",
+                "value": "605"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "67.25% (1,224)"
+              },
+              {
+                "label": "Deaths",
+                "value": "529"
+              },
+              {
+                "label": "Legshots",
+                "value": "5.27% (96)"
+              },
+              {
+                "label": "Assists",
+                "value": "116"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Duelist",
+              "role_pct": "57%",
+              "kda": "1.26:1",
+              "kills": 329,
+              "deaths": 311,
+              "assists": 62,
+              "wins": 11,
+              "losses": 9,
+              "win_rate": "55%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "29%",
+              "kda": "1.61:1",
+              "kills": 201,
+              "deaths": 138,
+              "assists": 21,
+              "wins": 4,
+              "losses": 6,
+              "win_rate": "40%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "9%",
+              "kda": "1.31:1",
+              "kills": 46,
+              "deaths": 54,
+              "assists": 25,
+              "wins": 1,
+              "losses": 2,
+              "win_rate": "33%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "6%",
+              "kda": "1.42:1",
+              "kills": 29,
+              "deaths": 26,
+              "assists": 8,
+              "wins": 1,
+              "losses": 1,
+              "win_rate": "50%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Breeze",
+            "win_rate_pct": 100.0,
+            "wins": 6,
+            "losses": 0,
+            "kd": 1.5,
+            "kill_round": 0.85,
+            "dmg_round": 144.0,
+            "score_round": 224.0,
+            "raw": {
+              "map": "Breeze",
+              "win_rate": "100%",
+              "wins": "6",
+              "losses": "0",
+              "kd": "1.5",
+              "kill_round": "0.85",
+              "dmg_round": "144",
+              "score_round": "224"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 80.0,
+            "wins": 4,
+            "losses": 1,
+            "kd": 1.4,
+            "kill_round": 0.98,
+            "dmg_round": 172.0,
+            "score_round": 269.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "80%",
+              "wins": "4",
+              "losses": "1",
+              "kd": "1.4",
+              "kill_round": "0.98",
+              "dmg_round": "172",
+              "score_round": "269"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 67.0,
+            "wins": 4,
+            "losses": 2,
+            "kd": 1.12,
+            "kill_round": 0.77,
+            "dmg_round": 138.0,
+            "score_round": 217.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "67%",
+              "wins": "4",
+              "losses": "2",
+              "kd": "1.12",
+              "kill_round": "0.77",
+              "dmg_round": "138",
+              "score_round": "217"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 20.0,
+            "wins": 1,
+            "losses": 4,
+            "kd": 0.98,
+            "kill_round": 0.72,
+            "dmg_round": 133.0,
+            "score_round": 208.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "20%",
+              "wins": "1",
+              "losses": "4",
+              "kd": "0.98",
+              "kill_round": "0.72",
+              "dmg_round": "133",
+              "score_round": "208"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 13.0,
+            "wins": 1,
+            "losses": 7,
+            "kd": 1.12,
+            "kill_round": 0.88,
+            "dmg_round": 159.0,
+            "score_round": 255.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "13%",
+              "wins": "1",
+              "losses": "7",
+              "kd": "1.12",
+              "kill_round": "0.88",
+              "dmg_round": "159",
+              "score_round": "255"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 33.0,
+            "wins": 1,
+            "losses": 2,
+            "kd": 0.84,
+            "kill_round": 0.68,
+            "dmg_round": 124.0,
+            "score_round": 188.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "33%",
+              "wins": "1",
+              "losses": "2",
+              "kd": "0.84",
+              "kill_round": "0.68",
+              "dmg_round": "124",
+              "score_round": "188"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 0.0,
+            "wins": 0,
+            "losses": 2,
+            "kd": 0.97,
+            "kill_round": 0.73,
+            "dmg_round": 158.0,
+            "score_round": 220.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "0%",
+              "wins": "0",
+              "losses": "2",
+              "kd": "0.97",
+              "kill_round": "0.73",
+              "dmg_round": "158",
+              "score_round": "220"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Yoru Duelist",
+            "matches": 18,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.26:1",
+            "kd": 1.1,
+            "acs": 144.0,
+            "dmg_round": 225.0,
+            "raw": "Yoru Duelist 18 50% 1.26:1 306 / 285 / 54 1.1 144 225"
+          },
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 7,
+            "win_rate": 29.0,
+            "win_rate_pct": 29.0,
+            "kda": "1.52:1",
+            "kd": 1.4,
+            "acs": 162.0,
+            "dmg_round": 244.0,
+            "raw": "Chamber Sentinel 7 29% 1.52:1 133 / 97 / 14 1.4 162 244"
+          },
+          {
+            "agent": "Vyse Sentinel",
+            "matches": 3,
+            "win_rate": 67.0,
+            "win_rate_pct": 67.0,
+            "kda": "1.83:1",
+            "kd": 1.7,
+            "acs": 185.0,
+            "dmg_round": 305.0,
+            "raw": "Vyse Sentinel 3 67% 1.83:1 68 / 41 / 7 1.7 185 305"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 3,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.31:1",
+            "kd": 0.9,
+            "acs": 137.0,
+            "dmg_round": 218.0,
+            "raw": "Clove Controller 3 33% 1.31:1 46 / 54 / 25 0.9 137 218"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.15:1",
+            "kd": 0.8,
+            "acs": 133.0,
+            "dmg_round": 197.0,
+            "raw": "Skye Initiator 1 0% 1.15:1 16 / 20 / 7 0.8 133 197"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.25:1",
+            "kd": 1.0,
+            "acs": 102.0,
+            "dmg_round": 170.0,
+            "raw": "Raze Duelist 1 100% 1.25:1 12 / 12 / 3 1.0 102 170"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.33:1",
+            "kd": 2.2,
+            "acs": 134.0,
+            "dmg_round": 188.0,
+            "raw": "Sova Initiator 1 100% 2.33:1 13 / 6 / 1 2.2 134 188"
+          },
+          {
+            "agent": "Waylay Duelist",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.14:1",
+            "kd": 0.8,
+            "acs": 101.0,
+            "dmg_round": 163.0,
+            "raw": "Waylay Duelist 1 100% 1.14:1 11 / 14 / 5 0.8 101 163"
+          }
+        ]
+      },
+      "shadowgoober1#thorn": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "shadowgoober1#thorn",
+        "slug": "shadowgoober1-thorn",
+        "profile_url": "https://op.gg/valorant/profile/shadowgoober1-thorn?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/shadowgoober1-thorn/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/shadowgoober1-thorn/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "-"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.5"
+              },
+              {
+                "label": "KDA",
+                "value": "1.67:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "8413"
+              },
+              {
+                "label": "Most kills match",
+                "value": "27"
+              },
+              {
+                "label": "Time played",
+                "value": "0h 5m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "-"
+              },
+              {
+                "label": "Kills",
+                "value": "27"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "-"
+              },
+              {
+                "label": "Deaths",
+                "value": "18"
+              },
+              {
+                "label": "Legshots",
+                "value": "-"
+              },
+              {
+                "label": "Assists",
+                "value": "3"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Initiator",
+              "role_pct": "100%",
+              "kda": "1.67:1",
+              "kills": 27,
+              "deaths": 18,
+              "assists": 3,
+              "wins": 0,
+              "losses": 1,
+              "win_rate": "0%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Pearl",
+            "win_rate_pct": 0.0,
+            "wins": 0,
+            "losses": 1,
+            "kd": 1.5,
+            "kill_round": 27.0,
+            "dmg_round": 0.0,
+            "score_round": 8413.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "0%",
+              "wins": "0",
+              "losses": "1",
+              "kd": "1.5",
+              "kill_round": "27.00",
+              "dmg_round": "-",
+              "score_round": "8,413"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Skye Initiator",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.67:1",
+            "kd": 1.5,
+            "acs": 0.0,
+            "dmg_round": 8413.0,
+            "raw": "Skye Initiator 1 0% 1.67:1 27 / 18 / 3 1.5 - 8,413"
+          }
+        ]
+      },
+      "khoyster#freak": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "khoyster#freak",
+        "slug": "khoyster-freak",
+        "profile_url": "https://op.gg/valorant/profile/khoyster-freak?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/khoyster-freak/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/khoyster-freak/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "145.6"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1"
+              },
+              {
+                "label": "KDA",
+                "value": "1.52:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "232.03"
+              },
+              {
+                "label": "Most kills match",
+                "value": "30"
+              },
+              {
+                "label": "Time played",
+                "value": "63h 40m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "19.83% (1,656)"
+              },
+              {
+                "label": "Kills",
+                "value": "2,021"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "72.58% (6,062)"
+              },
+              {
+                "label": "Deaths",
+                "value": "2,011"
+              },
+              {
+                "label": "Legshots",
+                "value": "7.59% (634)"
+              },
+              {
+                "label": "Assists",
+                "value": "1,032"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Controller",
+              "role_pct": "73%",
+              "kda": "1.54:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 49,
+              "losses": 38,
+              "win_rate": "56%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "21%",
+              "kda": "1.49:1",
+              "kills": 360,
+              "deaths": 358,
+              "assists": 172,
+              "wins": 14,
+              "losses": 10,
+              "win_rate": "56%"
+            },
+            {
+              "role": "Duelist",
+              "role_pct": "4%",
+              "kda": "1.58:1",
+              "kills": 106,
+              "deaths": 86,
+              "assists": 30,
+              "wins": 4,
+              "losses": 1,
+              "win_rate": "80%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "2%",
+              "kda": "0.98:1",
+              "kills": 35,
+              "deaths": 44,
+              "assists": 8,
+              "wins": 0,
+              "losses": 3,
+              "win_rate": "0%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Pearl",
+            "win_rate_pct": 60.0,
+            "wins": 12,
+            "losses": 7,
+            "kd": 1.04,
+            "kill_round": 0.83,
+            "dmg_round": 153.0,
+            "score_round": 244.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "60%",
+              "wins": "12",
+              "losses": "7",
+              "kd": "1.04",
+              "kill_round": "0.83",
+              "dmg_round": "153",
+              "score_round": "244"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 67.0,
+            "wins": 12,
+            "losses": 6,
+            "kd": 1.01,
+            "kill_round": 0.88,
+            "dmg_round": 156.0,
+            "score_round": 251.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "67%",
+              "wins": "12",
+              "losses": "6",
+              "kd": "1.01",
+              "kill_round": "0.88",
+              "dmg_round": "156",
+              "score_round": "251"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 58.0,
+            "wins": 11,
+            "losses": 8,
+            "kd": 0.99,
+            "kill_round": 0.77,
+            "dmg_round": 142.0,
+            "score_round": 228.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "58%",
+              "wins": "11",
+              "losses": "8",
+              "kd": "0.99",
+              "kill_round": "0.77",
+              "dmg_round": "142",
+              "score_round": "228"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 59.0,
+            "wins": 10,
+            "losses": 7,
+            "kd": 0.98,
+            "kill_round": 0.81,
+            "dmg_round": 151.0,
+            "score_round": 238.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "59%",
+              "wins": "10",
+              "losses": "7",
+              "kd": "0.98",
+              "kill_round": "0.81",
+              "dmg_round": "151",
+              "score_round": "238"
+            }
+          },
+          {
+            "map": "Breeze",
+            "win_rate_pct": 47.0,
+            "wins": 8,
+            "losses": 9,
+            "kd": 1.13,
+            "kill_round": 0.8,
+            "dmg_round": 143.0,
+            "score_round": 223.0,
+            "raw": {
+              "map": "Breeze",
+              "win_rate": "47%",
+              "wins": "8",
+              "losses": "9",
+              "kd": "1.13",
+              "kill_round": "0.80",
+              "dmg_round": "143",
+              "score_round": "223"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 44.0,
+            "wins": 8,
+            "losses": 9,
+            "kd": 0.88,
+            "kill_round": 0.68,
+            "dmg_round": 119.0,
+            "score_round": 194.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "44%",
+              "wins": "8",
+              "losses": "9",
+              "kd": "0.88",
+              "kill_round": "0.68",
+              "dmg_round": "119",
+              "score_round": "194"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 50.0,
+            "wins": 6,
+            "losses": 6,
+            "kd": 1.01,
+            "kill_round": 0.86,
+            "dmg_round": 158.0,
+            "score_round": 249.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "50%",
+              "wins": "6",
+              "losses": "6",
+              "kd": "1.01",
+              "kill_round": "0.86",
+              "dmg_round": "158",
+              "score_round": "249"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Clove Controller",
+            "matches": 69,
+            "win_rate": 59.0,
+            "win_rate_pct": 59.0,
+            "kda": "1.56:1",
+            "kd": 1.0,
+            "acs": 158.0,
+            "dmg_round": 252.0,
+            "raw": "Clove Controller 69 59% 1.56:1 1,246 / 1,250 / 700 1.0 158 252"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 15,
+            "win_rate": 47.0,
+            "win_rate_pct": 47.0,
+            "kda": "1.46:1",
+            "kd": 1.0,
+            "acs": 122.0,
+            "dmg_round": 198.0,
+            "raw": "Fade Initiator 15 47% 1.46:1 223 / 227 / 108 1.0 122 198"
+          },
+          {
+            "agent": "Viper Controller",
+            "matches": 12,
+            "win_rate": 58.0,
+            "win_rate_pct": 58.0,
+            "kda": "1.49:1",
+            "kd": 1.1,
+            "acs": 139.0,
+            "dmg_round": 212.0,
+            "raw": "Viper Controller 12 58% 1.49:1 178 / 159 / 59 1.1 139 212"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 7,
+            "win_rate": 71.0,
+            "win_rate_pct": 71.0,
+            "kda": "1.38:1",
+            "kd": 1.0,
+            "acs": 117.0,
+            "dmg_round": 181.0,
+            "raw": "Sova Initiator 7 71% 1.38:1 90 / 92 / 37 1.0 117 181"
+          },
+          {
+            "agent": "Astra Controller",
+            "matches": 6,
+            "win_rate": 17.0,
+            "win_rate_pct": 17.0,
+            "kda": "1.30:1",
+            "kd": 0.8,
+            "acs": 107.0,
+            "dmg_round": 179.0,
+            "raw": "Astra Controller 6 17% 1.30:1 78 / 97 / 48 0.8 107 179"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 5,
+            "win_rate": 80.0,
+            "win_rate_pct": 80.0,
+            "kda": "1.58:1",
+            "kd": 1.2,
+            "acs": 167.0,
+            "dmg_round": 257.0,
+            "raw": "Reyna Duelist 5 80% 1.58:1 106 / 86 / 30 1.2 167 257"
+          },
+          {
+            "agent": "Cypher Sentinel",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.21:1",
+            "kd": 0.9,
+            "acs": 149.0,
+            "dmg_round": 241.0,
+            "raw": "Cypher Sentinel 2 0% 1.21:1 27 / 29 / 8 0.9 149 241"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.84:1",
+            "kd": 1.1,
+            "acs": 118.0,
+            "dmg_round": 201.0,
+            "raw": "Skye Initiator 2 50% 1.84:1 28 / 25 / 18 1.1 118 201"
+          },
+          {
+            "agent": "Tejo Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.00:1",
+            "kd": 1.4,
+            "acs": 163.0,
+            "dmg_round": 258.0,
+            "raw": "Tejo Initiator 1 100% 2.00:1 19 / 14 / 9 1.4 163 258"
+          },
+          {
+            "agent": "Omen Controller",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.94:1",
+            "kd": 1.1,
+            "acs": 131.0,
+            "dmg_round": 219.0,
+            "raw": "Omen Controller 1 0% 1.94:1 18 / 17 / 15 1.1 131 219"
+          },
+          {
+            "agent": "Veto Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.53:1",
+            "kd": 0.5,
+            "acs": 75.0,
+            "dmg_round": 123.0,
+            "raw": "Veto Sentinel 1 0% 0.53:1 8 / 15 / 0 0.5 75 123"
+          }
+        ]
+      }
+    },
+    "4c4b8cff-43eb-13d3-8f14-96b783c90cd2": {
+      "Zzz#RS5": {
+        "season_label": "V25 - ACT 6",
+        "season_id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "riot_id": "Zzz#RS5",
+        "slug": "Zzz-RS5",
+        "profile_url": "https://op.gg/valorant/profile/Zzz-RS5?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "maps_url": "https://op.gg/valorant/profile/Zzz-RS5/maps?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "agents_url": "https://op.gg/valorant/profile/Zzz-RS5/agents?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "136.9"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.01"
+              },
+              {
+                "label": "KDA",
+                "value": "1.27:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "209.07"
+              },
+              {
+                "label": "Most kills match",
+                "value": "35"
+              },
+              {
+                "label": "Time played",
+                "value": "229h 54m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "33.13% (6,106)"
+              },
+              {
+                "label": "Kills",
+                "value": "6,955"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "62.23% (11,470)"
+              },
+              {
+                "label": "Deaths",
+                "value": "6,918"
+              },
+              {
+                "label": "Legshots",
+                "value": "4.64% (856)"
+              },
+              {
+                "label": "Assists",
+                "value": "1,833"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Duelist",
+              "role_pct": "42%",
+              "kda": "1.22:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 82,
+              "losses": 96,
+              "win_rate": "45%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "26%",
+              "kda": "1.24:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 53,
+              "losses": 58,
+              "win_rate": "47%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "19%",
+              "kda": "1.40:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 47,
+              "losses": 35,
+              "win_rate": "57%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "14%",
+              "kda": "1.33:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 25,
+              "losses": 34,
+              "win_rate": "42%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Haven",
+            "win_rate_pct": 58.0,
+            "wins": 38,
+            "losses": 27,
+            "kd": 1.01,
+            "kill_round": 0.74,
+            "dmg_round": 134.0,
+            "score_round": 202.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "58%",
+              "wins": "38",
+              "losses": "27",
+              "kd": "1.01",
+              "kill_round": "0.74",
+              "dmg_round": "134",
+              "score_round": "202"
+            }
+          },
+          {
+            "map": "Sunset",
+            "win_rate_pct": 55.0,
+            "wins": 31,
+            "losses": 24,
+            "kd": 1.05,
+            "kill_round": 0.78,
+            "dmg_round": 142.0,
+            "score_round": 216.0,
+            "raw": {
+              "map": "Sunset",
+              "win_rate": "55%",
+              "wins": "31",
+              "losses": "24",
+              "kd": "1.05",
+              "kill_round": "0.78",
+              "dmg_round": "142",
+              "score_round": "216"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 43.0,
+            "wins": 29,
+            "losses": 38,
+            "kd": 0.96,
+            "kill_round": 0.71,
+            "dmg_round": 130.0,
+            "score_round": 200.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "43%",
+              "wins": "29",
+              "losses": "38",
+              "kd": "0.96",
+              "kill_round": "0.71",
+              "dmg_round": "130",
+              "score_round": "200"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 48.0,
+            "wins": 29,
+            "losses": 30,
+            "kd": 0.99,
+            "kill_round": 0.73,
+            "dmg_round": 135.0,
+            "score_round": 204.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "48%",
+              "wins": "29",
+              "losses": "30",
+              "kd": "0.99",
+              "kill_round": "0.73",
+              "dmg_round": "135",
+              "score_round": "204"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 45.0,
+            "wins": 29,
+            "losses": 35,
+            "kd": 1.01,
+            "kill_round": 0.75,
+            "dmg_round": 136.0,
+            "score_round": 209.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "45%",
+              "wins": "29",
+              "losses": "35",
+              "kd": "1.01",
+              "kill_round": "0.75",
+              "dmg_round": "136",
+              "score_round": "209"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 41.0,
+            "wins": 27,
+            "losses": 37,
+            "kd": 1.0,
+            "kill_round": 0.77,
+            "dmg_round": 141.0,
+            "score_round": 217.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "41%",
+              "wins": "27",
+              "losses": "37",
+              "kd": "1",
+              "kill_round": "0.77",
+              "dmg_round": "141",
+              "score_round": "217"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 43.0,
+            "wins": 24,
+            "losses": 32,
+            "kd": 1.03,
+            "kill_round": 0.79,
+            "dmg_round": 143.0,
+            "score_round": 218.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "43%",
+              "wins": "24",
+              "losses": "32",
+              "kd": "1.03",
+              "kill_round": "0.79",
+              "dmg_round": "143",
+              "score_round": "218"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Reyna Duelist",
+            "matches": 56,
+            "win_rate": 45.0,
+            "win_rate_pct": 45.0,
+            "kda": "1.35:1",
+            "kd": 1.1,
+            "acs": 153.0,
+            "dmg_round": 234.0,
+            "raw": "Reyna Duelist 56 45% 1.35:1 1,040 / 909 / 187 1.1 153 234"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 54,
+            "win_rate": 41.0,
+            "win_rate_pct": 41.0,
+            "kda": "1.31:1",
+            "kd": 0.9,
+            "acs": 142.0,
+            "dmg_round": 218.0,
+            "raw": "Clove Controller 54 41% 1.31:1 921 / 1,005 / 399 0.9 142 218"
+          },
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 48,
+            "win_rate": 48.0,
+            "win_rate_pct": 48.0,
+            "kda": "1.17:1",
+            "kd": 1.0,
+            "acs": 134.0,
+            "dmg_round": 205.0,
+            "raw": "Chamber Sentinel 48 48% 1.17:1 748 / 727 / 102 1.0 134 205"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 39,
+            "win_rate": 64.0,
+            "win_rate_pct": 64.0,
+            "kda": "1.37:1",
+            "kd": 1.0,
+            "acs": 136.0,
+            "dmg_round": 202.0,
+            "raw": "Sova Initiator 39 64% 1.37:1 575 / 563 / 197 1.0 136 202"
+          },
+          {
+            "agent": "Waylay Duelist",
+            "matches": 38,
+            "win_rate": 47.0,
+            "win_rate_pct": 47.0,
+            "kda": "1.24:1",
+            "kd": 1.0,
+            "acs": 139.0,
+            "dmg_round": 216.0,
+            "raw": "Waylay Duelist 38 47% 1.24:1 609 / 607 / 146 1.0 139 216"
+          },
+          {
+            "agent": "Jett Duelist",
+            "matches": 33,
+            "win_rate": 52.0,
+            "win_rate_pct": 52.0,
+            "kda": "1.15:1",
+            "kd": 1.0,
+            "acs": 136.0,
+            "dmg_round": 207.0,
+            "raw": "Jett Duelist 33 52% 1.15:1 538 / 560 / 104 1.0 136 207"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 23,
+            "win_rate": 30.0,
+            "win_rate_pct": 30.0,
+            "kda": "1.12:1",
+            "kd": 0.9,
+            "acs": 140.0,
+            "dmg_round": 214.0,
+            "raw": "Raze Duelist 23 30% 1.12:1 360 / 392 / 79 0.9 140 214"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 21,
+            "win_rate": 43.0,
+            "win_rate_pct": 43.0,
+            "kda": "1.44:1",
+            "kd": 1.0,
+            "acs": 125.0,
+            "dmg_round": 201.0,
+            "raw": "Skye Initiator 21 43% 1.44:1 307 / 307 / 134 1.0 125 201"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 21,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.34:1",
+            "kd": 1.0,
+            "acs": 117.0,
+            "dmg_round": 178.0,
+            "raw": "Fade Initiator 21 57% 1.34:1 298 / 305 / 112 1.0 117 178"
+          },
+          {
+            "agent": "Cypher Sentinel",
+            "matches": 18,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.25:1",
+            "kd": 1.1,
+            "acs": 131.0,
+            "dmg_round": 197.0,
+            "raw": "Cypher Sentinel 18 50% 1.25:1 272 / 257 / 48 1.1 131 197"
+          },
+          {
+            "agent": "Neon Duelist",
+            "matches": 17,
+            "win_rate": 53.0,
+            "win_rate_pct": 53.0,
+            "kda": "1.11:1",
+            "kd": 0.9,
+            "acs": 131.0,
+            "dmg_round": 204.0,
+            "raw": "Neon Duelist 17 53% 1.11:1 260 / 290 / 62 0.9 131 204"
+          },
+          {
+            "agent": "Sage Sentinel",
+            "matches": 14,
+            "win_rate": 36.0,
+            "win_rate_pct": 36.0,
+            "kda": "1.33:1",
+            "kd": 1.0,
+            "acs": 129.0,
+            "dmg_round": 196.0,
+            "raw": "Sage Sentinel 14 36% 1.33:1 215 / 226 / 85 1.0 129 196"
+          },
+          {
+            "agent": "Vyse Sentinel",
+            "matches": 12,
+            "win_rate": 58.0,
+            "win_rate_pct": 58.0,
+            "kda": "1.36:1",
+            "kd": 1.1,
+            "acs": 128.0,
+            "dmg_round": 192.0,
+            "raw": "Vyse Sentinel 12 58% 1.36:1 173 / 157 / 40 1.1 128 192"
+          },
+          {
+            "agent": "Killjoy Sentinel",
+            "matches": 11,
+            "win_rate": 55.0,
+            "win_rate_pct": 55.0,
+            "kda": "1.39:1",
+            "kd": 1.3,
+            "acs": 147.0,
+            "dmg_round": 216.0,
+            "raw": "Killjoy Sentinel 11 55% 1.39:1 204 / 163 / 22 1.3 147 216"
+          },
+          {
+            "agent": "Yoru Duelist",
+            "matches": 11,
+            "win_rate": 45.0,
+            "win_rate_pct": 45.0,
+            "kda": "1.15:1",
+            "kd": 1.0,
+            "acs": 132.0,
+            "dmg_round": 210.0,
+            "raw": "Yoru Duelist 11 45% 1.15:1 181 / 176 / 22 1.0 132 210"
+          },
+          {
+            "agent": "Veto Sentinel",
+            "matches": 8,
+            "win_rate": 38.0,
+            "win_rate_pct": 38.0,
+            "kda": "1.21:1",
+            "kd": 1.0,
+            "acs": 144.0,
+            "dmg_round": 210.0,
+            "raw": "Veto Sentinel 8 38% 1.21:1 117 / 113 / 20 1.0 144 210"
+          },
+          {
+            "agent": "Omen Controller",
+            "matches": 6,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.48:1",
+            "kd": 0.9,
+            "acs": 109.0,
+            "dmg_round": 170.0,
+            "raw": "Omen Controller 6 50% 1.48:1 76 / 82 / 45 0.9 109 170"
+          },
+          {
+            "agent": "Phoenix Duelist",
+            "matches": 3,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "0.90:1",
+            "kd": 0.6,
+            "acs": 102.0,
+            "dmg_round": 150.0,
+            "raw": "Phoenix Duelist 3 33% 0.90:1 28 / 49 / 16 0.6 102 150"
+          },
+          {
+            "agent": "KAY/O Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.64:1",
+            "kd": 1.8,
+            "acs": 202.0,
+            "dmg_round": 294.0,
+            "raw": "KAY/O Initiator 1 100% 2.64:1 25 / 14 / 12 1.8 202 294"
+          },
+          {
+            "agent": "Deadlock Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.56:1",
+            "kd": 0.5,
+            "acs": 93.0,
+            "dmg_round": 130.0,
+            "raw": "Deadlock Sentinel 1 0% 0.56:1 8 / 16 / 1 0.5 93 130"
+          }
+        ]
+      },
+      "USC Zundga#0824": {
+        "season_label": "V25 - ACT 6",
+        "season_id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "riot_id": "USC Zundga#0824",
+        "slug": "USC Zundga-0824",
+        "profile_url": "https://op.gg/valorant/profile/USC Zundga-0824?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "maps_url": "https://op.gg/valorant/profile/USC Zundga-0824/maps?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "agents_url": "https://op.gg/valorant/profile/USC Zundga-0824/agents?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "141.7"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.01"
+              },
+              {
+                "label": "KDA",
+                "value": "1.37:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "209.97"
+              },
+              {
+                "label": "Most kills match",
+                "value": "26"
+              },
+              {
+                "label": "Time played",
+                "value": "36h 40m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "34.03% (928)"
+              },
+              {
+                "label": "Kills",
+                "value": "1,056"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "60.95% (1,662)"
+              },
+              {
+                "label": "Deaths",
+                "value": "1,049"
+              },
+              {
+                "label": "Legshots",
+                "value": "5.02% (137)"
+              },
+              {
+                "label": "Assists",
+                "value": "386"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Initiator",
+              "role_pct": "75%",
+              "kda": "1.40:1",
+              "kills": 769,
+              "deaths": 764,
+              "assists": 303,
+              "wins": 23,
+              "losses": 28,
+              "win_rate": "44%"
+            },
+            {
+              "role": "Duelist",
+              "role_pct": "22%",
+              "kda": "1.28:1",
+              "kills": 252,
+              "deaths": 249,
+              "assists": 67,
+              "wins": 6,
+              "losses": 9,
+              "win_rate": "40%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "3%",
+              "kda": "1.42:1",
+              "kills": 35,
+              "deaths": 36,
+              "assists": 16,
+              "wins": 2,
+              "losses": 0,
+              "win_rate": "100%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Abyss",
+            "win_rate_pct": 50.0,
+            "wins": 7,
+            "losses": 6,
+            "kd": 0.95,
+            "kill_round": 0.69,
+            "dmg_round": 139.0,
+            "score_round": 205.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "50%",
+              "wins": "7",
+              "losses": "6",
+              "kd": "0.95",
+              "kill_round": "0.69",
+              "dmg_round": "139",
+              "score_round": "205"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 88.0,
+            "wins": 7,
+            "losses": 1,
+            "kd": 1.31,
+            "kill_round": 0.87,
+            "dmg_round": 166.0,
+            "score_round": 247.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "88%",
+              "wins": "7",
+              "losses": "1",
+              "kd": "1.31",
+              "kill_round": "0.87",
+              "dmg_round": "166",
+              "score_round": "247"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 50.0,
+            "wins": 6,
+            "losses": 6,
+            "kd": 0.93,
+            "kill_round": 0.67,
+            "dmg_round": 128.0,
+            "score_round": 197.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "50%",
+              "wins": "6",
+              "losses": "6",
+              "kd": "0.93",
+              "kill_round": "0.67",
+              "dmg_round": "128",
+              "score_round": "197"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 36.0,
+            "wins": 4,
+            "losses": 7,
+            "kd": 0.98,
+            "kill_round": 0.73,
+            "dmg_round": 141.0,
+            "score_round": 205.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "36%",
+              "wins": "4",
+              "losses": "7",
+              "kd": "0.98",
+              "kill_round": "0.73",
+              "dmg_round": "141",
+              "score_round": "205"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 43.0,
+            "wins": 3,
+            "losses": 4,
+            "kd": 1.04,
+            "kill_round": 0.68,
+            "dmg_round": 144.0,
+            "score_round": 205.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "43%",
+              "wins": "3",
+              "losses": "4",
+              "kd": "1.04",
+              "kill_round": "0.68",
+              "dmg_round": "144",
+              "score_round": "205"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 25.0,
+            "wins": 2,
+            "losses": 6,
+            "kd": 0.96,
+            "kill_round": 0.69,
+            "dmg_round": 132.0,
+            "score_round": 197.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "25%",
+              "wins": "2",
+              "losses": "6",
+              "kd": "0.96",
+              "kill_round": "0.69",
+              "dmg_round": "132",
+              "score_round": "197"
+            }
+          },
+          {
+            "map": "Sunset",
+            "win_rate_pct": 22.0,
+            "wins": 2,
+            "losses": 7,
+            "kd": 1.01,
+            "kill_round": 0.78,
+            "dmg_round": 151.0,
+            "score_round": 226.0,
+            "raw": {
+              "map": "Sunset",
+              "win_rate": "22%",
+              "wins": "2",
+              "losses": "7",
+              "kd": "1.01",
+              "kill_round": "0.78",
+              "dmg_round": "151",
+              "score_round": "226"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Sova Initiator",
+            "matches": 33,
+            "win_rate": 48.0,
+            "win_rate_pct": 48.0,
+            "kda": "1.40:1",
+            "kd": 1.0,
+            "acs": 145.0,
+            "dmg_round": 211.0,
+            "raw": "Sova Initiator 33 48% 1.40:1 500 / 486 / 179 1.0 145 211"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 15,
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "kda": "1.28:1",
+            "kd": 1.0,
+            "acs": 149.0,
+            "dmg_round": 222.0,
+            "raw": "Reyna Duelist 15 40% 1.28:1 252 / 249 / 67 1.0 149 222"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 15,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.40:1",
+            "kd": 0.9,
+            "acs": 118.0,
+            "dmg_round": 183.0,
+            "raw": "Skye Initiator 15 33% 1.40:1 209 / 227 / 108 0.9 118 183"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 2,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.42:1",
+            "kd": 1.0,
+            "acs": 181.0,
+            "dmg_round": 273.0,
+            "raw": "Clove Controller 2 100% 1.42:1 35 / 36 / 16 1.0 181 273"
+          },
+          {
+            "agent": "Tejo Initiator",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.58:1",
+            "kd": 1.3,
+            "acs": 177.0,
+            "dmg_round": 246.0,
+            "raw": "Tejo Initiator 2 50% 1.58:1 31 / 24 / 7 1.3 177 246"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.41:1",
+            "kd": 1.1,
+            "acs": 151.0,
+            "dmg_round": 216.0,
+            "raw": "Fade Initiator 2 50% 1.41:1 29 / 27 / 9 1.1 151 216"
+          }
+        ]
+      },
+      "ondoerae#love": {
+        "season_label": "V25 - ACT 6",
+        "season_id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "riot_id": "ondoerae#love",
+        "slug": "ondoerae-love",
+        "profile_url": "https://op.gg/valorant/profile/ondoerae-love?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "maps_url": "https://op.gg/valorant/profile/ondoerae-love/maps?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "agents_url": "https://op.gg/valorant/profile/ondoerae-love/agents?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "153.2"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.06"
+              },
+              {
+                "label": "KDA",
+                "value": "1.37:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "232.59"
+              },
+              {
+                "label": "Most kills match",
+                "value": "42"
+              },
+              {
+                "label": "Time played",
+                "value": "41h 12m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "24.26% (1,028)"
+              },
+              {
+                "label": "Kills",
+                "value": "1,276"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "67.3% (2,852)"
+              },
+              {
+                "label": "Deaths",
+                "value": "1,201"
+              },
+              {
+                "label": "Legshots",
+                "value": "8.45% (358)"
+              },
+              {
+                "label": "Assists",
+                "value": "366"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Duelist",
+              "role_pct": "37%",
+              "kda": "1.31:1",
+              "kills": 476,
+              "deaths": 452,
+              "assists": 114,
+              "wins": 16,
+              "losses": 12,
+              "win_rate": "57%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "26%",
+              "kda": "1.54:1",
+              "kills": 386,
+              "deaths": 326,
+              "assists": 115,
+              "wins": 10,
+              "losses": 10,
+              "win_rate": "50%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "24%",
+              "kda": "1.22:1",
+              "kills": 263,
+              "deaths": 269,
+              "assists": 65,
+              "wins": 7,
+              "losses": 11,
+              "win_rate": "39%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "13%",
+              "kda": "1.45:1",
+              "kills": 151,
+              "deaths": 154,
+              "assists": 72,
+              "wins": 5,
+              "losses": 4,
+              "win_rate": "50%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Bind",
+            "win_rate_pct": 64.0,
+            "wins": 7,
+            "losses": 4,
+            "kd": 1.0,
+            "kill_round": 0.78,
+            "dmg_round": 144.0,
+            "score_round": 220.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "64%",
+              "wins": "7",
+              "losses": "4",
+              "kd": "1",
+              "kill_round": "0.78",
+              "dmg_round": "144",
+              "score_round": "220"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 64.0,
+            "wins": 7,
+            "losses": 4,
+            "kd": 1.1,
+            "kill_round": 0.78,
+            "dmg_round": 156.0,
+            "score_round": 229.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "64%",
+              "wins": "7",
+              "losses": "4",
+              "kd": "1.1",
+              "kill_round": "0.78",
+              "dmg_round": "156",
+              "score_round": "229"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 55.0,
+            "wins": 6,
+            "losses": 5,
+            "kd": 1.18,
+            "kill_round": 0.82,
+            "dmg_round": 156.0,
+            "score_round": 240.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "55%",
+              "wins": "6",
+              "losses": "5",
+              "kd": "1.18",
+              "kill_round": "0.82",
+              "dmg_round": "156",
+              "score_round": "240"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 38.0,
+            "wins": 6,
+            "losses": 10,
+            "kd": 1.16,
+            "kill_round": 0.88,
+            "dmg_round": 167.0,
+            "score_round": 255.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "38%",
+              "wins": "6",
+              "losses": "10",
+              "kd": "1.16",
+              "kill_round": "0.88",
+              "dmg_round": "167",
+              "score_round": "255"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 50.0,
+            "wins": 4,
+            "losses": 3,
+            "kd": 1.19,
+            "kill_round": 0.88,
+            "dmg_round": 170.0,
+            "score_round": 256.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "50%",
+              "wins": "4",
+              "losses": "3",
+              "kd": "1.19",
+              "kill_round": "0.88",
+              "dmg_round": "170",
+              "score_round": "256"
+            }
+          },
+          {
+            "map": "Sunset",
+            "win_rate_pct": 40.0,
+            "wins": 4,
+            "losses": 6,
+            "kd": 0.92,
+            "kill_round": 0.7,
+            "dmg_round": 140.0,
+            "score_round": 211.0,
+            "raw": {
+              "map": "Sunset",
+              "win_rate": "40%",
+              "wins": "4",
+              "losses": "6",
+              "kd": "0.92",
+              "kill_round": "0.70",
+              "dmg_round": "140",
+              "score_round": "211"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 44.0,
+            "wins": 4,
+            "losses": 5,
+            "kd": 0.84,
+            "kill_round": 0.67,
+            "dmg_round": 133.0,
+            "score_round": 203.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "44%",
+              "wins": "4",
+              "losses": "5",
+              "kd": "0.84",
+              "kill_round": "0.67",
+              "dmg_round": "133",
+              "score_round": "203"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Yoru Duelist",
+            "matches": 20,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.22:1",
+            "kd": 1.0,
+            "acs": 154.0,
+            "dmg_round": 235.0,
+            "raw": "Yoru Duelist 20 50% 1.22:1 330 / 325 / 68 1.0 154 235"
+          },
+          {
+            "agent": "Viper Controller",
+            "matches": 13,
+            "win_rate": 54.0,
+            "win_rate_pct": 54.0,
+            "kda": "1.69:1",
+            "kd": 1.3,
+            "acs": 176.0,
+            "dmg_round": 265.0,
+            "raw": "Viper Controller 13 54% 1.69:1 267 / 203 / 76 1.3 176 265"
+          },
+          {
+            "agent": "Phoenix Duelist",
+            "matches": 7,
+            "win_rate": 71.0,
+            "win_rate_pct": 71.0,
+            "kda": "1.57:1",
+            "kd": 1.2,
+            "acs": 168.0,
+            "dmg_round": 253.0,
+            "raw": "Phoenix Duelist 7 71% 1.57:1 123 / 106 / 43 1.2 168 253"
+          },
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 7,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.54:1",
+            "kd": 1.3,
+            "acs": 163.0,
+            "dmg_round": 245.0,
+            "raw": "Chamber Sentinel 7 57% 1.54:1 103 / 78 / 17 1.3 163 245"
+          },
+          {
+            "agent": "Cypher Sentinel",
+            "matches": 5,
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "kda": "1.24:1",
+            "kd": 1.0,
+            "acs": 149.0,
+            "dmg_round": 229.0,
+            "raw": "Cypher Sentinel 5 40% 1.24:1 86 / 87 / 22 1.0 149 229"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 5,
+            "win_rate": 60.0,
+            "win_rate_pct": 60.0,
+            "kda": "1.55:1",
+            "kd": 1.1,
+            "acs": 142.0,
+            "dmg_round": 224.0,
+            "raw": "Skye Initiator 5 60% 1.55:1 78 / 74 / 37 1.1 142 224"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 5,
+            "win_rate": 20.0,
+            "win_rate_pct": 20.0,
+            "kda": "1.29:1",
+            "kd": 1.0,
+            "acs": 148.0,
+            "dmg_round": 226.0,
+            "raw": "Clove Controller 5 20% 1.29:1 80 / 84 / 28 1.0 148 226"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 3,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.13:1",
+            "kd": 0.8,
+            "acs": 116.0,
+            "dmg_round": 184.0,
+            "raw": "Fade Initiator 3 33% 1.13:1 40 / 52 / 19 0.8 116 184"
+          },
+          {
+            "agent": "Omen Controller",
+            "matches": 2,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.28:1",
+            "kd": 1.0,
+            "acs": 141.0,
+            "dmg_round": 225.0,
+            "raw": "Omen Controller 2 100% 1.28:1 39 / 39 / 11 1.0 141 225"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.75:1",
+            "kd": 1.2,
+            "acs": 167.0,
+            "dmg_round": 243.0,
+            "raw": "Sova Initiator 2 50% 1.75:1 33 / 28 / 16 1.2 167 243"
+          },
+          {
+            "agent": "Deadlock Sentinel",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.94:1",
+            "kd": 0.7,
+            "acs": 115.0,
+            "dmg_round": 172.0,
+            "raw": "Deadlock Sentinel 2 0% 0.94:1 23 / 34 / 9 0.7 115 172"
+          },
+          {
+            "agent": "Vyse Sentinel",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "0.83:1",
+            "kd": 0.6,
+            "acs": 108.0,
+            "dmg_round": 151.0,
+            "raw": "Vyse Sentinel 2 50% 0.83:1 23 / 36 / 7 0.6 108 151"
+          },
+          {
+            "agent": "Iso Duelist",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.24:1",
+            "kd": 1.1,
+            "acs": 153.0,
+            "dmg_round": 223.0,
+            "raw": "Iso Duelist 1 100% 1.24:1 23 / 21 / 3 1.1 153 223"
+          },
+          {
+            "agent": "Sage Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.24:1",
+            "kd": 0.8,
+            "acs": 112.0,
+            "dmg_round": 171.0,
+            "raw": "Sage Sentinel 1 0% 1.24:1 14 / 17 / 7 0.8 112 171"
+          },
+          {
+            "agent": "Killjoy Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.00:1",
+            "kd": 0.8,
+            "acs": 123.0,
+            "dmg_round": 172.0,
+            "raw": "Killjoy Sentinel 1 0% 1.00:1 14 / 17 / 3 0.8 123 172"
+          }
+        ]
+      },
+      "Axio#1658": {
+        "season_label": "V25 - ACT 6",
+        "season_id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "riot_id": "Axio#1658",
+        "slug": "Axio-1658",
+        "profile_url": "https://op.gg/valorant/profile/Axio-1658?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "maps_url": "https://op.gg/valorant/profile/Axio-1658/maps?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "agents_url": "https://op.gg/valorant/profile/Axio-1658/agents?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "161.5"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.27"
+              },
+              {
+                "label": "KDA",
+                "value": "1.50:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "248.02"
+              },
+              {
+                "label": "Most kills match",
+                "value": "40"
+              },
+              {
+                "label": "Time played",
+                "value": "75h 3m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "29.44% (1,855)"
+              },
+              {
+                "label": "Kills",
+                "value": "2,620"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "65.6% (4,134)"
+              },
+              {
+                "label": "Deaths",
+                "value": "2,067"
+              },
+              {
+                "label": "Legshots",
+                "value": "4.97% (313)"
+              },
+              {
+                "label": "Assists",
+                "value": "485"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Duelist",
+              "role_pct": "52%",
+              "kda": "1.43:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 34,
+              "losses": 36,
+              "win_rate": "47%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "43%",
+              "kda": "1.63:1",
+              "kills": 190,
+              "deaths": 836,
+              "assists": 171,
+              "wins": 36,
+              "losses": 23,
+              "win_rate": "60%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "3%",
+              "kda": "1.43:1",
+              "kills": 50,
+              "deaths": 61,
+              "assists": 37,
+              "wins": 2,
+              "losses": 2,
+              "win_rate": "50%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "2%",
+              "kda": "1.19:1",
+              "kills": 52,
+              "deaths": 59,
+              "assists": 18,
+              "wins": 1,
+              "losses": 2,
+              "win_rate": "33%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Abyss",
+            "win_rate_pct": 74.0,
+            "wins": 14,
+            "losses": 5,
+            "kd": 1.45,
+            "kill_round": 0.93,
+            "dmg_round": 172.0,
+            "score_round": 261.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "74%",
+              "wins": "14",
+              "losses": "5",
+              "kd": "1.45",
+              "kill_round": "0.93",
+              "dmg_round": "172",
+              "score_round": "261"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 57.0,
+            "wins": 12,
+            "losses": 9,
+            "kd": 1.35,
+            "kill_round": 0.94,
+            "dmg_round": 170.0,
+            "score_round": 262.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "57%",
+              "wins": "12",
+              "losses": "9",
+              "kd": "1.35",
+              "kill_round": "0.94",
+              "dmg_round": "170",
+              "score_round": "262"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 55.0,
+            "wins": 11,
+            "losses": 8,
+            "kd": 1.52,
+            "kill_round": 0.96,
+            "dmg_round": 171.0,
+            "score_round": 265.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "55%",
+              "wins": "11",
+              "losses": "8",
+              "kd": "1.52",
+              "kill_round": "0.96",
+              "dmg_round": "171",
+              "score_round": "265"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 48.0,
+            "wins": 10,
+            "losses": 11,
+            "kd": 1.02,
+            "kill_round": 0.71,
+            "dmg_round": 131.0,
+            "score_round": 200.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "48%",
+              "wins": "10",
+              "losses": "11",
+              "kd": "1.02",
+              "kill_round": "0.71",
+              "dmg_round": "131",
+              "score_round": "200"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 53.0,
+            "wins": 9,
+            "losses": 7,
+            "kd": 1.18,
+            "kill_round": 0.86,
+            "dmg_round": 157.0,
+            "score_round": 244.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "53%",
+              "wins": "9",
+              "losses": "7",
+              "kd": "1.18",
+              "kill_round": "0.86",
+              "dmg_round": "157",
+              "score_round": "244"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 39.0,
+            "wins": 9,
+            "losses": 14,
+            "kd": 1.17,
+            "kill_round": 0.87,
+            "dmg_round": 161.0,
+            "score_round": 244.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "39%",
+              "wins": "9",
+              "losses": "14",
+              "kd": "1.17",
+              "kill_round": "0.87",
+              "dmg_round": "161",
+              "score_round": "244"
+            }
+          },
+          {
+            "map": "Sunset",
+            "win_rate_pct": 44.0,
+            "wins": 8,
+            "losses": 9,
+            "kd": 1.26,
+            "kill_round": 0.93,
+            "dmg_round": 170.0,
+            "score_round": 263.0,
+            "raw": {
+              "map": "Sunset",
+              "win_rate": "44%",
+              "wins": "8",
+              "losses": "9",
+              "kd": "1.26",
+              "kill_round": "0.93",
+              "dmg_round": "170",
+              "score_round": "263"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 59,
+            "win_rate": 61.0,
+            "win_rate_pct": 61.0,
+            "kda": "1.63:1",
+            "kd": 1.4,
+            "acs": 167.0,
+            "dmg_round": 260.0,
+            "raw": "Chamber Sentinel 59 61% 1.63:1 1,177 / 823 / 168 1.4 167 260"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 45,
+            "win_rate": 49.0,
+            "win_rate_pct": 49.0,
+            "kda": "1.57:1",
+            "kd": 1.3,
+            "acs": 162.0,
+            "dmg_round": 246.0,
+            "raw": "Reyna Duelist 45 49% 1.57:1 821 / 644 / 187 1.3 162 246"
+          },
+          {
+            "agent": "Jett Duelist",
+            "matches": 13,
+            "win_rate": 46.0,
+            "win_rate_pct": 46.0,
+            "kda": "1.21:1",
+            "kd": 1.1,
+            "acs": 151.0,
+            "dmg_round": 228.0,
+            "raw": "Jett Duelist 13 46% 1.21:1 233 / 214 / 27 1.1 151 228"
+          },
+          {
+            "agent": "Waylay Duelist",
+            "matches": 7,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.28:1",
+            "kd": 1.1,
+            "acs": 145.0,
+            "dmg_round": 225.0,
+            "raw": "Waylay Duelist 7 57% 1.28:1 126 / 118 / 25 1.1 145 225"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 5,
+            "win_rate": 20.0,
+            "win_rate_pct": 20.0,
+            "kda": "1.23:1",
+            "kd": 1.1,
+            "acs": 164.0,
+            "dmg_round": 254.0,
+            "raw": "Raze Duelist 5 20% 1.23:1 107 / 99 / 15 1.1 164 254"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 3,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.19:1",
+            "kd": 0.9,
+            "acs": 164.0,
+            "dmg_round": 247.0,
+            "raw": "Clove Controller 3 33% 1.19:1 52 / 59 / 18 0.9 164 247"
+          },
+          {
+            "agent": "Neon Duelist",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.28:1",
+            "kd": 1.1,
+            "acs": 149.0,
+            "dmg_round": 250.0,
+            "raw": "Neon Duelist 2 50% 1.28:1 41 / 36 / 5 1.1 149 250"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.33:1",
+            "kd": 1.4,
+            "acs": 155.0,
+            "dmg_round": 252.0,
+            "raw": "Skye Initiator 1 100% 2.33:1 17 / 12 / 11 1.4 155 252"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.73:1",
+            "kd": 0.9,
+            "acs": 171.0,
+            "dmg_round": 204.0,
+            "raw": "Sova Initiator 1 100% 1.73:1 13 / 15 / 13 0.9 171 204"
+          },
+          {
+            "agent": "Vyse Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.23:1",
+            "kd": 1.0,
+            "acs": 235.0,
+            "dmg_round": 333.0,
+            "raw": "Vyse Sentinel 1 0% 1.23:1 13 / 13 / 3 1.0 235 333"
+          },
+          {
+            "agent": "Breach Initiator",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.00:1",
+            "kd": 0.6,
+            "acs": 99.0,
+            "dmg_round": 155.0,
+            "raw": "Breach Initiator 1 0% 1.00:1 11 / 17 / 6 0.6 99 155"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.94:1",
+            "kd": 0.5,
+            "acs": 80.0,
+            "dmg_round": 119.0,
+            "raw": "Fade Initiator 1 0% 0.94:1 9 / 17 / 7 0.5 80 119"
+          }
+        ]
+      },
+      "NUT rodney#moon": {
+        "season_label": "V25 - ACT 6",
+        "season_id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "riot_id": "NUT rodney#moon",
+        "slug": "NUT rodney-moon",
+        "profile_url": "https://op.gg/valorant/profile/NUT rodney-moon?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "maps_url": "https://op.gg/valorant/profile/NUT rodney-moon/maps?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "agents_url": "https://op.gg/valorant/profile/NUT rodney-moon/agents?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "160.8"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.28"
+              },
+              {
+                "label": "KDA",
+                "value": "1.56:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "247.46"
+              },
+              {
+                "label": "Most kills match",
+                "value": "34"
+              },
+              {
+                "label": "Time played",
+                "value": "66h 45m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "29.35% (1,832)"
+              },
+              {
+                "label": "Kills",
+                "value": "2,275"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "64.16% (4,004)"
+              },
+              {
+                "label": "Deaths",
+                "value": "1,784"
+              },
+              {
+                "label": "Legshots",
+                "value": "6.49% (405)"
+              },
+              {
+                "label": "Assists",
+                "value": "505"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Duelist",
+              "role_pct": "41%",
+              "kda": "1.50:1",
+              "kills": 920,
+              "deaths": 746,
+              "assists": 198,
+              "wins": 25,
+              "losses": 22,
+              "win_rate": "52%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "39%",
+              "kda": "1.53:1",
+              "kills": 917,
+              "deaths": 676,
+              "assists": 118,
+              "wins": 27,
+              "losses": 19,
+              "win_rate": "59%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "17%",
+              "kda": "1.72:1",
+              "kills": 363,
+              "deaths": 308,
+              "assists": 166,
+              "wins": 13,
+              "losses": 7,
+              "win_rate": "65%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "3%",
+              "kda": "1.81:1",
+              "kills": 75,
+              "deaths": 54,
+              "assists": 23,
+              "wins": 1,
+              "losses": 3,
+              "win_rate": "25%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Sunset",
+            "win_rate_pct": 52.0,
+            "wins": 11,
+            "losses": 10,
+            "kd": 1.24,
+            "kill_round": 0.84,
+            "dmg_round": 149.0,
+            "score_round": 228.0,
+            "raw": {
+              "map": "Sunset",
+              "win_rate": "52%",
+              "wins": "11",
+              "losses": "10",
+              "kd": "1.24",
+              "kill_round": "0.84",
+              "dmg_round": "149",
+              "score_round": "228"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 58.0,
+            "wins": 11,
+            "losses": 8,
+            "kd": 1.37,
+            "kill_round": 0.96,
+            "dmg_round": 173.0,
+            "score_round": 270.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "58%",
+              "wins": "11",
+              "losses": "8",
+              "kd": "1.37",
+              "kill_round": "0.96",
+              "dmg_round": "173",
+              "score_round": "270"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 56.0,
+            "wins": 9,
+            "losses": 7,
+            "kd": 1.41,
+            "kill_round": 0.96,
+            "dmg_round": 173.0,
+            "score_round": 269.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "56%",
+              "wins": "9",
+              "losses": "7",
+              "kd": "1.41",
+              "kill_round": "0.96",
+              "dmg_round": "173",
+              "score_round": "269"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 56.0,
+            "wins": 9,
+            "losses": 7,
+            "kd": 1.1,
+            "kill_round": 0.84,
+            "dmg_round": 152.0,
+            "score_round": 237.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "56%",
+              "wins": "9",
+              "losses": "7",
+              "kd": "1.1",
+              "kill_round": "0.84",
+              "dmg_round": "152",
+              "score_round": "237"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 53.0,
+            "wins": 9,
+            "losses": 8,
+            "kd": 1.26,
+            "kill_round": 0.88,
+            "dmg_round": 156.0,
+            "score_round": 238.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "53%",
+              "wins": "9",
+              "losses": "8",
+              "kd": "1.26",
+              "kill_round": "0.88",
+              "dmg_round": "156",
+              "score_round": "238"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 60.0,
+            "wins": 9,
+            "losses": 6,
+            "kd": 1.33,
+            "kill_round": 0.92,
+            "dmg_round": 167.0,
+            "score_round": 251.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "60%",
+              "wins": "9",
+              "losses": "6",
+              "kd": "1.33",
+              "kill_round": "0.92",
+              "dmg_round": "167",
+              "score_round": "251"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 57.0,
+            "wins": 8,
+            "losses": 5,
+            "kd": 1.21,
+            "kill_round": 0.85,
+            "dmg_round": 156.0,
+            "score_round": 239.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "57%",
+              "wins": "8",
+              "losses": "5",
+              "kd": "1.21",
+              "kill_round": "0.85",
+              "dmg_round": "156",
+              "score_round": "239"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 44,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.53:1",
+            "kd": 1.4,
+            "acs": 156.0,
+            "dmg_round": 240.0,
+            "raw": "Chamber Sentinel 44 57% 1.53:1 880 / 649 / 113 1.4 156 240"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 21,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.51:1",
+            "kd": 1.2,
+            "acs": 166.0,
+            "dmg_round": 255.0,
+            "raw": "Reyna Duelist 21 57% 1.51:1 396 / 318 / 84 1.2 166 255"
+          },
+          {
+            "agent": "Yoru Duelist",
+            "matches": 20,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.54:1",
+            "kd": 1.2,
+            "acs": 159.0,
+            "dmg_round": 249.0,
+            "raw": "Yoru Duelist 20 50% 1.54:1 390 / 313 / 92 1.2 159 249"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 20,
+            "win_rate": 65.0,
+            "win_rate_pct": 65.0,
+            "kda": "1.72:1",
+            "kd": 1.2,
+            "acs": 172.0,
+            "dmg_round": 263.0,
+            "raw": "Clove Controller 20 65% 1.72:1 363 / 308 / 166 1.2 172 263"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 6,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.35:1",
+            "kd": 1.2,
+            "acs": 161.0,
+            "dmg_round": 246.0,
+            "raw": "Raze Duelist 6 50% 1.35:1 116 / 99 / 18 1.2 161 246"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 4,
+            "win_rate": 25.0,
+            "win_rate_pct": 25.0,
+            "kda": "1.81:1",
+            "kd": 1.4,
+            "acs": 159.0,
+            "dmg_round": 233.0,
+            "raw": "Sova Initiator 4 25% 1.81:1 75 / 54 / 23 1.4 159 233"
+          },
+          {
+            "agent": "Neon Duelist",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.38:1",
+            "kd": 1.1,
+            "acs": 177.0,
+            "dmg_round": 285.0,
+            "raw": "Neon Duelist 1 0% 1.38:1 18 / 16 / 4 1.1 177 285"
+          },
+          {
+            "agent": "Vyse Sentinel",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.31:1",
+            "kd": 1.1,
+            "acs": 117.0,
+            "dmg_round": 204.0,
+            "raw": "Vyse Sentinel 1 100% 1.31:1 17 / 16 / 4 1.1 117 204"
+          },
+          {
+            "agent": "Killjoy Sentinel",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.91:1",
+            "kd": 1.8,
+            "acs": 143.0,
+            "dmg_round": 215.0,
+            "raw": "Killjoy Sentinel 1 100% 1.91:1 20 / 11 / 1 1.8 143 215"
+          }
+        ]
+      },
+      "shadowgoober1#thorn": {
+        "season_label": "V25 - ACT 6",
+        "season_id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "riot_id": "shadowgoober1#thorn",
+        "slug": "shadowgoober1-thorn",
+        "profile_url": "https://op.gg/valorant/profile/shadowgoober1-thorn?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "maps_url": "https://op.gg/valorant/profile/shadowgoober1-thorn/maps?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "agents_url": "https://op.gg/valorant/profile/shadowgoober1-thorn/agents?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "124.6"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "1.13"
+              },
+              {
+                "label": "KDA",
+                "value": "1.41:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "328.97"
+              },
+              {
+                "label": "Most kills match",
+                "value": "40"
+              },
+              {
+                "label": "Time played",
+                "value": "21h 50m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "30.57% (421)"
+              },
+              {
+                "label": "Kills",
+                "value": "879"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "63.47% (874)"
+              },
+              {
+                "label": "Deaths",
+                "value": "777"
+              },
+              {
+                "label": "Legshots",
+                "value": "5.95% (82)"
+              },
+              {
+                "label": "Assists",
+                "value": "216"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Initiator",
+              "role_pct": "43%",
+              "kda": "1.48:1",
+              "kills": 327,
+              "deaths": 288,
+              "assists": 100,
+              "wins": 11,
+              "losses": 9,
+              "win_rate": "55%"
+            },
+            {
+              "role": "Duelist",
+              "role_pct": "22%",
+              "kda": "1.16:1",
+              "kills": 208,
+              "deaths": 207,
+              "assists": 32,
+              "wins": 2,
+              "losses": 8,
+              "win_rate": "20%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "20%",
+              "kda": "1.46:1",
+              "kills": 182,
+              "deaths": 157,
+              "assists": 48,
+              "wins": 2,
+              "losses": 7,
+              "win_rate": "22%"
+            },
+            {
+              "role": "Controller",
+              "role_pct": "15%",
+              "kda": "1.58:1",
+              "kills": 162,
+              "deaths": 125,
+              "assists": 36,
+              "wins": 2,
+              "losses": 5,
+              "win_rate": "29%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Corrode",
+            "win_rate_pct": 71.0,
+            "wins": 5,
+            "losses": 2,
+            "kd": 1.39,
+            "kill_round": 1.44,
+            "dmg_round": 139.0,
+            "score_round": 409.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "71%",
+              "wins": "5",
+              "losses": "2",
+              "kd": "1.39",
+              "kill_round": "1.44",
+              "dmg_round": "139",
+              "score_round": "409"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 50.0,
+            "wins": 3,
+            "losses": 3,
+            "kd": 1.31,
+            "kill_round": 2.19,
+            "dmg_round": 138.0,
+            "score_round": 647.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "50%",
+              "wins": "3",
+              "losses": "3",
+              "kd": "1.31",
+              "kill_round": "2.19",
+              "dmg_round": "138",
+              "score_round": "647"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 60.0,
+            "wins": 3,
+            "losses": 2,
+            "kd": 1.01,
+            "kill_round": 0.63,
+            "dmg_round": 115.0,
+            "score_round": 177.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "60%",
+              "wins": "3",
+              "losses": "2",
+              "kd": "1.01",
+              "kill_round": "0.63",
+              "dmg_round": "115",
+              "score_round": "177"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 25.0,
+            "wins": 2,
+            "losses": 6,
+            "kd": 0.81,
+            "kill_round": 0.61,
+            "dmg_round": 118.0,
+            "score_round": 177.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "25%",
+              "wins": "2",
+              "losses": "6",
+              "kd": "0.81",
+              "kill_round": "0.61",
+              "dmg_round": "118",
+              "score_round": "177"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 25.0,
+            "wins": 2,
+            "losses": 6,
+            "kd": 1.23,
+            "kill_round": 1.32,
+            "dmg_round": 135.0,
+            "score_round": 388.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "25%",
+              "wins": "2",
+              "losses": "6",
+              "kd": "1.23",
+              "kill_round": "1.32",
+              "dmg_round": "135",
+              "score_round": "388"
+            }
+          },
+          {
+            "map": "Haven",
+            "win_rate_pct": 33.0,
+            "wins": 2,
+            "losses": 4,
+            "kd": 1.3,
+            "kill_round": 1.66,
+            "dmg_round": 109.0,
+            "score_round": 481.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "33%",
+              "wins": "2",
+              "losses": "4",
+              "kd": "1.3",
+              "kill_round": "1.66",
+              "dmg_round": "109",
+              "score_round": "481"
+            }
+          },
+          {
+            "map": "Ascent",
+            "win_rate_pct": 0.0,
+            "wins": 0,
+            "losses": 1,
+            "kd": 0.46,
+            "kill_round": 0.4,
+            "dmg_round": 88.0,
+            "score_round": 129.0,
+            "raw": {
+              "map": "Ascent",
+              "win_rate": "0%",
+              "wins": "0",
+              "losses": "1",
+              "kd": "0.46",
+              "kill_round": "0.40",
+              "dmg_round": "88",
+              "score_round": "129"
+            }
+          },
+          {
+            "map": "Lotus",
+            "win_rate_pct": 0.0,
+            "wins": 0,
+            "losses": 1,
+            "kd": 0.88,
+            "kill_round": 0.7,
+            "dmg_round": 142.0,
+            "score_round": 209.0,
+            "raw": {
+              "map": "Lotus",
+              "win_rate": "0%",
+              "wins": "0",
+              "losses": "1",
+              "kd": "0.88",
+              "kill_round": "0.70",
+              "dmg_round": "142",
+              "score_round": "209"
+            }
+          },
+          {
+            "map": "Sunset",
+            "win_rate_pct": 0.0,
+            "wins": 0,
+            "losses": 4,
+            "kd": 0.92,
+            "kill_round": 1.18,
+            "dmg_round": 120.0,
+            "score_round": 356.0,
+            "raw": {
+              "map": "Sunset",
+              "win_rate": "0%",
+              "wins": "0",
+              "losses": "4",
+              "kd": "0.92",
+              "kill_round": "1.18",
+              "dmg_round": "120",
+              "score_round": "356"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Sova Initiator",
+            "matches": 12,
+            "win_rate": 75.0,
+            "win_rate_pct": 75.0,
+            "kda": "1.46:1",
+            "kd": 1.2,
+            "acs": 115.0,
+            "dmg_round": 229.0,
+            "raw": "Sova Initiator 12 75% 1.46:1 177 / 153 / 47 1.2 115 229"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 5,
+            "win_rate": 20.0,
+            "win_rate_pct": 20.0,
+            "kda": "1.32:1",
+            "kd": 0.8,
+            "acs": 111.0,
+            "dmg_round": 166.0,
+            "raw": "Skye Initiator 5 20% 1.32:1 63 / 78 / 40 0.8 111 166"
+          },
+          {
+            "agent": "Clove Controller",
+            "matches": 4,
+            "win_rate": 25.0,
+            "win_rate_pct": 25.0,
+            "kda": "1.45:1",
+            "kd": 1.1,
+            "acs": 155.0,
+            "dmg_round": 243.0,
+            "raw": "Clove Controller 4 25% 1.45:1 78 / 74 / 29 1.1 155 243"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 4,
+            "win_rate": 25.0,
+            "win_rate_pct": 25.0,
+            "kda": "1.11:1",
+            "kd": 0.9,
+            "acs": 153.0,
+            "dmg_round": 223.0,
+            "raw": "Raze Duelist 4 25% 1.11:1 67 / 71 / 12 0.9 153 223"
+          },
+          {
+            "agent": "Sage Sentinel",
+            "matches": 4,
+            "win_rate": 25.0,
+            "win_rate_pct": 25.0,
+            "kda": "1.36:1",
+            "kd": 0.9,
+            "acs": 133.0,
+            "dmg_round": 210.0,
+            "raw": "Sage Sentinel 4 25% 1.36:1 63 / 67 / 28 0.9 133 210"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 3,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.95:1",
+            "kd": 0.8,
+            "acs": 110.0,
+            "dmg_round": 332.0,
+            "raw": "Reyna Duelist 3 0% 0.95:1 51 / 65 / 11 0.8 110 332"
+          },
+          {
+            "agent": "Omen Controller",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.42:1",
+            "kd": 1.2,
+            "acs": 75.0,
+            "dmg_round": 696.0,
+            "raw": "Omen Controller 2 0% 1.42:1 44 / 36 / 7 1.2 75 696"
+          },
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.31:1",
+            "kd": 1.1,
+            "acs": 120.0,
+            "dmg_round": 197.0,
+            "raw": "Chamber Sentinel 2 50% 1.31:1 32 / 29 / 6 1.1 120 197"
+          },
+          {
+            "agent": "KAY/O Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.16:1",
+            "kd": 2.1,
+            "acs": 0.0,
+            "dmg_round": 11582.0,
+            "raw": "KAY/O Initiator 1 100% 2.16:1 40 / 19 / 1 2.1 - 11,582"
+          },
+          {
+            "agent": "Harbor Controller",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.67:1",
+            "kd": 2.7,
+            "acs": 0.0,
+            "dmg_round": 11522.0,
+            "raw": "Harbor Controller 1 100% 2.67:1 40 / 15 / 0 2.7 - 11,522"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "2.00:1",
+            "kd": 1.6,
+            "acs": 0.0,
+            "dmg_round": 11008.0,
+            "raw": "Fade Initiator 1 0% 2.00:1 36 / 22 / 8 1.6 - 11,008"
+          },
+          {
+            "agent": "Killjoy Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.72:1",
+            "kd": 1.5,
+            "acs": 0.0,
+            "dmg_round": 10976.0,
+            "raw": "Killjoy Sentinel 1 0% 1.72:1 37 / 25 / 6 1.5 - 10,976"
+          },
+          {
+            "agent": "Iso Duelist",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.48:1",
+            "kd": 1.3,
+            "acs": 0.0,
+            "dmg_round": 10838.0,
+            "raw": "Iso Duelist 1 0% 1.48:1 36 / 27 / 4 1.3 - 10,838"
+          },
+          {
+            "agent": "Phoenix Duelist",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.48:1",
+            "kd": 1.4,
+            "acs": 0.0,
+            "dmg_round": 10726.0,
+            "raw": "Phoenix Duelist 1 0% 1.48:1 35 / 25 / 2 1.4 - 10,726"
+          },
+          {
+            "agent": "Deadlock Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.95:1",
+            "kd": 1.8,
+            "acs": 0.0,
+            "dmg_round": 10633.0,
+            "raw": "Deadlock Sentinel 1 0% 1.95:1 36 / 20 / 3 1.8 - 10,633"
+          },
+          {
+            "agent": "Jett Duelist",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.16:1",
+            "kd": 1.0,
+            "acs": 136.0,
+            "dmg_round": 198.0,
+            "raw": "Jett Duelist 1 100% 1.16:1 19 / 19 / 3 1.0 136 198"
+          },
+          {
+            "agent": "Vyse Sentinel",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.19:1",
+            "kd": 0.9,
+            "acs": 142.0,
+            "dmg_round": 209.0,
+            "raw": "Vyse Sentinel 1 0% 1.19:1 14 / 16 / 5 0.9 142 209"
+          },
+          {
+            "agent": "Tejo Initiator",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.94:1",
+            "kd": 0.7,
+            "acs": 112.0,
+            "dmg_round": 160.0,
+            "raw": "Tejo Initiator 1 0% 0.94:1 11 / 16 / 4 0.7 112 160"
+          }
+        ]
+      },
+      "khoyster#freak": {
+        "season_label": "V25 - ACT 6",
+        "season_id": "4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "riot_id": "khoyster#freak",
+        "slug": "khoyster-freak",
+        "profile_url": "https://op.gg/valorant/profile/khoyster-freak?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "maps_url": "https://op.gg/valorant/profile/khoyster-freak/maps?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "agents_url": "https://op.gg/valorant/profile/khoyster-freak/agents?seasonId=4c4b8cff-43eb-13d3-8f14-96b783c90cd2",
+        "profile_stats": {
+          "stats_card": {
+            "top": [
+              {
+                "label": "Dmg/round",
+                "value": "142.7"
+              },
+              {
+                "label": "K/D ratio",
+                "value": "0.95"
+              },
+              {
+                "label": "KDA",
+                "value": "1.43:1"
+              },
+              {
+                "label": "Score/round",
+                "value": "218.84"
+              },
+              {
+                "label": "Most kills match",
+                "value": "37"
+              },
+              {
+                "label": "Time played",
+                "value": "172h 30m"
+              }
+            ],
+            "breakdown": [
+              {
+                "label": "Headshots",
+                "value": "21.54% (4,143)"
+              },
+              {
+                "label": "Kills",
+                "value": "5,098"
+              },
+              {
+                "label": "Bodyshots",
+                "value": "68.93% (13,260)"
+              },
+              {
+                "label": "Deaths",
+                "value": "5,359"
+              },
+              {
+                "label": "Legshots",
+                "value": "9.54% (1,835)"
+              },
+              {
+                "label": "Assists",
+                "value": "2,572"
+              }
+            ]
+          },
+          "roles_card": [
+            {
+              "role": "Controller",
+              "role_pct": "42%",
+              "kda": "1.44:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 66,
+              "losses": 66,
+              "win_rate": "50%"
+            },
+            {
+              "role": "Initiator",
+              "role_pct": "42%",
+              "kda": "1.42:1",
+              "kills": null,
+              "deaths": null,
+              "assists": null,
+              "wins": 59,
+              "losses": 70,
+              "win_rate": "45%"
+            },
+            {
+              "role": "Duelist",
+              "role_pct": "8%",
+              "kda": "1.40:1",
+              "kills": 485,
+              "deaths": 465,
+              "assists": 167,
+              "wins": 15,
+              "losses": 12,
+              "win_rate": "56%"
+            },
+            {
+              "role": "Sentinel",
+              "role_pct": "8%",
+              "kda": "1.48:1",
+              "kills": 421,
+              "deaths": 364,
+              "assists": 117,
+              "wins": 13,
+              "losses": 13,
+              "win_rate": "50%"
+            }
+          ]
+        },
+        "maps": [
+          {
+            "map": "Haven",
+            "win_rate_pct": 55.0,
+            "wins": 29,
+            "losses": 24,
+            "kd": 1.0,
+            "kill_round": 0.76,
+            "dmg_round": 145.0,
+            "score_round": 222.0,
+            "raw": {
+              "map": "Haven",
+              "win_rate": "55%",
+              "wins": "29",
+              "losses": "24",
+              "kd": "1",
+              "kill_round": "0.76",
+              "dmg_round": "145",
+              "score_round": "222"
+            }
+          },
+          {
+            "map": "Pearl",
+            "win_rate_pct": 61.0,
+            "wins": 27,
+            "losses": 15,
+            "kd": 0.98,
+            "kill_round": 0.74,
+            "dmg_round": 139.0,
+            "score_round": 217.0,
+            "raw": {
+              "map": "Pearl",
+              "win_rate": "61%",
+              "wins": "27",
+              "losses": "15",
+              "kd": "0.98",
+              "kill_round": "0.74",
+              "dmg_round": "139",
+              "score_round": "217"
+            }
+          },
+          {
+            "map": "Split",
+            "win_rate_pct": 48.0,
+            "wins": 26,
+            "losses": 28,
+            "kd": 0.91,
+            "kill_round": 0.73,
+            "dmg_round": 142.0,
+            "score_round": 219.0,
+            "raw": {
+              "map": "Split",
+              "win_rate": "48%",
+              "wins": "26",
+              "losses": "28",
+              "kd": "0.91",
+              "kill_round": "0.73",
+              "dmg_round": "142",
+              "score_round": "219"
+            }
+          },
+          {
+            "map": "Bind",
+            "win_rate_pct": 51.0,
+            "wins": 22,
+            "losses": 21,
+            "kd": 1.04,
+            "kill_round": 0.81,
+            "dmg_round": 155.0,
+            "score_round": 238.0,
+            "raw": {
+              "map": "Bind",
+              "win_rate": "51%",
+              "wins": "22",
+              "losses": "21",
+              "kd": "1.04",
+              "kill_round": "0.81",
+              "dmg_round": "155",
+              "score_round": "238"
+            }
+          },
+          {
+            "map": "Corrode",
+            "win_rate_pct": 36.0,
+            "wins": 20,
+            "losses": 34,
+            "kd": 0.89,
+            "kill_round": 0.7,
+            "dmg_round": 136.0,
+            "score_round": 208.0,
+            "raw": {
+              "map": "Corrode",
+              "win_rate": "36%",
+              "wins": "20",
+              "losses": "34",
+              "kd": "0.89",
+              "kill_round": "0.70",
+              "dmg_round": "136",
+              "score_round": "208"
+            }
+          },
+          {
+            "map": "Sunset",
+            "win_rate_pct": 47.0,
+            "wins": 17,
+            "losses": 19,
+            "kd": 0.98,
+            "kill_round": 0.77,
+            "dmg_round": 147.0,
+            "score_round": 225.0,
+            "raw": {
+              "map": "Sunset",
+              "win_rate": "47%",
+              "wins": "17",
+              "losses": "19",
+              "kd": "0.98",
+              "kill_round": "0.77",
+              "dmg_round": "147",
+              "score_round": "225"
+            }
+          },
+          {
+            "map": "Abyss",
+            "win_rate_pct": 36.0,
+            "wins": 12,
+            "losses": 20,
+            "kd": 0.88,
+            "kill_round": 0.69,
+            "dmg_round": 135.0,
+            "score_round": 203.0,
+            "raw": {
+              "map": "Abyss",
+              "win_rate": "36%",
+              "wins": "12",
+              "losses": "20",
+              "kd": "0.88",
+              "kill_round": "0.69",
+              "dmg_round": "135",
+              "score_round": "203"
+            }
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Clove Controller",
+            "matches": 105,
+            "win_rate": 53.0,
+            "win_rate_pct": 53.0,
+            "kda": "1.44:1",
+            "kd": 0.9,
+            "acs": 159.0,
+            "dmg_round": 245.0,
+            "raw": "Clove Controller 105 53% 1.44:1 1,882 / 2,025 / 1,040 0.9 159 245"
+          },
+          {
+            "agent": "Fade Initiator",
+            "matches": 69,
+            "win_rate": 43.0,
+            "win_rate_pct": 43.0,
+            "kda": "1.40:1",
+            "kd": 0.9,
+            "acs": 128.0,
+            "dmg_round": 198.0,
+            "raw": "Fade Initiator 69 43% 1.40:1 1,018 / 1,104 / 528 0.9 128 198"
+          },
+          {
+            "agent": "Sova Initiator",
+            "matches": 49,
+            "win_rate": 49.0,
+            "win_rate_pct": 49.0,
+            "kda": "1.41:1",
+            "kd": 0.9,
+            "acs": 138.0,
+            "dmg_round": 203.0,
+            "raw": "Sova Initiator 49 49% 1.41:1 681 / 728 / 342 0.9 138 203"
+          },
+          {
+            "agent": "Reyna Duelist",
+            "matches": 23,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.46:1",
+            "kd": 1.1,
+            "acs": 150.0,
+            "dmg_round": 235.0,
+            "raw": "Reyna Duelist 23 57% 1.46:1 423 / 389 / 145 1.1 150 235"
+          },
+          {
+            "agent": "Omen Controller",
+            "matches": 16,
+            "win_rate": 38.0,
+            "win_rate_pct": 38.0,
+            "kda": "1.34:1",
+            "kd": 0.8,
+            "acs": 118.0,
+            "dmg_round": 178.0,
+            "raw": "Omen Controller 16 38% 1.34:1 194 / 238 / 126 0.8 118 178"
+          },
+          {
+            "agent": "Skye Initiator",
+            "matches": 13,
+            "win_rate": 31.0,
+            "win_rate_pct": 31.0,
+            "kda": "1.54:1",
+            "kd": 0.9,
+            "acs": 143.0,
+            "dmg_round": 213.0,
+            "raw": "Skye Initiator 13 31% 1.54:1 199 / 215 / 133 0.9 143 213"
+          },
+          {
+            "agent": "Astra Controller",
+            "matches": 10,
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "kda": "1.55:1",
+            "kd": 1.0,
+            "acs": 138.0,
+            "dmg_round": 218.0,
+            "raw": "Astra Controller 10 40% 1.55:1 173 / 175 / 99 1.0 138 218"
+          },
+          {
+            "agent": "Cypher Sentinel",
+            "matches": 10,
+            "win_rate": 70.0,
+            "win_rate_pct": 70.0,
+            "kda": "1.67:1",
+            "kd": 1.3,
+            "acs": 140.0,
+            "dmg_round": 219.0,
+            "raw": "Cypher Sentinel 10 70% 1.67:1 169 / 130 / 48 1.3 140 219"
+          },
+          {
+            "agent": "Killjoy Sentinel",
+            "matches": 7,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.31:1",
+            "kd": 1.1,
+            "acs": 137.0,
+            "dmg_round": 207.0,
+            "raw": "Killjoy Sentinel 7 57% 1.31:1 97 / 91 / 22 1.1 137 207"
+          },
+          {
+            "agent": "Sage Sentinel",
+            "matches": 5,
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "kda": "1.58:1",
+            "kd": 1.1,
+            "acs": 134.0,
+            "dmg_round": 211.0,
+            "raw": "Sage Sentinel 5 40% 1.58:1 87 / 76 / 33 1.1 134 211"
+          },
+          {
+            "agent": "Chamber Sentinel",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.63:1",
+            "kd": 1.5,
+            "acs": 179.0,
+            "dmg_round": 289.0,
+            "raw": "Chamber Sentinel 2 0% 1.63:1 44 / 30 / 5 1.5 179 289"
+          },
+          {
+            "agent": "Phoenix Duelist",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.50:1",
+            "kd": 1.1,
+            "acs": 156.0,
+            "dmg_round": 241.0,
+            "raw": "Phoenix Duelist 2 50% 1.50:1 38 / 34 / 13 1.1 156 241"
+          },
+          {
+            "agent": "Veto Sentinel",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.89:1",
+            "kd": 0.6,
+            "acs": 105.0,
+            "dmg_round": 157.0,
+            "raw": "Veto Sentinel 2 0% 0.89:1 24 / 37 / 9 0.6 105 157"
+          },
+          {
+            "agent": "Harbor Controller",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.47:1",
+            "kd": 1.1,
+            "acs": 159.0,
+            "dmg_round": 244.0,
+            "raw": "Harbor Controller 1 0% 1.47:1 20 / 19 / 8 1.1 159 244"
+          },
+          {
+            "agent": "Tejo Initiator",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "2.30:1",
+            "kd": 1.7,
+            "acs": 141.0,
+            "dmg_round": 234.0,
+            "raw": "Tejo Initiator 1 100% 2.30:1 17 / 10 / 6 1.7 141 234"
+          },
+          {
+            "agent": "Raze Duelist",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.70:1",
+            "kd": 0.5,
+            "acs": 110.0,
+            "dmg_round": 153.0,
+            "raw": "Raze Duelist 1 0% 0.70:1 14 / 27 / 5 0.5 110 153"
+          },
+          {
+            "agent": "Jett Duelist",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "0.93:1",
+            "kd": 0.7,
+            "acs": 121.0,
+            "dmg_round": 146.0,
+            "raw": "Jett Duelist 1 100% 0.93:1 10 / 15 / 4 0.7 121 146"
+          },
+          {
+            "agent": "Brimstone Controller",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.88:1",
+            "kd": 0.5,
+            "acs": 84.0,
+            "dmg_round": 134.0,
+            "raw": "Brimstone Controller 1 0% 0.88:1 8 / 16 / 6 0.5 84 134"
+          }
+        ]
+      }
+    }
+  }
+}

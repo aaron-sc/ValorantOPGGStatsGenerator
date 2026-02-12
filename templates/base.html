@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}Valorant Tracker{% endblock %}</title>
+  <title>{% block title %}Valorant Scout{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&family=Teko:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -13,9 +13,9 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <div class="brand">VALO TRACKER</div>
+    <div class="brand">VALORANT SCOUT</div>
     <div class="nav-actions">
-      <button class="btn secondary" onclick="history.back()">← Back</button>
+      <button class="btn secondary" onclick="history.back()">&larr; Back</button>
       <a href="/" class="btn secondary">Home</a>
     </div>
   </div>
@@ -41,12 +41,12 @@
 <!-- Progress Overlay -->
 <div class="progress-overlay" id="progressOverlay">
   <div class="progress-card">
-    <div class="progress-title">Scraping OP.GG…</div>
+    <div class="progress-title">Scraping OP.GG...</div>
     <div class="progress-bar">
       <div class="progress-fill" id="progressFill"></div>
     </div>
     <div class="subtle" style="margin-top:10px;" id="progressText">
-      Initializing…
+      Initializing...
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Team Comparison · Valorant Tracker{% endblock %}
+{% block title %}Team Comparison &middot; Valorant Scout{% endblock %}
 
 {% block content %}
 <div class="section-head">
@@ -24,7 +24,7 @@
       <div class="metric-tile">
         <div class="muted">Top Map</div>
         <div class="strong">
-          {% if team_a.summary.best_map %}{{ team_a.summary.best_map.map }}{% else %}—{% endif %}
+          {% if team_a.summary.best_map %}{{ team_a.summary.best_map.map }}{% else %}&mdash;{% endif %}
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
       <div class="metric-tile">
         <div class="muted">Top Map</div>
         <div class="strong">
-          {% if team_b.summary.best_map %}{{ team_b.summary.best_map.map }}{% else %}—{% endif %}
+          {% if team_b.summary.best_map %}{{ team_b.summary.best_map.map }}{% else %}&mdash;{% endif %}
         </div>
       </div>
     </div>

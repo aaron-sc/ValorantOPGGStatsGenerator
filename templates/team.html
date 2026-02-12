@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ team_name }} · Team{% endblock %}
+{% block title %}{{ team_name }} &middot; Team{% endblock %}
 
 {% block content %}
 
@@ -8,8 +8,8 @@
     <h1 class="section-title">{{ team_name }}</h1>
     <div class="subtle">
       Team key: <span class="kbd">{{ team_key }}</span>
-      · Season: <span class="kbd">{{ season_id }}</span>
-      {% if snapshot_updated_ts %} · Updated: <span class="kbd">{{ snapshot_updated_ts }}</span>{% endif %}
+      &middot; Season: <span class="kbd">{{ season_id }}</span>
+      {% if snapshot_updated_ts %} &middot; Updated: <span class="kbd">{{ snapshot_updated_ts }}</span>{% endif %}
     </div>
   </div>
 
@@ -63,7 +63,7 @@
       <div class="big">{{ team_summary.top_agent.agent }}</div>
       <div class="subtle">{{ team_summary.top_agent.matches }} matches</div>
     {% else %}
-      <div class="big">—</div>
+      <div class="big">&mdash;</div>
       <div class="subtle">No agent data</div>
     {% endif %}
   </div>
@@ -85,7 +85,7 @@
         <div class="pill pill-good">{{ "%.1f"|format(team_summary.best_map.win_rate_pct) }}%</div>
       </div>
     {% else %}
-      <div class="muted">—</div>
+      <div class="muted">&mdash;</div>
     {% endif %}
   </div>
 
@@ -103,9 +103,124 @@
         <div class="pill pill-bad">{{ "%.1f"|format(team_summary.worst_map.win_rate_pct) }}%</div>
       </div>
     {% else %}
-      <div class="muted">—</div>
+      <div class="muted">&mdash;</div>
     {% endif %}
   </div>
+</div>
+
+<!-- Scouting planner -->
+<div class="section-head" style="margin-top:18px;">
+  <h2 class="section-title">Scouting Planner</h2>
+  <div class="subtle">Auto-generated priorities and tendencies.</div>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Map Pick/Ban Priorities</h2>
+      <span class="pill pill-mid">Adjusted</span>
+    </div>
+    {% if map_plan and (map_plan.pick_targets or map_plan.ban_targets) %}
+      <div class="map-plan-grid">
+        <div class="map-plan-col">
+          <div class="muted small">Pick Order</div>
+          <div class="map-rec-list">
+            {% for m in map_plan.pick_targets %}
+              <div class="map-rec-item">
+                <span class="pill pill-mid">P{{ loop.index }}</span>
+                <span class="strong">{{ m.map }}</span>
+                <span class="subtle">Adj {{ "%.1f"|format(m.adj_win_rate_pct) }}% &middot; {{ m.games }}g</span>
+                <span class="pill {{ m.confidence_class }}">{{ m.confidence }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="map-plan-col">
+          <div class="muted small">Ban Order</div>
+          <div class="map-rec-list">
+            {% for m in map_plan.ban_targets %}
+              <div class="map-rec-item">
+                <span class="pill pill-bad">B{{ loop.index }}</span>
+                <span class="strong">{{ m.map }}</span>
+                <span class="subtle">Adj {{ "%.1f"|format(m.adj_win_rate_pct) }}% &middot; {{ m.games }}g</span>
+                <span class="pill {{ m.confidence_class }}">{{ m.confidence }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="subtle" style="margin-top:8px;">Adjusted win% smooths small samples.</div>
+    {% else %}
+      <div class="muted">No map plan available.</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Team Tendencies</h2>
+      <span class="pill pill-mid">Auto-generated</span>
+    </div>
+    {% if team_insights %}
+      <ul class="insight-list">
+        {% for i in team_insights %}
+          <li class="insight-item">
+            <span class="pill {{ i.level }}">{{ i.tag }}</span>
+            <span>{{ i.text }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="muted">No insights generated.</div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Expected comps table -->
+<div class="section-head" style="margin-top:18px;">
+  <h2 class="section-title">Expected Agent Comps by Map</h2>
+  <div class="subtle">Best-effort from roster agent pools and map play.</div>
+</div>
+
+<div class="card">
+  {% if expected_comps and expected_comps|length > 0 %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="left">Map</th>
+            <th class="center">Games</th>
+            <th class="left">Expected Agents</th>
+            <th class="center">Roles</th>
+            <th class="center">Confidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in expected_comps %}
+            <tr>
+              <td class="left strong">{{ c.map }}</td>
+              <td class="center">{{ c.games }}</td>
+              <td class="left">
+                <div class="agent-chips">
+                  {% for a in c.agents %}
+                    <span class="agent-chip {% if a.conflict %}warn{% endif %}" title="{{ a.player }}">
+                      <span class="agent-name">{{ a.agent }}</span>
+                      {% if a.role and a.role != "Flex" %}
+                        <span class="agent-role">{{ a.role }}</span>
+                      {% endif %}
+                    </span>
+                  {% endfor %}
+                </div>
+              </td>
+              <td class="center">{{ c.roles_label }}</td>
+              <td class="center"><span class="pill {{ c.confidence_class }}">{{ c.confidence }}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="muted">No agent comp data available.</div>
+  {% endif %}
 </div>
 
 <!-- Chart -->
@@ -121,7 +236,7 @@
     </div>
     <div class="subtle" style="margin-top:10px;">Tip: Low sample sizes can swing Win% wildly.</div>
   {% else %}
-    <div class="muted">No map rows available for charting. Try “Update snapshot”.</div>
+    <div class="muted">No map rows available for charting. Try "Update snapshot".</div>
   {% endif %}
 </div>
 
@@ -198,8 +313,8 @@
               <div class="strong">{{ s.riot_id }}</div>
               <div class="subtle">
                 {% if s.profile_url %}<a class="link" href="{{ s.profile_url }}" target="_blank">Profile</a>{% endif %}
-                {% if s.maps_url %}{% if s.profile_url %} · {% endif %}<a class="link" href="{{ s.maps_url }}" target="_blank">Maps</a>{% endif %}
-                {% if s.agents_url %}{% if s.profile_url or s.maps_url %} · {% endif %}<a class="link" href="{{ s.agents_url }}" target="_blank">Agents</a>{% endif %}
+                {% if s.maps_url %}{% if s.profile_url %} &middot; {% endif %}<a class="link" href="{{ s.maps_url }}" target="_blank">Maps</a>{% endif %}
+                {% if s.agents_url %}{% if s.profile_url or s.maps_url %} &middot; {% endif %}<a class="link" href="{{ s.agents_url }}" target="_blank">Agents</a>{% endif %}
               </div>
             </td>
             <td class="center">{{ s.games }}</td>

@@ -51,6 +51,42 @@ SEASONS: Dict[str, str] = {
 DEFAULT_SEASON_ID = SEASONS["V26 - ACT 1"]
 
 # ============================================================
+# Agent roles (best-effort, used for comp heuristics)
+# ============================================================
+def _agent_key(name: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", (name or "").lower())
+
+AGENT_ROLES = {
+    "Astra": "Controller",
+    "Brimstone": "Controller",
+    "Clove": "Controller",
+    "Harbor": "Controller",
+    "Omen": "Controller",
+    "Viper": "Controller",
+    "Breach": "Initiator",
+    "Fade": "Initiator",
+    "Gekko": "Initiator",
+    "KAY/O": "Initiator",
+    "Skye": "Initiator",
+    "Sova": "Initiator",
+    "Chamber": "Sentinel",
+    "Cypher": "Sentinel",
+    "Deadlock": "Sentinel",
+    "Killjoy": "Sentinel",
+    "Sage": "Sentinel",
+    "Iso": "Duelist",
+    "Jett": "Duelist",
+    "Neon": "Duelist",
+    "Phoenix": "Duelist",
+    "Raze": "Duelist",
+    "Reyna": "Duelist",
+    "Yoru": "Duelist",
+}
+
+AGENT_ROLE_BY_KEY = {_agent_key(k): v for k, v in AGENT_ROLES.items()}
+ROLE_ORDER = ["Controller", "Initiator", "Sentinel", "Duelist", "Flex"]
+
+# ============================================================
 # Snapshot helpers
 # ============================================================
 def snapshot_path(team_key: str) -> Path:
@@ -59,7 +95,7 @@ def snapshot_path(team_key: str) -> Path:
 def to_float(x, default=0.0):
     """
     Robust float parser for messy scraped values like:
-    None, "None", "", "—", "-", "27.1%", "1,234", "  12.3  "
+    None, "None", "", "\u2014", "-", "27.1%", "1,234", "  12.3  "
     """
     try:
         if x is None:
@@ -67,7 +103,7 @@ def to_float(x, default=0.0):
         if isinstance(x, (int, float)):
             return float(x)
         s = str(x).strip()
-        if not s or s.lower() in {"none", "null", "nan", "—", "-", "n/a"}:
+        if not s or s.lower() in {"none", "null", "nan", "\u2014", "-", "n/a"}:
             return default
         s = s.replace("%", "").replace(",", "")
         return float(s)
@@ -83,7 +119,7 @@ def to_int(x, default=0):
         if isinstance(x, float):
             return int(x)
         s = str(x).strip().replace(",", "")
-        if not s or s.lower() in {"none", "null", "—", "-", "n/a"}:
+        if not s or s.lower() in {"none", "null", "\u2014", "-", "n/a"}:
             return default
         return int(float(s))
     except Exception:
@@ -147,6 +183,319 @@ def _stdev(values):
     var = sum((v - m) ** 2 for v in values) / len(values)
     return math.sqrt(var)
 
+def agent_role(agent: str) -> str:
+    key = _agent_key(agent)
+    return AGENT_ROLE_BY_KEY.get(key, "Flex")
+
+def map_confidence_label(games: int) -> str:
+    if games >= 12:
+        return "High"
+    if games >= 6:
+        return "Medium"
+    return "Low"
+
+def map_confidence_class(label: str) -> str:
+    if label == "High":
+        return "pill-good"
+    if label == "Medium":
+        return "pill-mid"
+    return "pill-bad"
+
+def role_mix_label(role_counts: Dict[str, int]) -> str:
+    parts = []
+    for role in ROLE_ORDER:
+        n = int(role_counts.get(role, 0))
+        if n > 0:
+            parts.append(f"{n} {role}")
+    return " / ".join(parts) if parts else "Unknown"
+
+def build_agent_pools(season_block: dict, roster: list) -> Tuple[Dict[str, list], Dict[str, int]]:
+    pools = {}
+    role_counts = {}
+    for rid in roster:
+        entry = season_block.get(rid) or {}
+        agents = []
+        for a in (entry.get("agents") or []):
+            agent = (a.get("agent") or a.get("name") or "").strip()
+            if not agent:
+                continue
+            matches = to_int(a.get("matches", 0))
+            win_rate = to_float(a.get("win_rate", 0.0))
+            acs = to_float(a.get("acs", 0.0))
+            dmg_round = to_float(a.get("dmg_round", 0.0))
+            role = agent_role(agent)
+            if matches <= 0:
+                continue
+            agents.append({
+                "agent": agent,
+                "matches": matches,
+                "win_rate": win_rate,
+                "acs": acs,
+                "dmg_round": dmg_round,
+                "role": role,
+            })
+            role_counts[role] = role_counts.get(role, 0) + matches
+        agents.sort(key=lambda x: x["matches"], reverse=True)
+        pools[rid] = agents
+    return pools, role_counts
+
+def build_map_games_by_player(season_block: dict, roster: list) -> Dict[str, Dict[str, int]]:
+    out: Dict[str, Dict[str, int]] = {}
+    for rid in roster:
+        entry = season_block.get(rid) or {}
+        for m in (entry.get("maps") or []):
+            map_name = (m.get("map") or "").strip()
+            if not map_name:
+                continue
+            games = int(m.get("wins", 0)) + int(m.get("losses", 0))
+            if games <= 0:
+                continue
+            by_player = out.setdefault(map_name, {})
+            by_player[rid] = by_player.get(rid, 0) + games
+    return out
+
+def pick_agents_for_players(player_ids: list, agent_pools: Dict[str, list]) -> Tuple[List[dict], int]:
+    used = set()
+    picks = []
+    conflicts = 0
+    for rid in player_ids:
+        pool = agent_pools.get(rid) or []
+        pick = None
+        conflict = False
+        for a in pool:
+            if a["agent"] not in used:
+                pick = a
+                break
+        if not pick and pool:
+            pick = pool[0]
+            conflict = True
+            conflicts += 1
+        if pick:
+            if pick["agent"] in used:
+                conflict = True
+            used.add(pick["agent"])
+            picks.append({
+                "agent": pick["agent"],
+                "role": pick["role"],
+                "player": rid,
+                "matches": pick["matches"],
+                "win_rate": pick["win_rate"],
+                "conflict": conflict,
+            })
+        else:
+            conflicts += 1
+            picks.append({
+                "agent": "Unknown",
+                "role": "Flex",
+                "player": rid,
+                "matches": 0,
+                "win_rate": 0.0,
+                "conflict": True,
+            })
+    return picks, conflicts
+
+def build_expected_comps(
+    map_rows: list,
+    map_games_by_player: Dict[str, Dict[str, int]],
+    agent_pools: Dict[str, list],
+    fallback_player_order: list,
+) -> List[dict]:
+    comps = []
+    for r in map_rows:
+        map_name = (r.get("map") or "").strip()
+        if not map_name:
+            continue
+        games = int(r.get("games", 0))
+        by_player = map_games_by_player.get(map_name, {})
+        if by_player:
+            player_ids = [pid for pid, _ in sorted(by_player.items(), key=lambda x: x[1], reverse=True)]
+        else:
+            player_ids = list(fallback_player_order)
+        player_ids = player_ids[:5]
+        picks, conflicts = pick_agents_for_players(player_ids, agent_pools)
+        role_counts = {}
+        for p in picks:
+            role = p.get("role") or "Flex"
+            role_counts[role] = role_counts.get(role, 0) + 1
+        conf = map_confidence_label(games)
+        comps.append({
+            "map": map_name,
+            "games": games,
+            "agents": picks,
+            "roles_label": role_mix_label(role_counts),
+            "confidence": conf,
+            "confidence_class": map_confidence_class(conf),
+            "conflicts": conflicts,
+        })
+    comps.sort(key=lambda x: x.get("games", 0), reverse=True)
+    return comps
+
+def compute_map_strengths(map_rows: list, smoothing: int = 6) -> List[dict]:
+    rows = []
+    for r in map_rows:
+        games = int(r.get("games", 0))
+        wins = int(r.get("wins", 0))
+        win_rate = float(r.get("win_rate_pct", 0.0))
+        adj = (wins + smoothing * 0.5) / (games + smoothing) if games > 0 else 0.5
+        conf = map_confidence_label(games)
+        rows.append({
+            "map": r.get("map"),
+            "games": games,
+            "wins": wins,
+            "losses": int(r.get("losses", 0)),
+            "win_rate_pct": win_rate,
+            "adj_win_rate_pct": adj * 100.0,
+            "confidence": conf,
+            "confidence_class": map_confidence_class(conf),
+        })
+    return rows
+
+def recommend_map_plan(map_rows: list, min_games: int = 3, smoothing: int = 6, limit: int = 3) -> dict:
+    rows = compute_map_strengths(map_rows, smoothing=smoothing)
+    viable = [r for r in rows if r["games"] >= min_games]
+    if not viable:
+        viable = rows
+    picks = sorted(viable, key=lambda r: r["adj_win_rate_pct"], reverse=True)
+    bans = sorted(viable, key=lambda r: r["adj_win_rate_pct"])
+    return {
+        "pick_targets": picks[:limit],
+        "ban_targets": bans[:limit],
+        "first_pick": picks[0] if picks else None,
+        "first_ban": bans[0] if bans else None,
+    }
+
+def generate_team_insights(summary: dict, agents_agg: list, role_counts: Dict[str, int], players: list) -> list:
+    insights = []
+
+    def add(level, tag, text):
+        insights.append({"level": level, "tag": tag, "text": text})
+
+    total_games = int(summary.get("total_games", 0))
+    if total_games < 20:
+        add("pill-bad", "Sample", f"Low sample size ({total_games} games). Treat map win% as volatile.")
+    elif total_games < 50:
+        add("pill-mid", "Sample", f"Moderate sample size ({total_games} games). Trends can still swing.")
+    else:
+        add("pill-good", "Sample", f"Solid sample size ({total_games} games). Trends are more trustworthy.")
+
+    stable_maps = int(summary.get("stable_map_count", 0))
+    if stable_maps <= 3:
+        add("pill-bad", "Map Pool", f"Shallow map pool ({stable_maps} maps with >=5 games). Expect bans to target comfort.")
+    elif stable_maps <= 5:
+        add("pill-mid", "Map Pool", f"Moderate map depth ({stable_maps} maps with >=5 games).")
+    else:
+        add("pill-good", "Map Pool", f"Wide map pool ({stable_maps} maps with >=5 games).")
+
+    win_vol = float(summary.get("win_volatility", 0.0))
+    if win_vol >= 12:
+        add("pill-bad", "Consistency", f"High map volatility (win% stdev {win_vol:.1f}). Expect swingy results.")
+    elif win_vol >= 7:
+        add("pill-mid", "Consistency", f"Moderate map volatility (win% stdev {win_vol:.1f}).")
+    else:
+        add("pill-good", "Consistency", f"Stable across maps (win% stdev {win_vol:.1f}).")
+
+    best_map = summary.get("best_map") or {}
+    worst_map = summary.get("worst_map") or {}
+    if best_map and worst_map and best_map.get("map") and worst_map.get("map"):
+        best_games = int(best_map.get("games", 0))
+        worst_games = int(worst_map.get("games", 0))
+        if best_games >= 5 and worst_games >= 5 and best_map.get("map") != worst_map.get("map"):
+            best_win = float(best_map.get("win_rate_pct", 0.0))
+            worst_win = float(worst_map.get("win_rate_pct", 0.0))
+            spread = best_win - worst_win
+            if spread >= 20:
+                add(
+                    "pill-bad",
+                    "Map Gap",
+                    f"Large win-rate gap: {best_map['map']} {best_win:.1f}% vs {worst_map['map']} {worst_win:.1f}%. Expect bans into {worst_map['map']}.",
+                )
+            elif spread >= 12:
+                add(
+                    "pill-mid",
+                    "Map Gap",
+                    f"Noticeable map gap: {best_map['map']} {best_win:.1f}% vs {worst_map['map']} {worst_win:.1f}%.",
+                )
+            else:
+                add(
+                    "pill-good",
+                    "Map Gap",
+                    f"Map win rates are fairly tight (best {best_map['map']} {best_win:.1f}%, worst {worst_map['map']} {worst_win:.1f}%).",
+                )
+
+    avg_kd = float(summary.get("avg_kd", 0.0))
+    avg_win = float(summary.get("avg_win_rate_pct", 0.0))
+    if avg_kd >= 1.05 and avg_win < 50:
+        add("pill-mid", "Conversion", "Fragging looks strong but win rate lags. Focus on mid-round trade and conversion.")
+    elif avg_kd < 0.98 and avg_win >= 52:
+        add("pill-good", "Teamplay", "Winning despite lower K/D. Utility, trades, and post-plants likely carry.")
+
+    total_agent_matches = sum(int(a.get("matches", 0)) for a in agents_agg) or 0
+    if total_agent_matches > 0:
+        top2 = sum(int(a.get("matches", 0)) for a in agents_agg[:2])
+        share = (top2 / total_agent_matches) * 100.0
+        if share >= 60:
+            add("pill-bad", "Agent Pool", f"Narrow agent pool (top 2 agents = {share:.0f}% of matches). Prep anti-strats.")
+        elif share >= 45:
+            add("pill-mid", "Agent Pool", f"Moderate agent reliance (top 2 = {share:.0f}% of matches).")
+        else:
+            add("pill-good", "Agent Pool", f"Healthy agent diversity (top 2 = {share:.0f}% of matches).")
+
+        top_agent = agents_agg[0] if agents_agg else None
+        if top_agent:
+            top_share = (int(top_agent.get("matches", 0)) / total_agent_matches) * 100.0
+            top_win = float(top_agent.get("win_rate", 0.0))
+            diff = top_win - avg_win
+            if top_share >= 30 and diff <= -4:
+                add(
+                    "pill-bad",
+                    "Signature Agent",
+                    f"Heavy reliance on {top_agent['agent']} ({top_share:.0f}% of matches) but win rate trails team average by {abs(diff):.1f} pts.",
+                )
+            elif top_share >= 30 and diff >= 4:
+                add(
+                    "pill-good",
+                    "Signature Agent",
+                    f"{top_agent['agent']} is a signature pick ({top_share:.0f}% of matches) and wins {diff:.1f} pts above team average.",
+                )
+
+        pocket = None
+        for a in agents_agg:
+            matches = int(a.get("matches", 0))
+            if matches < 5:
+                continue
+            share = (matches / total_agent_matches) * 100.0
+            if share > 12:
+                continue
+            win = float(a.get("win_rate", 0.0))
+            diff = win - avg_win
+            if diff >= 8:
+                if not pocket or diff > pocket["diff"]:
+                    pocket = {"agent": a.get("agent"), "share": share, "win": win, "diff": diff}
+        if pocket:
+            add(
+                "pill-mid",
+                "Pocket Pick",
+                f"{pocket['agent']} wins {pocket['diff']:.1f} pts above team average on limited use ({pocket['share']:.0f}% of matches). Consider expanding if comp fits.",
+            )
+
+    if role_counts:
+        total_role = sum(role_counts.values()) or 1
+        top_role = max(role_counts.items(), key=lambda x: x[1])
+        top_share = (top_role[1] / total_role) * 100.0
+        if top_share >= 50:
+            add("pill-mid", "Role Bias", f"{top_role[0]} heavy ({top_share:.0f}% of agent picks). Expect role-centric game plan.")
+
+    # Impact concentration (top-2 players share)
+    if players:
+        sorted_players = sorted(players, key=lambda p: p.get("impact_index", 0.0), reverse=True)
+        total_impact = sum(float(p.get("impact_index", 0.0)) for p in sorted_players) or 1.0
+        top2 = sum(float(p.get("impact_index", 0.0)) for p in sorted_players[:2])
+        share = (top2 / total_impact) * 100.0
+        if share >= 55:
+            add("pill-mid", "Reliance", f"Top-heavy impact (top 2 = {share:.0f}% of team impact). Target carries.")
+
+    return insights
+
 def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
     """
     Returns a rich summary suitable for scouting + comparisons.
@@ -165,13 +514,16 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
     team_agg = aggregate_team_maps(players_maps)  # your existing function
     map_rows = team_agg.get("by_map") or []
 
+    agent_pools, role_counts_from_agents = build_agent_pools(season_block, roster)
+    map_games_by_player = build_map_games_by_player(season_block, roster)
+
     total_games = sum(int(r.get("games", 0)) for r in map_rows)
     avg_win = _weighted_avg(map_rows, "win_rate_pct", "games")
     avg_kd = _weighted_avg(map_rows, "kd", "games")
     avg_dmg = _weighted_avg(map_rows, "dmg_round", "games")
     avg_score = _weighted_avg(map_rows, "score_round", "games")
 
-    # “Pool breadth”: how many maps above N games
+    # Pool breadth: how many maps above N games
     map_min_games = 5
     stable_maps = [r for r in map_rows if int(r.get("games", 0)) >= map_min_games]
     stable_map_count = len(stable_maps)
@@ -218,33 +570,22 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
 
     players.sort(key=lambda p: (p["games"], p["score_round"]), reverse=True)
 
-    # “Carry index” (simple scouting heuristic): score_round * kd * log(games+1)
+    # Carry index (simple scouting heuristic): score_round * kd * log(games+1)
     for p in players:
         p["impact_index"] = float(p["score_round"]) * max(0.5, float(p["kd"])) * math.log(p["games"] + 1.0)
 
     top_impact = sorted(players, key=lambda p: p["impact_index"], reverse=True)[:3]
 
     # --- Agents aggregation across roster ---
-    # Expect each entry["agents"] list of dicts with agent, matches, win_rate, kda, acs, dmg_round, etc.
     agent_rows = []
-    for rid in roster:
-        entry = season_block.get(rid) or {}
-        for a in (entry.get("agents") or []):
-            agent = a.get("agent") or a.get("name") or ""
-            if not agent:
-                continue
-            # matches might be "12" or int
-            try:
-                matches = int(str(a.get("matches", 0)).replace(",", "").strip())
-            except Exception:
-                matches = 0
+    for rid, pool in agent_pools.items():
+        for a in pool:
             agent_rows.append({
-                "agent": agent,
-                "matches": to_int(a.get("matches", 0)),
-                "win_rate": to_float(a.get("win_rate", 0.0)),
-                "kda": str(a.get("kda", "")).strip(),
-                "acs": to_float(a.get("acs", 0.0)),
-                "dmg_round": to_float(a.get("dmg_round", 0.0)),
+                "agent": a["agent"],
+                "matches": a["matches"],
+                "win_rate": a["win_rate"],
+                "acs": a["acs"],
+                "dmg_round": a["dmg_round"],
             })
     # aggregate by agent
     by_agent = {}
@@ -270,8 +611,8 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
     agents_agg.sort(key=lambda x: x["matches"], reverse=True)
     top_agents = agents_agg[:5]
 
-    # Role balance (best-effort) from profile_stats roles_card if present
-    role_counts = {}
+    # Role balance from profile_stats roles_card if present (fallback)
+    role_counts_profile = {}
     for rid in roster:
         entry = season_block.get(rid) or {}
         roles = (entry.get("profile_stats") or {}).get("roles_card") or []
@@ -280,7 +621,34 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
             if not role:
                 continue
             # role share might exist as "62%" in rr["rate"] or similar; if not, count appearances
-            role_counts[role] = role_counts.get(role, 0) + 1
+    role_counts_profile[role] = role_counts_profile.get(role, 0) + 1
+
+    role_counts = role_counts_from_agents or role_counts_profile
+
+    team_summary = {
+        "total_games": total_games,
+        "avg_win_rate_pct": avg_win,
+        "avg_kd": avg_kd,
+        "avg_dmg_round": avg_dmg,
+        "avg_score_round": avg_score,
+        "stable_map_count": stable_map_count,
+        "win_volatility": win_volatility,
+        "best_map": best_map,
+        "worst_map": worst_map,
+    }
+    top_agent = top_agents[0] if top_agents else None
+    team_summary["top_agent"] = top_agent
+
+    starting_roster = [p["riot_id"] for p in players[:5]]
+    expected_comps = build_expected_comps(
+        map_rows=map_rows,
+        map_games_by_player=map_games_by_player,
+        agent_pools=agent_pools,
+        fallback_player_order=starting_roster,
+    )
+
+    map_plan = recommend_map_plan(map_rows)
+    team_insights = generate_team_insights(team_summary, agents_agg, role_counts, players)
 
     return {
         "team_key": team_key,
@@ -290,20 +658,13 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
         "map_rows": map_rows,
         "players": players,
         "agents": agents_agg,
-        "summary": {
-            "total_games": total_games,
-            "avg_win_rate_pct": avg_win,
-            "avg_kd": avg_kd,
-            "avg_dmg_round": avg_dmg,
-            "avg_score_round": avg_score,
-            "stable_map_count": stable_map_count,
-            "win_volatility": win_volatility,
-            "best_map": best_map,
-            "worst_map": worst_map,
-        },
+        "summary": team_summary,
         "top_impact_players": top_impact,
         "top_agents": top_agents,
         "role_balance": role_counts,
+        "map_plan": map_plan,
+        "expected_comps": expected_comps,
+        "team_insights": team_insights,
     }
 
 def generate_comparison_insights(A: dict, B: dict) -> list:
@@ -333,11 +694,11 @@ def generate_comparison_insights(A: dict, B: dict) -> list:
 
     # Map pool breadth
     if aS["stable_map_count"] > bS["stable_map_count"] + 1:
-        add("pill-good", "Map Pool", f"{A['team_name']} looks more battle-tested: {aS['stable_map_count']} maps with ≥5 games vs {bS['stable_map_count']}.")
+        add("pill-good", "Map Pool", f"{A['team_name']} looks more battle-tested: {aS['stable_map_count']} maps with >=5 games vs {bS['stable_map_count']}.")
     elif bS["stable_map_count"] > aS["stable_map_count"] + 1:
-        add("pill-good", "Map Pool", f"{B['team_name']} looks more battle-tested: {bS['stable_map_count']} maps with ≥5 games vs {aS['stable_map_count']}.")
+        add("pill-good", "Map Pool", f"{B['team_name']} looks more battle-tested: {bS['stable_map_count']} maps with >=5 games vs {aS['stable_map_count']}.")
     else:
-        add("pill-mid", "Map Pool", f"Similar map pool breadth (≥5 games): {A['team_name']} {aS['stable_map_count']} vs {B['team_name']} {bS['stable_map_count']}.")
+        add("pill-mid", "Map Pool", f"Similar map pool breadth (>=5 games): {A['team_name']} {aS['stable_map_count']} vs {B['team_name']} {bS['stable_map_count']}.")
 
     # Consistency (win volatility)
     if aS["win_volatility"] + 4 < bS["win_volatility"]:
@@ -394,6 +755,44 @@ def generate_comparison_insights(A: dict, B: dict) -> list:
         add("pill-mid", "Map Edge",
             "No strong shared-map advantage found (or too few games on shared maps).")
 
+    # Pick/Ban suggestions using adjusted win rates on shared maps
+    def map_advantage_recos(team_a: dict, team_b: dict):
+        a_strength = {r["map"]: r for r in compute_map_strengths(team_a["map_rows"])}
+        b_strength = {r["map"]: r for r in compute_map_strengths(team_b["map_rows"])}
+        shared_maps = [m for m in a_strength.keys() if m in b_strength and m]
+        rows = []
+        for m in shared_maps:
+            ra, rb = a_strength[m], b_strength[m]
+            ga, gb = int(ra.get("games", 0)), int(rb.get("games", 0))
+            if min(ga, gb) < 3:
+                continue
+            adv = float(ra.get("adj_win_rate_pct", 0.0)) - float(rb.get("adj_win_rate_pct", 0.0))
+            rows.append((m, adv, ra, rb))
+        if not rows:
+            return None
+        rows.sort(key=lambda x: x[1], reverse=True)
+        pick = rows[0]
+        ban = rows[-1]
+        return {"pick": pick, "ban": ban}
+
+    recos = map_advantage_recos(A, B)
+    if recos:
+        m, adv, ra, rb = recos["pick"]
+        add("pill-good", f"{A['team_name']} Pick",
+            f"Suggested pick: {m} (adj {ra['adj_win_rate_pct']:.1f}% vs {rb['adj_win_rate_pct']:.1f}%).")
+        m, adv, ra, rb = recos["ban"]
+        add("pill-bad", f"{A['team_name']} Ban",
+            f"Suggested ban: {m} (adj {ra['adj_win_rate_pct']:.1f}% vs {rb['adj_win_rate_pct']:.1f}%).")
+
+    recos_b = map_advantage_recos(B, A)
+    if recos_b:
+        m, adv, rb, ra = recos_b["pick"]
+        add("pill-good", f"{B['team_name']} Pick",
+            f"Suggested pick: {m} (adj {rb['adj_win_rate_pct']:.1f}% vs {ra['adj_win_rate_pct']:.1f}%).")
+        m, adv, rb, ra = recos_b["ban"]
+        add("pill-bad", f"{B['team_name']} Ban",
+            f"Suggested ban: {m} (adj {rb['adj_win_rate_pct']:.1f}% vs {ra['adj_win_rate_pct']:.1f}%).")
+
     # Player impact concentration: is one team carried by 1-2 players?
     def impact_concentration(team):
         ps = team["players"]
@@ -422,10 +821,10 @@ def generate_comparison_insights(A: dict, B: dict) -> list:
     overlap = [x for x in a_agents if x in b_agents]
     if overlap:
         add("pill-mid", "Agent Meta",
-            f"Both teams share key agent comfort picks: {', '.join(overlap[:3])}{'…' if len(overlap)>3 else ''}.")
+            f"Both teams share key agent comfort picks: {', '.join(overlap[:3])}{'...' if len(overlap)>3 else ''}.")
     else:
         add("pill-good", "Agent Meta",
-            "Top agent pools differ — higher chance of comp mismatch and exploitable utility gaps.")
+            "Top agent pools differ - higher chance of comp mismatch and exploitable utility gaps.")
 
     return insights
 
@@ -1134,7 +1533,7 @@ def aggregate_team_maps(players_maps: Dict[str, List[Dict[str, Any]]]) -> Dict[s
 @dataclass
 class TaskState:
     pct: int = 0
-    msg: str = "Queued…"
+    msg: str = "Queued..."
     done: bool = False
     error: Optional[str] = None
     redirect: Optional[str] = None
@@ -1176,7 +1575,7 @@ def fail_task(task_id: str, err: str) -> None:
 
 
 # ============================================================
-# Snapshot Builder (ALL players × ALL seasons)
+# Snapshot Builder (ALL players x ALL seasons)
 # ============================================================
 def build_team_snapshot(
     team_key: str,
@@ -1228,14 +1627,14 @@ def build_team_snapshot(
 
                     pref = f"{team_key}_{riot_id.replace('#','_')}_{season_id}"
 
-                    bump(f"[{season_label}] {riot_id}: profile…")
+                    bump(f"[{season_label}] {riot_id}: profile...")
                     profile_stats = scrape_profile_page(
                         context,
                         profile_url,
                         debug_prefix=f"profile_{pref}",
                     )
 
-                    bump(f"[{season_label}] {riot_id}: maps…")
+                    bump(f"[{season_label}] {riot_id}: maps...")
                     maps_raw = scrape_maps_page(
                         context,
                         maps_url,
@@ -1243,7 +1642,7 @@ def build_team_snapshot(
                     )
                     maps = normalize_maps(maps_raw)
 
-                    bump(f"[{season_label}] {riot_id}: agents…")
+                    bump(f"[{season_label}] {riot_id}: agents...")
                     agents = scrape_agents_page(
                         context,
                         agents_url,
@@ -1409,11 +1808,11 @@ def upload_async():
     (UPLOAD_DIR / f"{team_key}.txt").write_text("\n".join([team_name] + team_ids), encoding="utf-8")
 
     task_id = _new_task_id()
-    TASKS[task_id] = TaskState(pct=2, msg="Starting…")
+    TASKS[task_id] = TaskState(pct=2, msg="Starting...")
 
     def worker():
         try:
-            set_task(task_id, 5, "Launching Chromium…")
+            set_task(task_id, 5, "Launching Chromium...")
             snap = build_team_snapshot(
                 team_key,
                 team_name,
@@ -1482,30 +1881,12 @@ def team_view(team_key: str):
     team_name = snap.get("team_name") or team_key
     team_ids = snap.get("players") or []
     season_block = (snap.get("data") or {}).get(season_id, {})
-
-    players_maps = {}
-    for rid in team_ids:
-        entry = season_block.get(rid) or {}
-        players_maps[rid] = entry.get("maps") or []
-
-    team_agg = aggregate_team_maps(players_maps)
-    map_rows = team_agg.get("by_map") or []
-
-    # Safe team_summary so templates never crash
-    total_games = sum(int(r.get("games", 0)) for r in map_rows)
-    avg_dmg = (
-        sum(float(r.get("dmg_round", 0.0)) * int(r.get("games", 0)) for r in map_rows) / total_games
-        if total_games else 0.0
-    )
-    best_map = max(map_rows, key=lambda r: (r.get("win_rate_pct", 0.0), r.get("games", 0)), default=None)
-    worst_map = min(map_rows, key=lambda r: (r.get("win_rate_pct", 999.0), -r.get("games", 0)), default=None)
-
-    team_summary = {
-        "total_games": total_games,
-        "avg_dmg_round": avg_dmg,
-        "best_map": best_map,
-        "worst_map": worst_map,
-    }
+    summary = summarize_team_snapshot(snap, season_id)
+    map_rows = summary.get("map_rows") or []
+    team_summary = summary.get("summary") or {}
+    map_plan = summary.get("map_plan") or {}
+    expected_comps = summary.get("expected_comps") or []
+    team_insights = summary.get("team_insights") or []
 
     # Per-player summaries (roster table)
     summaries = []
@@ -1541,6 +1922,8 @@ def team_view(team_key: str):
             "dmg_round": (w_dmg / total_g) if total_g else 0.0,
             "score_round": (w_score / total_g) if total_g else 0.0,
             "profile_url": entry.get("profile_url"),
+            "maps_url": entry.get("maps_url"),
+            "agents_url": entry.get("agents_url"),
         })
 
     summaries.sort(key=lambda x: x["games"], reverse=True)
@@ -1553,9 +1936,11 @@ def team_view(team_key: str):
         season_id=season_id,
         team_ids=team_ids,
         summaries=summaries,
-        team_agg=team_agg,
         map_rows=map_rows,
         team_summary=team_summary,
+        map_plan=map_plan,
+        expected_comps=expected_comps,
+        team_insights=team_insights,
         snapshot_updated_ts=snap.get("updated_ts"),
     )
 

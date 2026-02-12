@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}{{ riot_id }} · Player{% endblock %}
+{% block title %}{{ riot_id }} &middot; Player{% endblock %}
 
 {% block content %}
   <div class="section-head">
     <div>
       <h1 class="section-title">{{ riot_id }}</h1>
       <div class="subtle">
-        {{ team_name }} · Season: <span class="kbd">{{ season_id }}</span>
-        {% if snapshot_updated_ts %} · Updated: <span class="kbd">{{ snapshot_updated_ts }}</span>{% endif %}
+        {{ team_name }} &middot; Season: <span class="kbd">{{ season_id }}</span>
+        {% if snapshot_updated_ts %} &middot; Updated: <span class="kbd">{{ snapshot_updated_ts }}</span>{% endif %}
       </div>
     </div>
 
@@ -91,17 +91,17 @@
                   <td class="left strong">{{ r.role }}</td>
                   <td class="center">
                     <span class="pill {% if r.kda and (r.kda|replace(':1','')|float) >= 1.2 %}pill-good{% else %}pill-mid{% endif %}">
-                      {{ r.kda if r.kda else "—" }}
+                      {% if r.kda %}{{ r.kda }}{% else %}&mdash;{% endif %}
                     </span>
                   </td>
                   <td class="center subtle">
-                    {% if r.kills is not none %}{{ r.kills }} / {{ r.deaths }} / {{ r.assists }}{% else %}—{% endif %}
+                    {% if r.kills is not none %}{{ r.kills }} / {{ r.deaths }} / {{ r.assists }}{% else %}&mdash;{% endif %}
                   </td>
                   <td class="center subtle">
-                    {% if r.wins is not none %}{{ r.wins }}W / {{ r.losses }}L{% else %}—{% endif %}
+                    {% if r.wins is not none %}{{ r.wins }}W / {{ r.losses }}L{% else %}&mdash;{% endif %}
                   </td>
                   <td class="right">
-                    <span class="pill pill-mid">{{ r.win_rate if r.win_rate else "—" }}</span>
+                    <span class="pill pill-mid">{% if r.win_rate %}{{ r.win_rate }}{% else %}&mdash;{% endif %}</span>
                   </td>
                 </tr>
               {% endfor %}
@@ -142,7 +142,7 @@
                       {{ "%.1f"|format(a.win_rate_pct) }}%
                     </span>
                   </td>
-                  <td class="center"><span>{{ a.kda if a.kda else "—" }}</span></td>
+                  <td class="center"><span>{% if a.kda %}{{ a.kda }}{% else %}&mdash;{% endif %}</span></td>
                 </tr>
               {% endfor %}
             </tbody>

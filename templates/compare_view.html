@@ -9,23 +9,83 @@
   </div>
 </div>
 
+{% set a_summary = team_a.summary if team_a.summary is defined else {} %}
+{% set b_summary = team_b.summary if team_b.summary is defined else {} %}
+
+<div class="row wrap" style="justify-content:flex-end; gap:10px;">
+  <button type="button" class="btn secondary" id="mapFilterBtn">Map Filters</button>
+</div>
+
+<div class="card" id="mapFilterPanel" style="display:none; margin-top:10px;">
+  <form method="get" action="{{ url_for('compare_view_saved', compare_id=compare_id) }}">
+    <div class="subtle" style="margin-bottom:8px;">
+      Current pool auto-enabled by default. Select additional maps as needed.
+    </div>
+    <div class="row wrap" style="gap:10px;">
+      {% for m in (available_maps or []) %}
+        <label class="badge" style="display:flex; align-items:center; gap:6px;">
+          <input type="checkbox" name="maps" value="{{ m }}" {% if map_filters and (m in map_filters) %}checked{% endif %}>
+          <span>{{ m }}</span>
+        </label>
+      {% endfor %}
+    </div>
+    <div class="row" style="margin-top:10px; gap:10px;">
+      <button class="btn">Apply Maps</button>
+    </div>
+  </form>
+</div>
+
 <div class="grid two">
   <div class="card">
     <h2 class="h2">{{ team_a.team_name }}</h2>
     <div class="metrics-grid">
       <div class="metric-tile">
         <div class="muted">Total Games</div>
-        <div class="strong">{{ team_a.summary.total_games }}</div>
+        <div class="strong">{{ a_summary.total_games | default(0) }}</div>
       </div>
       <div class="metric-tile">
-        <div class="muted">Avg DMG/R</div>
-        <div class="strong">{{ "%.1f"|format(team_a.summary.avg_dmg_round) }}</div>
+        <div class="muted">Win Rate</div>
+        <div class="strong">{{ "%.1f"|format(a_summary.avg_win_rate_pct | default(0.0)) }}%</div>
       </div>
       <div class="metric-tile">
-        <div class="muted">Top Map</div>
-        <div class="strong">
-          {% if team_a.summary.best_map %}{{ team_a.summary.best_map.map }}{% else %}&mdash;{% endif %}
-        </div>
+        <div class="muted">K/D</div>
+        <div class="strong">{{ "%.2f"|format(a_summary.avg_kd | default(0.0)) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">DMG/R</div>
+        <div class="strong">{{ "%.1f"|format(a_summary.avg_dmg_round | default(0.0)) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Score/R</div>
+        <div class="strong">{{ "%.1f"|format(a_summary.avg_score_round | default(0.0)) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Map Depth</div>
+        <div class="strong">{{ a_summary.stable_map_count | default(0) }}</div>
+        <div class="subtle">Maps with >= 5 games</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Volatility</div>
+        <div class="strong">{{ "%.1f"|format(a_summary.win_volatility | default(0.0)) }}</div>
+        <div class="subtle">Win% stdev</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Best Map</div>
+        {% if a_summary.best_map %}
+          <div class="strong">{{ a_summary.best_map.map }}</div>
+          <div class="subtle">{{ "%.1f"|format(a_summary.best_map.win_rate_pct) }}% &middot; {{ a_summary.best_map.games }}g</div>
+        {% else %}
+          <div class="strong">&mdash;</div>
+        {% endif %}
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Top Agent</div>
+        {% if a_summary.top_agent %}
+          <div class="strong">{{ a_summary.top_agent.agent }}</div>
+          <div class="subtle">{{ a_summary.top_agent.matches }} matches</div>
+        {% else %}
+          <div class="strong">&mdash;</div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -35,17 +95,51 @@
     <div class="metrics-grid">
       <div class="metric-tile">
         <div class="muted">Total Games</div>
-        <div class="strong">{{ team_b.summary.total_games }}</div>
+        <div class="strong">{{ b_summary.total_games | default(0) }}</div>
       </div>
       <div class="metric-tile">
-        <div class="muted">Avg DMG/R</div>
-        <div class="strong">{{ "%.1f"|format(team_b.summary.avg_dmg_round) }}</div>
+        <div class="muted">Win Rate</div>
+        <div class="strong">{{ "%.1f"|format(b_summary.avg_win_rate_pct | default(0.0)) }}%</div>
       </div>
       <div class="metric-tile">
-        <div class="muted">Top Map</div>
-        <div class="strong">
-          {% if team_b.summary.best_map %}{{ team_b.summary.best_map.map }}{% else %}&mdash;{% endif %}
-        </div>
+        <div class="muted">K/D</div>
+        <div class="strong">{{ "%.2f"|format(b_summary.avg_kd | default(0.0)) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">DMG/R</div>
+        <div class="strong">{{ "%.1f"|format(b_summary.avg_dmg_round | default(0.0)) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Score/R</div>
+        <div class="strong">{{ "%.1f"|format(b_summary.avg_score_round | default(0.0)) }}</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Map Depth</div>
+        <div class="strong">{{ b_summary.stable_map_count | default(0) }}</div>
+        <div class="subtle">Maps with >= 5 games</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Volatility</div>
+        <div class="strong">{{ "%.1f"|format(b_summary.win_volatility | default(0.0)) }}</div>
+        <div class="subtle">Win% stdev</div>
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Best Map</div>
+        {% if b_summary.best_map %}
+          <div class="strong">{{ b_summary.best_map.map }}</div>
+          <div class="subtle">{{ "%.1f"|format(b_summary.best_map.win_rate_pct) }}% &middot; {{ b_summary.best_map.games }}g</div>
+        {% else %}
+          <div class="strong">&mdash;</div>
+        {% endif %}
+      </div>
+      <div class="metric-tile">
+        <div class="muted">Top Agent</div>
+        {% if b_summary.top_agent %}
+          <div class="strong">{{ b_summary.top_agent.agent }}</div>
+          <div class="subtle">{{ b_summary.top_agent.matches }} matches</div>
+        {% else %}
+          <div class="strong">&mdash;</div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -72,9 +166,25 @@
 </div>
 
 <div class="row" style="margin-top:16px;">
+  <a class="btn secondary" href="{{ url_for('export_comparison_png', compare_id=compare_id, maps=map_filters) }}">
+    Export Snapshot (.png)
+  </a>
   <a class="btn secondary" href="{{ url_for('export_comparison', compare_id=compare_id) }}">
     Export Dashboard (.zip)
   </a>
   <a class="btn ghost" href="{{ url_for('compare_picker') }}">Back</a>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function() {
+    const btn = document.getElementById("mapFilterBtn");
+    const panel = document.getElementById("mapFilterPanel");
+    if (!btn || !panel) return;
+    btn.addEventListener("click", () => {
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+  })();
+</script>
 {% endblock %}

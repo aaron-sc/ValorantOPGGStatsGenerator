@@ -1,0 +1,1910 @@
+{
+  "dash_id": "8c9cc1043d5e",
+  "created_ts": "2026-02-13T05:39:52Z",
+  "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+  "team_a_key": "University_of_Portland-THHHHICCMEAT_NA1-Kvngshooter_SNS-SilenceBtwnSongs_SBS-TRYNXz_NUGET-Setanta_123",
+  "team_b_key": "BCIT_Black-balakeh_shhhh-shysoup_bruhf-Oomerz_oom-goblin_eater_munch-Mathman1129_1129",
+  "team_a_name": "University of Portland",
+  "team_b_name": "BCIT Black",
+  "A": {
+    "team_key": "University_of_Portland-THHHHICCMEAT_NA1-Kvngshooter_SNS-SilenceBtwnSongs_SBS-TRYNXz_NUGET-Setanta_123",
+    "team_name": "University of Portland",
+    "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+    "roster": [
+      "THHHHICCMEAT#NA1",
+      "Kvngshooter#SNS",
+      "SilenceBtwnSongs#SBS",
+      "TRYNXz#NUGET",
+      "Setanta#123"
+    ],
+    "available_maps": [
+      "Abyss",
+      "Bind",
+      "Breeze",
+      "Corrode",
+      "Haven",
+      "Pearl",
+      "Split"
+    ],
+    "map_rows": [
+      {
+        "map": "Split",
+        "games": 46,
+        "wins": 26,
+        "losses": 20,
+        "win_rate_pct": 56.52173913043478,
+        "kd": 1.067826086956522,
+        "kill_round": 0.7323913043478261,
+        "dmg_round": 141.52173913043478,
+        "score_round": 211.91304347826087
+      },
+      {
+        "map": "Corrode",
+        "games": 43,
+        "wins": 25,
+        "losses": 18,
+        "win_rate_pct": 58.139534883720934,
+        "kd": 1.0911627906976744,
+        "kill_round": 0.780232558139535,
+        "dmg_round": 149.4418604651163,
+        "score_round": 226.65116279069767
+      },
+      {
+        "map": "Breeze",
+        "games": 43,
+        "wins": 19,
+        "losses": 24,
+        "win_rate_pct": 44.18604651162791,
+        "kd": 1.0186046511627909,
+        "kill_round": 0.7330232558139534,
+        "dmg_round": 138.8372093023256,
+        "score_round": 210.25581395348837
+      },
+      {
+        "map": "Pearl",
+        "games": 42,
+        "wins": 18,
+        "losses": 24,
+        "win_rate_pct": 42.857142857142854,
+        "kd": 1.0585714285714285,
+        "kill_round": 0.7678571428571429,
+        "dmg_round": 150.83333333333334,
+        "score_round": 228.04761904761904
+      },
+      {
+        "map": "Bind",
+        "games": 38,
+        "wins": 23,
+        "losses": 15,
+        "win_rate_pct": 60.526315789473685,
+        "kd": 1.0710526315789475,
+        "kill_round": 0.7871052631578948,
+        "dmg_round": 150.1578947368421,
+        "score_round": 227.26315789473685
+      },
+      {
+        "map": "Abyss",
+        "games": 35,
+        "wins": 19,
+        "losses": 16,
+        "win_rate_pct": 54.285714285714285,
+        "kd": 1.0591428571428572,
+        "kill_round": 0.7085714285714287,
+        "dmg_round": 139.71428571428572,
+        "score_round": 205.88571428571427
+      },
+      {
+        "map": "Haven",
+        "games": 35,
+        "wins": 21,
+        "losses": 14,
+        "win_rate_pct": 60.0,
+        "kd": 1.042,
+        "kill_round": 0.7360000000000001,
+        "dmg_round": 139.6,
+        "score_round": 213.71428571428572
+      }
+    ],
+    "players": [
+      {
+        "riot_id": "SilenceBtwnSongs#SBS",
+        "games": 109,
+        "custom_games": 0,
+        "win_rate_pct": 48.62385321100918,
+        "kd": 1.0643119266055046,
+        "kill_round": 0.7234862385321099,
+        "dmg_round": 135.11009174311926,
+        "score_round": 203.954128440367,
+        "impact_index": 1020.3370868760323
+      },
+      {
+        "riot_id": "TRYNXz#NUGET",
+        "games": 65,
+        "custom_games": 0,
+        "win_rate_pct": 63.07692307692307,
+        "kd": 1.0073846153846155,
+        "kill_round": 0.7095384615384616,
+        "dmg_round": 141.98461538461538,
+        "score_round": 211.46153846153845,
+        "impact_index": 892.4932435552552
+      },
+      {
+        "riot_id": "Kvngshooter#SNS",
+        "games": 55,
+        "custom_games": 0,
+        "win_rate_pct": 54.54545454545454,
+        "kd": 1.0419999999999998,
+        "kill_round": 0.7694545454545455,
+        "dmg_round": 147.36363636363637,
+        "score_round": 225.87272727272727,
+        "impact_index": 947.4042855321977
+      },
+      {
+        "riot_id": "Setanta#123",
+        "games": 27,
+        "custom_games": 0,
+        "win_rate_pct": 51.85185185185185,
+        "kd": 1.0281481481481483,
+        "kill_round": 0.7674074074074073,
+        "dmg_round": 150.8148148148148,
+        "score_round": 224.22222222222223,
+        "impact_index": 768.185310101118
+      },
+      {
+        "riot_id": "THHHHICCMEAT#NA1",
+        "games": 26,
+        "custom_games": 0,
+        "win_rate_pct": 50.0,
+        "kd": 1.23,
+        "kill_round": 0.9023076923076924,
+        "dmg_round": 176.53846153846155,
+        "score_round": 268.53846153846155,
+        "impact_index": 1088.622522618613
+      }
+    ],
+    "agents": [
+      {
+        "agent": "Deadlock",
+        "matches": 57,
+        "win_rate": 47.3859649122807,
+        "acs": 141.75438596491227,
+        "dmg_round": 214.28070175438597
+      },
+      {
+        "agent": "Clove",
+        "matches": 27,
+        "win_rate": 63.25925925925926,
+        "acs": 162.85185185185185,
+        "dmg_round": 249.74074074074073
+      },
+      {
+        "agent": "Jett",
+        "matches": 20,
+        "win_rate": 35.4,
+        "acs": 133.0,
+        "dmg_round": 203.1
+      },
+      {
+        "agent": "Viper",
+        "matches": 20,
+        "win_rate": 39.9,
+        "acs": 154.8,
+        "dmg_round": 233.1
+      },
+      {
+        "agent": "Gekko",
+        "matches": 19,
+        "win_rate": 58.1578947368421,
+        "acs": 135.68421052631578,
+        "dmg_round": 202.21052631578948
+      },
+      {
+        "agent": "Chamber",
+        "matches": 17,
+        "win_rate": 53.1764705882353,
+        "acs": 141.35294117647058,
+        "dmg_round": 215.1764705882353
+      },
+      {
+        "agent": "Cypher",
+        "matches": 16,
+        "win_rate": 56.5,
+        "acs": 129.5,
+        "dmg_round": 195.5
+      },
+      {
+        "agent": "Sova",
+        "matches": 16,
+        "win_rate": 50.0,
+        "acs": 141.75,
+        "dmg_round": 206.25
+      },
+      {
+        "agent": "Omen",
+        "matches": 15,
+        "win_rate": 60.333333333333336,
+        "acs": 142.2,
+        "dmg_round": 210.73333333333332
+      },
+      {
+        "agent": "Phoenix",
+        "matches": 12,
+        "win_rate": 58.666666666666664,
+        "acs": 142.41666666666666,
+        "dmg_round": 221.58333333333334
+      },
+      {
+        "agent": "Tejo",
+        "matches": 10,
+        "win_rate": 60.4,
+        "acs": 127.2,
+        "dmg_round": 187.3
+      },
+      {
+        "agent": "Iso",
+        "matches": 9,
+        "win_rate": 55.666666666666664,
+        "acs": 181.77777777777777,
+        "dmg_round": 263.55555555555554
+      },
+      {
+        "agent": "Vyse",
+        "matches": 9,
+        "win_rate": 66.66666666666667,
+        "acs": 154.11111111111111,
+        "dmg_round": 234.55555555555554
+      },
+      {
+        "agent": "KAY/O",
+        "matches": 7,
+        "win_rate": 42.857142857142854,
+        "acs": 136.71428571428572,
+        "dmg_round": 212.42857142857142
+      },
+      {
+        "agent": "Raze",
+        "matches": 7,
+        "win_rate": 71.14285714285714,
+        "acs": 159.28571428571428,
+        "dmg_round": 241.28571428571428
+      },
+      {
+        "agent": "Waylay",
+        "matches": 5,
+        "win_rate": 100.0,
+        "acs": 183.8,
+        "dmg_round": 286.6
+      },
+      {
+        "agent": "Breach",
+        "matches": 4,
+        "win_rate": 50.0,
+        "acs": 126.5,
+        "dmg_round": 193.5
+      },
+      {
+        "agent": "Fade",
+        "matches": 4,
+        "win_rate": 75.25,
+        "acs": 138.0,
+        "dmg_round": 211.5
+      },
+      {
+        "agent": "Yoru",
+        "matches": 3,
+        "win_rate": 33.333333333333336,
+        "acs": 130.66666666666666,
+        "dmg_round": 186.0
+      },
+      {
+        "agent": "Veto",
+        "matches": 3,
+        "win_rate": 33.0,
+        "acs": 124.0,
+        "dmg_round": 187.0
+      },
+      {
+        "agent": "Neon",
+        "matches": 2,
+        "win_rate": 0.0,
+        "acs": 169.5,
+        "dmg_round": 261.5
+      },
+      {
+        "agent": "Skye",
+        "matches": 2,
+        "win_rate": 50.0,
+        "acs": 152.5,
+        "dmg_round": 234.0
+      },
+      {
+        "agent": "Reyna",
+        "matches": 2,
+        "win_rate": 0.0,
+        "acs": 150.5,
+        "dmg_round": 225.0
+      },
+      {
+        "agent": "Astra",
+        "matches": 1,
+        "win_rate": 100.0,
+        "acs": 133.0,
+        "dmg_round": 198.0
+      },
+      {
+        "agent": "Killjoy",
+        "matches": 1,
+        "win_rate": 0.0,
+        "acs": 87.0,
+        "dmg_round": 113.0
+      },
+      {
+        "agent": "Sage",
+        "matches": 1,
+        "win_rate": 0.0,
+        "acs": 130.0,
+        "dmg_round": 173.0
+      }
+    ],
+    "summary": {
+      "total_games": 282,
+      "custom_games": 0,
+      "custom_games_weight": 1.15,
+      "avg_win_rate_pct": 53.54609929078015,
+      "avg_kd": 1.0586524822695034,
+      "avg_dmg_round": 144.4078014184397,
+      "avg_score_round": 217.854609929078,
+      "stable_map_count": 7,
+      "win_volatility": 6.78582448198355,
+      "best_map": {
+        "map": "Bind",
+        "games": 38,
+        "wins": 23,
+        "losses": 15,
+        "win_rate_pct": 60.526315789473685,
+        "kd": 1.0710526315789475,
+        "kill_round": 0.7871052631578948,
+        "dmg_round": 150.1578947368421,
+        "score_round": 227.26315789473685
+      },
+      "worst_map": {
+        "map": "Pearl",
+        "games": 42,
+        "wins": 18,
+        "losses": 24,
+        "win_rate_pct": 42.857142857142854,
+        "kd": 1.0585714285714285,
+        "kill_round": 0.7678571428571429,
+        "dmg_round": 150.83333333333334,
+        "score_round": 228.04761904761904
+      },
+      "top_agent": {
+        "agent": "Deadlock",
+        "matches": 57,
+        "win_rate": 47.3859649122807,
+        "acs": 141.75438596491227,
+        "dmg_round": 214.28070175438597
+      }
+    },
+    "top_impact_players": [
+      {
+        "riot_id": "THHHHICCMEAT#NA1",
+        "games": 26,
+        "custom_games": 0,
+        "win_rate_pct": 50.0,
+        "kd": 1.23,
+        "kill_round": 0.9023076923076924,
+        "dmg_round": 176.53846153846155,
+        "score_round": 268.53846153846155,
+        "impact_index": 1088.622522618613
+      },
+      {
+        "riot_id": "SilenceBtwnSongs#SBS",
+        "games": 109,
+        "custom_games": 0,
+        "win_rate_pct": 48.62385321100918,
+        "kd": 1.0643119266055046,
+        "kill_round": 0.7234862385321099,
+        "dmg_round": 135.11009174311926,
+        "score_round": 203.954128440367,
+        "impact_index": 1020.3370868760323
+      },
+      {
+        "riot_id": "Kvngshooter#SNS",
+        "games": 55,
+        "custom_games": 0,
+        "win_rate_pct": 54.54545454545454,
+        "kd": 1.0419999999999998,
+        "kill_round": 0.7694545454545455,
+        "dmg_round": 147.36363636363637,
+        "score_round": 225.87272727272727,
+        "impact_index": 947.4042855321977
+      }
+    ],
+    "top_agents": [
+      {
+        "agent": "Deadlock",
+        "matches": 57,
+        "win_rate": 47.3859649122807,
+        "acs": 141.75438596491227,
+        "dmg_round": 214.28070175438597
+      },
+      {
+        "agent": "Clove",
+        "matches": 27,
+        "win_rate": 63.25925925925926,
+        "acs": 162.85185185185185,
+        "dmg_round": 249.74074074074073
+      },
+      {
+        "agent": "Jett",
+        "matches": 20,
+        "win_rate": 35.4,
+        "acs": 133.0,
+        "dmg_round": 203.1
+      },
+      {
+        "agent": "Viper",
+        "matches": 20,
+        "win_rate": 39.9,
+        "acs": 154.8,
+        "dmg_round": 233.1
+      },
+      {
+        "agent": "Gekko",
+        "matches": 19,
+        "win_rate": 58.1578947368421,
+        "acs": 135.68421052631578,
+        "dmg_round": 202.21052631578948
+      }
+    ],
+    "role_balance": {
+      "Duelist": 60,
+      "Controller": 63,
+      "Initiator": 52,
+      "Sentinel": 101,
+      "Unknown": 13
+    },
+    "map_plan": {
+      "pick_targets": [
+        {
+          "map": "Bind",
+          "games": 38,
+          "wins": 23,
+          "losses": 15,
+          "win_rate_pct": 60.526315789473685,
+          "adj_win_rate_pct": 59.09090909090909,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Haven",
+          "games": 35,
+          "wins": 21,
+          "losses": 14,
+          "win_rate_pct": 60.0,
+          "adj_win_rate_pct": 58.536585365853654,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Corrode",
+          "games": 43,
+          "wins": 25,
+          "losses": 18,
+          "win_rate_pct": 58.139534883720934,
+          "adj_win_rate_pct": 57.14285714285714,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        }
+      ],
+      "ban_targets": [
+        {
+          "map": "Pearl",
+          "games": 42,
+          "wins": 18,
+          "losses": 24,
+          "win_rate_pct": 42.857142857142854,
+          "adj_win_rate_pct": 43.75,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Breeze",
+          "games": 43,
+          "wins": 19,
+          "losses": 24,
+          "win_rate_pct": 44.18604651162791,
+          "adj_win_rate_pct": 44.89795918367347,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Abyss",
+          "games": 35,
+          "wins": 19,
+          "losses": 16,
+          "win_rate_pct": 54.285714285714285,
+          "adj_win_rate_pct": 53.65853658536586,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        }
+      ],
+      "first_pick": {
+        "map": "Bind",
+        "games": 38,
+        "wins": 23,
+        "losses": 15,
+        "win_rate_pct": 60.526315789473685,
+        "adj_win_rate_pct": 59.09090909090909,
+        "confidence": "High",
+        "confidence_class": "pill-good"
+      },
+      "first_ban": {
+        "map": "Pearl",
+        "games": 42,
+        "wins": 18,
+        "losses": 24,
+        "win_rate_pct": 42.857142857142854,
+        "adj_win_rate_pct": 43.75,
+        "confidence": "High",
+        "confidence_class": "pill-good"
+      }
+    },
+    "expected_comps": [
+      {
+        "map": "Split",
+        "games": 46,
+        "agents": [
+          {
+            "agent": "Deadlock",
+            "role": "Sentinel",
+            "player": "SilenceBtwnSongs#SBS",
+            "matches": 48,
+            "win_rate": 50.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "TRYNXz#NUGET",
+            "matches": 11,
+            "win_rate": 64.0,
+            "conflict": false
+          },
+          {
+            "agent": "Viper",
+            "role": "Controller",
+            "player": "Kvngshooter#SNS",
+            "matches": 19,
+            "win_rate": 42.0,
+            "conflict": false
+          },
+          {
+            "agent": "Waylay",
+            "role": "Duelist",
+            "player": "Setanta#123",
+            "matches": 4,
+            "win_rate": 100.0,
+            "conflict": false
+          },
+          {
+            "agent": "Iso",
+            "role": "Duelist",
+            "player": "THHHHICCMEAT#NA1",
+            "matches": 5,
+            "win_rate": 60.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Sentinel / 2 Duelist",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Corrode",
+        "games": 43,
+        "agents": [
+          {
+            "agent": "Deadlock",
+            "role": "Sentinel",
+            "player": "SilenceBtwnSongs#SBS",
+            "matches": 48,
+            "win_rate": 50.0,
+            "conflict": false
+          },
+          {
+            "agent": "Viper",
+            "role": "Controller",
+            "player": "Kvngshooter#SNS",
+            "matches": 19,
+            "win_rate": 42.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "TRYNXz#NUGET",
+            "matches": 11,
+            "win_rate": 64.0,
+            "conflict": false
+          },
+          {
+            "agent": "Waylay",
+            "role": "Duelist",
+            "player": "Setanta#123",
+            "matches": 4,
+            "win_rate": 100.0,
+            "conflict": false
+          },
+          {
+            "agent": "Iso",
+            "role": "Duelist",
+            "player": "THHHHICCMEAT#NA1",
+            "matches": 5,
+            "win_rate": 60.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Sentinel / 2 Duelist",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Breeze",
+        "games": 43,
+        "agents": [
+          {
+            "agent": "Deadlock",
+            "role": "Sentinel",
+            "player": "SilenceBtwnSongs#SBS",
+            "matches": 48,
+            "win_rate": 50.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "TRYNXz#NUGET",
+            "matches": 11,
+            "win_rate": 64.0,
+            "conflict": false
+          },
+          {
+            "agent": "Viper",
+            "role": "Controller",
+            "player": "Kvngshooter#SNS",
+            "matches": 19,
+            "win_rate": 42.0,
+            "conflict": false
+          },
+          {
+            "agent": "Iso",
+            "role": "Duelist",
+            "player": "THHHHICCMEAT#NA1",
+            "matches": 5,
+            "win_rate": 60.0,
+            "conflict": false
+          },
+          {
+            "agent": "Waylay",
+            "role": "Duelist",
+            "player": "Setanta#123",
+            "matches": 4,
+            "win_rate": 100.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Sentinel / 2 Duelist",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Pearl",
+        "games": 42,
+        "agents": [
+          {
+            "agent": "Deadlock",
+            "role": "Sentinel",
+            "player": "SilenceBtwnSongs#SBS",
+            "matches": 48,
+            "win_rate": 50.0,
+            "conflict": false
+          },
+          {
+            "agent": "Viper",
+            "role": "Controller",
+            "player": "Kvngshooter#SNS",
+            "matches": 19,
+            "win_rate": 42.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "TRYNXz#NUGET",
+            "matches": 11,
+            "win_rate": 64.0,
+            "conflict": false
+          },
+          {
+            "agent": "Iso",
+            "role": "Duelist",
+            "player": "THHHHICCMEAT#NA1",
+            "matches": 5,
+            "win_rate": 60.0,
+            "conflict": false
+          },
+          {
+            "agent": "Waylay",
+            "role": "Duelist",
+            "player": "Setanta#123",
+            "matches": 4,
+            "win_rate": 100.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Sentinel / 2 Duelist",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Bind",
+        "games": 38,
+        "agents": [
+          {
+            "agent": "Deadlock",
+            "role": "Sentinel",
+            "player": "SilenceBtwnSongs#SBS",
+            "matches": 48,
+            "win_rate": 50.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "TRYNXz#NUGET",
+            "matches": 11,
+            "win_rate": 64.0,
+            "conflict": false
+          },
+          {
+            "agent": "Viper",
+            "role": "Controller",
+            "player": "Kvngshooter#SNS",
+            "matches": 19,
+            "win_rate": 42.0,
+            "conflict": false
+          },
+          {
+            "agent": "Iso",
+            "role": "Duelist",
+            "player": "THHHHICCMEAT#NA1",
+            "matches": 5,
+            "win_rate": 60.0,
+            "conflict": false
+          },
+          {
+            "agent": "Waylay",
+            "role": "Duelist",
+            "player": "Setanta#123",
+            "matches": 4,
+            "win_rate": 100.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Sentinel / 2 Duelist",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Abyss",
+        "games": 35,
+        "agents": [
+          {
+            "agent": "Deadlock",
+            "role": "Sentinel",
+            "player": "SilenceBtwnSongs#SBS",
+            "matches": 48,
+            "win_rate": 50.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "TRYNXz#NUGET",
+            "matches": 11,
+            "win_rate": 64.0,
+            "conflict": false
+          },
+          {
+            "agent": "Iso",
+            "role": "Duelist",
+            "player": "THHHHICCMEAT#NA1",
+            "matches": 5,
+            "win_rate": 60.0,
+            "conflict": false
+          },
+          {
+            "agent": "Viper",
+            "role": "Controller",
+            "player": "Kvngshooter#SNS",
+            "matches": 19,
+            "win_rate": 42.0,
+            "conflict": false
+          },
+          {
+            "agent": "Waylay",
+            "role": "Duelist",
+            "player": "Setanta#123",
+            "matches": 4,
+            "win_rate": 100.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Sentinel / 2 Duelist",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Haven",
+        "games": 35,
+        "agents": [
+          {
+            "agent": "Deadlock",
+            "role": "Sentinel",
+            "player": "SilenceBtwnSongs#SBS",
+            "matches": 48,
+            "win_rate": 50.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "TRYNXz#NUGET",
+            "matches": 11,
+            "win_rate": 64.0,
+            "conflict": false
+          },
+          {
+            "agent": "Viper",
+            "role": "Controller",
+            "player": "Kvngshooter#SNS",
+            "matches": 19,
+            "win_rate": 42.0,
+            "conflict": false
+          },
+          {
+            "agent": "Waylay",
+            "role": "Duelist",
+            "player": "Setanta#123",
+            "matches": 4,
+            "win_rate": 100.0,
+            "conflict": false
+          },
+          {
+            "agent": "Iso",
+            "role": "Duelist",
+            "player": "THHHHICCMEAT#NA1",
+            "matches": 5,
+            "win_rate": 60.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Sentinel / 2 Duelist",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      }
+    ],
+    "team_insights": [
+      {
+        "level": "pill-good",
+        "tag": "Sample",
+        "text": "Solid sample size (282 games). Trends are more trustworthy."
+      },
+      {
+        "level": "pill-good",
+        "tag": "Map Pool",
+        "text": "Wide map pool (7 maps with >=5 games)."
+      },
+      {
+        "level": "pill-good",
+        "tag": "Consistency",
+        "text": "Stable across maps (win% stdev 6.8)."
+      },
+      {
+        "level": "pill-mid",
+        "tag": "Map Gap",
+        "text": "Noticeable map gap: Bind 60.5% vs Pearl 42.9%."
+      },
+      {
+        "level": "pill-good",
+        "tag": "Agent Pool",
+        "text": "Healthy agent diversity (top 2 = 29% of matches)."
+      },
+      {
+        "level": "pill-mid",
+        "tag": "Pocket Pick",
+        "text": "Waylay wins 46.5 pts above team average on limited use (2% of matches). Consider expanding if comp fits."
+      }
+    ]
+  },
+  "B": {
+    "team_key": "BCIT_Black-balakeh_shhhh-shysoup_bruhf-Oomerz_oom-goblin_eater_munch-Mathman1129_1129",
+    "team_name": "BCIT Black",
+    "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+    "roster": [
+      "balakeh#shhhh",
+      "shysoup#bruhf",
+      "Oomerz#oom",
+      "goblin eater#munch",
+      "Mathman1129#1129"
+    ],
+    "available_maps": [
+      "Abyss",
+      "Ascent",
+      "Bind",
+      "Breeze",
+      "Corrode",
+      "Haven",
+      "Lotus",
+      "Pearl",
+      "Skirmish A",
+      "Skirmish B",
+      "Skirmish C",
+      "Split",
+      "Sunset"
+    ],
+    "map_rows": [
+      {
+        "map": "Corrode",
+        "games": 35,
+        "wins": 24,
+        "losses": 11,
+        "win_rate_pct": 68.57142857142857,
+        "kd": 1.1761904761904762,
+        "kill_round": 0.8188461538461538,
+        "dmg_round": 143.9752380952381,
+        "score_round": 223.31238095238095
+      },
+      {
+        "map": "Haven",
+        "games": 25,
+        "wins": 8,
+        "losses": 17,
+        "win_rate_pct": 32.0,
+        "kd": 1.0366666666666666,
+        "kill_round": 0.7365217391304348,
+        "dmg_round": 140.91733333333335,
+        "score_round": 212.94133333333332
+      },
+      {
+        "map": "Bind",
+        "games": 25,
+        "wins": 15,
+        "losses": 10,
+        "win_rate_pct": 60.0,
+        "kd": 1.1344,
+        "kill_round": 0.7866666666666666,
+        "dmg_round": 144.592,
+        "score_round": 219.592
+      },
+      {
+        "map": "Breeze",
+        "games": 20,
+        "wins": 12,
+        "losses": 8,
+        "win_rate_pct": 60.0,
+        "kd": 1.1285,
+        "kill_round": 0.7736842105263159,
+        "dmg_round": 143.12,
+        "score_round": 213.0
+      },
+      {
+        "map": "Abyss",
+        "games": 20,
+        "wins": 12,
+        "losses": 8,
+        "win_rate_pct": 60.0,
+        "kd": 1.1963333333333332,
+        "kill_round": 0.7938888888888889,
+        "dmg_round": 144.48333333333332,
+        "score_round": 217.06666666666666
+      },
+      {
+        "map": "Pearl",
+        "games": 19,
+        "wins": 11,
+        "losses": 8,
+        "win_rate_pct": 57.89473684210527,
+        "kd": 1.2284210526315789,
+        "kill_round": 0.8431578947368421,
+        "dmg_round": 158.0,
+        "score_round": 241.05263157894737
+      },
+      {
+        "map": "Split",
+        "games": 17,
+        "wins": 7,
+        "losses": 10,
+        "win_rate_pct": 41.17647058823529,
+        "kd": 0.9821568627450982,
+        "kill_round": 0.6938461538461538,
+        "dmg_round": 138.33333333333331,
+        "score_round": 206.9294117647059
+      }
+    ],
+    "players": [
+      {
+        "riot_id": "goblin eater#munch",
+        "games": 55,
+        "custom_games": 21,
+        "win_rate_pct": 56.14789337919175,
+        "kd": 1.0104901117798795,
+        "kill_round": 0.7664705882352941,
+        "dmg_round": 128.41616509028376,
+        "score_round": 197.48925193465178,
+        "impact_index": 803.3029521900348
+      },
+      {
+        "riot_id": "shysoup#bruhf",
+        "games": 53,
+        "custom_games": 11,
+        "win_rate_pct": 62.30558096980786,
+        "kd": 1.1227813357731016,
+        "kill_round": 0.8147619047619047,
+        "dmg_round": 144.42177493138152,
+        "score_round": 218.01006404391583,
+        "impact_index": 976.4140646925158
+      },
+      {
+        "riot_id": "balakeh#shhhh",
+        "games": 48,
+        "custom_games": 19,
+        "win_rate_pct": 50.14749262536874,
+        "kd": 1.1345132743362831,
+        "kill_round": 0.7355172413793104,
+        "dmg_round": 143.91445427728613,
+        "score_round": 215.63028515240904,
+        "impact_index": 952.0770965177016
+      },
+      {
+        "riot_id": "Oomerz#oom",
+        "games": 37,
+        "custom_games": 20,
+        "win_rate_pct": 48.75,
+        "kd": 1.051125,
+        "kill_round": 0.7288235294117648,
+        "dmg_round": 149.975,
+        "score_round": 228.9975,
+        "impact_index": 875.5851663462287
+      },
+      {
+        "riot_id": "Mathman1129#1129",
+        "games": 28,
+        "custom_games": 11,
+        "win_rate_pct": 60.87689713322091,
+        "kd": 1.2483979763912312,
+        "kill_round": 0.8694117647058823,
+        "dmg_round": 140.75716694772345,
+        "score_round": 217.70489038785834,
+        "impact_index": 915.1715556714802
+      }
+    ],
+    "agents": [
+      {
+        "agent": "Omen",
+        "matches": 38,
+        "win_rate": 60.473684210526315,
+        "acs": 155.94736842105263,
+        "dmg_round": 180.6315789473684
+      },
+      {
+        "agent": "Viper",
+        "matches": 23,
+        "win_rate": 56.52173913043478,
+        "acs": 199.65217391304347,
+        "dmg_round": 159.2173913043478
+      },
+      {
+        "agent": "Sova",
+        "matches": 22,
+        "win_rate": 59.27272727272727,
+        "acs": 176.13636363636363,
+        "dmg_round": 219.36363636363637
+      },
+      {
+        "agent": "Yoru",
+        "matches": 17,
+        "win_rate": 41.1764705882353,
+        "acs": 164.47058823529412,
+        "dmg_round": 187.0
+      },
+      {
+        "agent": "Vyse",
+        "matches": 13,
+        "win_rate": 76.76923076923077,
+        "acs": 163.76923076923077,
+        "dmg_round": 179.46153846153845
+      },
+      {
+        "agent": "Skye",
+        "matches": 12,
+        "win_rate": 58.666666666666664,
+        "acs": 147.83333333333334,
+        "dmg_round": 207.0
+      },
+      {
+        "agent": "Fade",
+        "matches": 11,
+        "win_rate": 72.72727272727273,
+        "acs": 140.0,
+        "dmg_round": 164.63636363636363
+      },
+      {
+        "agent": "Raze",
+        "matches": 11,
+        "win_rate": 54.54545454545455,
+        "acs": 233.0,
+        "dmg_round": 202.45454545454547
+      },
+      {
+        "agent": "Waylay",
+        "matches": 10,
+        "win_rate": 49.9,
+        "acs": 217.5,
+        "dmg_round": 181.0
+      },
+      {
+        "agent": "Clove",
+        "matches": 9,
+        "win_rate": 55.55555555555556,
+        "acs": 129.11111111111111,
+        "dmg_round": 189.0
+      },
+      {
+        "agent": "Chamber",
+        "matches": 7,
+        "win_rate": 14.285714285714286,
+        "acs": 156.85714285714286,
+        "dmg_round": 239.71428571428572
+      },
+      {
+        "agent": "Astra",
+        "matches": 7,
+        "win_rate": 57.142857142857146,
+        "acs": 158.42857142857142,
+        "dmg_round": 214.42857142857142
+      },
+      {
+        "agent": "Cypher",
+        "matches": 6,
+        "win_rate": 66.66666666666667,
+        "acs": 132.66666666666666,
+        "dmg_round": 200.16666666666666
+      },
+      {
+        "agent": "Reyna",
+        "matches": 6,
+        "win_rate": 50.0,
+        "acs": 175.0,
+        "dmg_round": 265.0
+      },
+      {
+        "agent": "Breach",
+        "matches": 5,
+        "win_rate": 39.8,
+        "acs": 126.4,
+        "dmg_round": 129.8
+      },
+      {
+        "agent": "Brimstone",
+        "matches": 5,
+        "win_rate": 60.0,
+        "acs": 149.4,
+        "dmg_round": 135.0
+      },
+      {
+        "agent": "Tejo",
+        "matches": 4,
+        "win_rate": 25.0,
+        "acs": 119.5,
+        "dmg_round": 173.0
+      },
+      {
+        "agent": "Veto",
+        "matches": 4,
+        "win_rate": 50.0,
+        "acs": 199.0,
+        "dmg_round": 272.0
+      },
+      {
+        "agent": "Jett",
+        "matches": 4,
+        "win_rate": 50.0,
+        "acs": 208.25,
+        "dmg_round": 214.5
+      },
+      {
+        "agent": "Neon",
+        "matches": 3,
+        "win_rate": 66.66666666666667,
+        "acs": 143.0,
+        "dmg_round": 174.0
+      },
+      {
+        "agent": "Phoenix",
+        "matches": 2,
+        "win_rate": 50.0,
+        "acs": 161.0,
+        "dmg_round": 231.0
+      },
+      {
+        "agent": "Killjoy",
+        "matches": 2,
+        "win_rate": 50.0,
+        "acs": 137.5,
+        "dmg_round": 130.0
+      },
+      {
+        "agent": "Sage",
+        "matches": 1,
+        "win_rate": 0.0,
+        "acs": 117.0,
+        "dmg_round": 86.0
+      }
+    ],
+    "summary": {
+      "total_games": 161,
+      "custom_games": 22,
+      "custom_games_weight": 1.15,
+      "avg_win_rate_pct": 55.17346317711503,
+      "avg_kd": 1.1274051531750864,
+      "avg_dmg_round": 144.30852099817406,
+      "avg_score_round": 218.97906269020086,
+      "stable_map_count": 7,
+      "win_volatility": 11.853588652126197,
+      "best_map": {
+        "map": "Corrode",
+        "games": 35,
+        "wins": 24,
+        "losses": 11,
+        "win_rate_pct": 68.57142857142857,
+        "kd": 1.1761904761904762,
+        "kill_round": 0.8188461538461538,
+        "dmg_round": 143.9752380952381,
+        "score_round": 223.31238095238095
+      },
+      "worst_map": {
+        "map": "Haven",
+        "games": 25,
+        "wins": 8,
+        "losses": 17,
+        "win_rate_pct": 32.0,
+        "kd": 1.0366666666666666,
+        "kill_round": 0.7365217391304348,
+        "dmg_round": 140.91733333333335,
+        "score_round": 212.94133333333332
+      },
+      "top_agent": {
+        "agent": "Omen",
+        "matches": 38,
+        "win_rate": 60.473684210526315,
+        "acs": 155.94736842105263,
+        "dmg_round": 180.6315789473684
+      }
+    },
+    "top_impact_players": [
+      {
+        "riot_id": "shysoup#bruhf",
+        "games": 53,
+        "custom_games": 11,
+        "win_rate_pct": 62.30558096980786,
+        "kd": 1.1227813357731016,
+        "kill_round": 0.8147619047619047,
+        "dmg_round": 144.42177493138152,
+        "score_round": 218.01006404391583,
+        "impact_index": 976.4140646925158
+      },
+      {
+        "riot_id": "balakeh#shhhh",
+        "games": 48,
+        "custom_games": 19,
+        "win_rate_pct": 50.14749262536874,
+        "kd": 1.1345132743362831,
+        "kill_round": 0.7355172413793104,
+        "dmg_round": 143.91445427728613,
+        "score_round": 215.63028515240904,
+        "impact_index": 952.0770965177016
+      },
+      {
+        "riot_id": "Mathman1129#1129",
+        "games": 28,
+        "custom_games": 11,
+        "win_rate_pct": 60.87689713322091,
+        "kd": 1.2483979763912312,
+        "kill_round": 0.8694117647058823,
+        "dmg_round": 140.75716694772345,
+        "score_round": 217.70489038785834,
+        "impact_index": 915.1715556714802
+      }
+    ],
+    "top_agents": [
+      {
+        "agent": "Omen",
+        "matches": 38,
+        "win_rate": 60.473684210526315,
+        "acs": 155.94736842105263,
+        "dmg_round": 180.6315789473684
+      },
+      {
+        "agent": "Viper",
+        "matches": 23,
+        "win_rate": 56.52173913043478,
+        "acs": 199.65217391304347,
+        "dmg_round": 159.2173913043478
+      },
+      {
+        "agent": "Sova",
+        "matches": 22,
+        "win_rate": 59.27272727272727,
+        "acs": 176.13636363636363,
+        "dmg_round": 219.36363636363637
+      },
+      {
+        "agent": "Yoru",
+        "matches": 17,
+        "win_rate": 41.1764705882353,
+        "acs": 164.47058823529412,
+        "dmg_round": 187.0
+      },
+      {
+        "agent": "Vyse",
+        "matches": 13,
+        "win_rate": 76.76923076923077,
+        "acs": 163.76923076923077,
+        "dmg_round": 179.46153846153845
+      }
+    ],
+    "role_balance": {
+      "Sentinel": 29,
+      "Controller": 82,
+      "Initiator": 50,
+      "Unknown": 8,
+      "Duelist": 53
+    },
+    "map_plan": {
+      "pick_targets": [
+        {
+          "map": "Corrode",
+          "games": 35,
+          "wins": 24,
+          "losses": 11,
+          "win_rate_pct": 68.57142857142857,
+          "adj_win_rate_pct": 65.85365853658537,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Bind",
+          "games": 25,
+          "wins": 15,
+          "losses": 10,
+          "win_rate_pct": 60.0,
+          "adj_win_rate_pct": 58.06451612903226,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Breeze",
+          "games": 20,
+          "wins": 12,
+          "losses": 8,
+          "win_rate_pct": 60.0,
+          "adj_win_rate_pct": 57.692307692307686,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        }
+      ],
+      "ban_targets": [
+        {
+          "map": "Haven",
+          "games": 25,
+          "wins": 8,
+          "losses": 17,
+          "win_rate_pct": 32.0,
+          "adj_win_rate_pct": 35.483870967741936,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Split",
+          "games": 17,
+          "wins": 7,
+          "losses": 10,
+          "win_rate_pct": 41.17647058823529,
+          "adj_win_rate_pct": 43.47826086956522,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        },
+        {
+          "map": "Pearl",
+          "games": 19,
+          "wins": 11,
+          "losses": 8,
+          "win_rate_pct": 57.89473684210527,
+          "adj_win_rate_pct": 56.00000000000001,
+          "confidence": "High",
+          "confidence_class": "pill-good"
+        }
+      ],
+      "first_pick": {
+        "map": "Corrode",
+        "games": 35,
+        "wins": 24,
+        "losses": 11,
+        "win_rate_pct": 68.57142857142857,
+        "adj_win_rate_pct": 65.85365853658537,
+        "confidence": "High",
+        "confidence_class": "pill-good"
+      },
+      "first_ban": {
+        "map": "Haven",
+        "games": 25,
+        "wins": 8,
+        "losses": 17,
+        "win_rate_pct": 32.0,
+        "adj_win_rate_pct": 35.483870967741936,
+        "confidence": "High",
+        "confidence_class": "pill-good"
+      }
+    },
+    "expected_comps": [
+      {
+        "map": "Corrode",
+        "games": 35,
+        "agents": [
+          {
+            "agent": "Skye",
+            "role": "Initiator",
+            "player": "shysoup#bruhf",
+            "matches": 8,
+            "win_rate": 63.0,
+            "conflict": false
+          },
+          {
+            "agent": "Chamber",
+            "role": "Sentinel",
+            "player": "balakeh#shhhh",
+            "matches": 5,
+            "win_rate": 20.0,
+            "conflict": false
+          },
+          {
+            "agent": "Omen",
+            "role": "Controller",
+            "player": "goblin eater#munch",
+            "matches": 14,
+            "win_rate": 71.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "Oomerz#oom",
+            "matches": 5,
+            "win_rate": 40.0,
+            "conflict": false
+          },
+          {
+            "agent": "Sova",
+            "role": "Initiator",
+            "player": "Mathman1129#1129",
+            "matches": 6,
+            "win_rate": 67.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 2 Initiator / 1 Sentinel",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Haven",
+        "games": 25,
+        "agents": [
+          {
+            "agent": "Skye",
+            "role": "Initiator",
+            "player": "shysoup#bruhf",
+            "matches": 8,
+            "win_rate": 63.0,
+            "conflict": false
+          },
+          {
+            "agent": "Omen",
+            "role": "Controller",
+            "player": "goblin eater#munch",
+            "matches": 14,
+            "win_rate": 71.0,
+            "conflict": false
+          },
+          {
+            "agent": "Chamber",
+            "role": "Sentinel",
+            "player": "balakeh#shhhh",
+            "matches": 5,
+            "win_rate": 20.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "Oomerz#oom",
+            "matches": 5,
+            "win_rate": 40.0,
+            "conflict": false
+          },
+          {
+            "agent": "Sova",
+            "role": "Initiator",
+            "player": "Mathman1129#1129",
+            "matches": 6,
+            "win_rate": 67.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 2 Initiator / 1 Sentinel",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Bind",
+        "games": 25,
+        "agents": [
+          {
+            "agent": "Skye",
+            "role": "Initiator",
+            "player": "shysoup#bruhf",
+            "matches": 8,
+            "win_rate": 63.0,
+            "conflict": false
+          },
+          {
+            "agent": "Chamber",
+            "role": "Sentinel",
+            "player": "balakeh#shhhh",
+            "matches": 5,
+            "win_rate": 20.0,
+            "conflict": false
+          },
+          {
+            "agent": "Omen",
+            "role": "Controller",
+            "player": "goblin eater#munch",
+            "matches": 14,
+            "win_rate": 71.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "Oomerz#oom",
+            "matches": 5,
+            "win_rate": 40.0,
+            "conflict": false
+          },
+          {
+            "agent": "Sova",
+            "role": "Initiator",
+            "player": "Mathman1129#1129",
+            "matches": 6,
+            "win_rate": 67.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 2 Initiator / 1 Sentinel",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Breeze",
+        "games": 20,
+        "agents": [
+          {
+            "agent": "Skye",
+            "role": "Initiator",
+            "player": "shysoup#bruhf",
+            "matches": 8,
+            "win_rate": 63.0,
+            "conflict": false
+          },
+          {
+            "agent": "Chamber",
+            "role": "Sentinel",
+            "player": "balakeh#shhhh",
+            "matches": 5,
+            "win_rate": 20.0,
+            "conflict": false
+          },
+          {
+            "agent": "Omen",
+            "role": "Controller",
+            "player": "goblin eater#munch",
+            "matches": 14,
+            "win_rate": 71.0,
+            "conflict": false
+          },
+          {
+            "agent": "Sova",
+            "role": "Initiator",
+            "player": "Mathman1129#1129",
+            "matches": 6,
+            "win_rate": 67.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "1 Controller / 2 Initiator / 1 Sentinel",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Abyss",
+        "games": 20,
+        "agents": [
+          {
+            "agent": "Omen",
+            "role": "Controller",
+            "player": "goblin eater#munch",
+            "matches": 14,
+            "win_rate": 71.0,
+            "conflict": false
+          },
+          {
+            "agent": "Skye",
+            "role": "Initiator",
+            "player": "shysoup#bruhf",
+            "matches": 8,
+            "win_rate": 63.0,
+            "conflict": false
+          },
+          {
+            "agent": "Chamber",
+            "role": "Sentinel",
+            "player": "balakeh#shhhh",
+            "matches": 5,
+            "win_rate": 20.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "Oomerz#oom",
+            "matches": 5,
+            "win_rate": 40.0,
+            "conflict": false
+          },
+          {
+            "agent": "Sova",
+            "role": "Initiator",
+            "player": "Mathman1129#1129",
+            "matches": 6,
+            "win_rate": 67.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 2 Initiator / 1 Sentinel",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Pearl",
+        "games": 19,
+        "agents": [
+          {
+            "agent": "Chamber",
+            "role": "Sentinel",
+            "player": "balakeh#shhhh",
+            "matches": 5,
+            "win_rate": 20.0,
+            "conflict": false
+          },
+          {
+            "agent": "Skye",
+            "role": "Initiator",
+            "player": "shysoup#bruhf",
+            "matches": 8,
+            "win_rate": 63.0,
+            "conflict": false
+          },
+          {
+            "agent": "Omen",
+            "role": "Controller",
+            "player": "goblin eater#munch",
+            "matches": 14,
+            "win_rate": 71.0,
+            "conflict": false
+          },
+          {
+            "agent": "Sova",
+            "role": "Initiator",
+            "player": "Mathman1129#1129",
+            "matches": 6,
+            "win_rate": 67.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "Oomerz#oom",
+            "matches": 5,
+            "win_rate": 40.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 2 Initiator / 1 Sentinel",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      },
+      {
+        "map": "Split",
+        "games": 17,
+        "agents": [
+          {
+            "agent": "Omen",
+            "role": "Controller",
+            "player": "goblin eater#munch",
+            "matches": 14,
+            "win_rate": 71.0,
+            "conflict": false
+          },
+          {
+            "agent": "Chamber",
+            "role": "Sentinel",
+            "player": "balakeh#shhhh",
+            "matches": 5,
+            "win_rate": 20.0,
+            "conflict": false
+          },
+          {
+            "agent": "Skye",
+            "role": "Initiator",
+            "player": "shysoup#bruhf",
+            "matches": 8,
+            "win_rate": 63.0,
+            "conflict": false
+          },
+          {
+            "agent": "Clove",
+            "role": "Controller",
+            "player": "Oomerz#oom",
+            "matches": 5,
+            "win_rate": 40.0,
+            "conflict": false
+          }
+        ],
+        "roles_label": "2 Controller / 1 Initiator / 1 Sentinel",
+        "confidence": "High",
+        "confidence_class": "pill-good",
+        "conflicts": 0
+      }
+    ],
+    "team_insights": [
+      {
+        "level": "pill-good",
+        "tag": "Sample",
+        "text": "Solid sample size (161 games). Trends are more trustworthy."
+      },
+      {
+        "level": "pill-good",
+        "tag": "Map Pool",
+        "text": "Wide map pool (7 maps with >=5 games)."
+      },
+      {
+        "level": "pill-mid",
+        "tag": "Consistency",
+        "text": "Moderate map volatility (win% stdev 11.9)."
+      },
+      {
+        "level": "pill-bad",
+        "tag": "Map Gap",
+        "text": "Large win-rate gap: Corrode 68.6% vs Haven 32.0%. Expect bans into Haven."
+      },
+      {
+        "level": "pill-good",
+        "tag": "Agent Pool",
+        "text": "Healthy agent diversity (top 2 = 27% of matches)."
+      },
+      {
+        "level": "pill-mid",
+        "tag": "Pocket Pick",
+        "text": "Vyse wins 21.6 pts above team average on limited use (6% of matches). Consider expanding if comp fits."
+      }
+    ]
+  },
+  "insights": [
+    {
+      "level": "pill-good",
+      "tag": "Confidence",
+      "text": "Solid sample size: University of Portland 282 games vs BCIT Black 161. Trends are more trustworthy."
+    },
+    {
+      "level": "pill-mid",
+      "tag": "Map Pool",
+      "text": "Similar map pool breadth (>=5 games): University of Portland 7 vs BCIT Black 7."
+    },
+    {
+      "level": "pill-good",
+      "tag": "Consistency",
+      "text": "University of Portland is more consistent across maps (win% volatility 6.8 vs 11.9)."
+    },
+    {
+      "level": "pill-mid",
+      "tag": "Win Rate",
+      "text": "BCIT Black leads on win rate (53.5% vs 55.2%)."
+    },
+    {
+      "level": "pill-mid",
+      "tag": "K/D",
+      "text": "BCIT Black leads on k/d (1.06 vs 1.13)."
+    },
+    {
+      "level": "pill-mid",
+      "tag": "DMG/R",
+      "text": "University of Portland leads on dmg/r (144.41 vs 144.31)."
+    },
+    {
+      "level": "pill-good",
+      "tag": "Score/R",
+      "text": "BCIT Black leads on score/r (217.85 vs 218.98)."
+    },
+    {
+      "level": "pill-good",
+      "tag": "Map Edge",
+      "text": "Biggest shared-map edge: University of Portland on Haven (win% gap 28.0 pts; samples 35g vs 25g)."
+    },
+    {
+      "level": "pill-good",
+      "tag": "University of Portland Pick",
+      "text": "Suggested pick: Haven (adj 58.5% vs 35.5%)."
+    },
+    {
+      "level": "pill-bad",
+      "tag": "University of Portland Ban",
+      "text": "Suggested ban: Breeze (adj 44.9% vs 57.7%)."
+    },
+    {
+      "level": "pill-good",
+      "tag": "BCIT Black Pick",
+      "text": "Suggested pick: Breeze (adj 57.7% vs 44.9%)."
+    },
+    {
+      "level": "pill-bad",
+      "tag": "BCIT Black Ban",
+      "text": "Suggested ban: Haven (adj 35.5% vs 58.5%)."
+    },
+    {
+      "level": "pill-good",
+      "tag": "Reliance",
+      "text": "Similar impact distribution (top-2 share: University of Portland ~45%, BCIT Black ~43%)."
+    },
+    {
+      "level": "pill-mid",
+      "tag": "Agent Meta",
+      "text": "Both teams share key agent comfort picks: Viper."
+    }
+  ]
+}

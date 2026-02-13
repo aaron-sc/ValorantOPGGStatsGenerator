@@ -15,6 +15,11 @@
 
   <div class="row wrap" style="justify-content:flex-end; gap:10px;">
     <form method="get" class="row wrap" style="gap:10px;">
+      {% if map_filters %}
+        {% for m in map_filters %}
+          <input type="hidden" name="maps" value="{{ m }}">
+        {% endfor %}
+      {% endif %}
       <span class="badge">Season</span>
       <select name="seasonId" onchange="this.form.submit()">
         {% for label, sid in seasons.items() %}
@@ -23,10 +28,36 @@
       </select>
     </form>
 
+    <button type="button" class="btn secondary" id="mapFilterBtn">Map Filters</button>
 
+    <a class="btn secondary" href="{{ url_for('export_team_png', team_key=team_key, seasonId=season_id, maps=map_filters) }}">
+      Export Snapshot (.png)
+    </a>
     <a class="btn ghost" href="{{ url_for('download_snapshot', team_key=team_key) }}">Download .json</a>
   </div>
 </div>
+
+<div class="card" id="mapFilterPanel" style="display:none; margin-top:10px;">
+  <form method="get">
+    <input type="hidden" name="seasonId" value="{{ season_id }}">
+    <div class="subtle" style="margin-bottom:8px;">
+      Current pool auto-enabled by default. Select additional maps as needed.
+    </div>
+    <div class="row wrap" style="gap:10px;">
+      {% for m in (available_maps or []) %}
+        <label class="badge" style="display:flex; align-items:center; gap:6px;">
+          <input type="checkbox" name="maps" value="{{ m }}" {% if map_filters and (m in map_filters) %}checked{% endif %}>
+          <span>{{ m }}</span>
+        </label>
+      {% endfor %}
+    </div>
+    <div class="row" style="margin-top:10px; gap:10px;">
+      <button class="btn">Apply Maps</button>
+    </div>
+  </form>
+</div>
+
+{% set total_games = team_summary.total_games if team_summary else 0 %}
 
 <!-- Summary tiles -->
 <div class="grid three">
@@ -35,10 +66,42 @@
       <h2 class="h2">Total Games</h2>
       <span class="pill pill-mid">Season</span>
     </div>
-    <div class="big">{{ (team_summary.total_games if team_summary else 0) }}</div>
+    <div class="big">{{ total_games }}</div>
     <div class="subtle">Across roster for selected season</div>
   </div>
 
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Win Rate</h2>
+      <span class="pill pill-good">Weighted</span>
+    </div>
+    <div class="big">
+      {% if team_summary and team_summary.avg_win_rate_pct is not none %}
+        {{ "%.1f"|format(team_summary.avg_win_rate_pct) }}%
+      {% else %}
+        0.0%
+      {% endif %}
+    </div>
+    <div class="subtle">Weighted by games played</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">K/D</h2>
+      <span class="pill pill-mid">Weighted</span>
+    </div>
+    <div class="big">
+      {% if team_summary and team_summary.avg_kd is not none %}
+        {{ "%.2f"|format(team_summary.avg_kd) }}
+      {% else %}
+        0.00
+      {% endif %}
+    </div>
+    <div class="subtle">Weighted by games played</div>
+  </div>
+</div>
+
+<div class="grid three" style="margin-top:14px;">
   <div class="card">
     <div class="card-title">
       <h2 class="h2">Avg DMG / Round</h2>
@@ -52,6 +115,53 @@
       {% endif %}
     </div>
     <div class="subtle">Weighted by games played</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Score / Round</h2>
+      <span class="pill pill-mid">Weighted</span>
+    </div>
+    <div class="big">
+      {% if team_summary and team_summary.avg_score_round is not none %}
+        {{ "%.1f"|format(team_summary.avg_score_round) }}
+      {% else %}
+        0.0
+      {% endif %}
+    </div>
+    <div class="subtle">Weighted by games played</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Map Depth</h2>
+      <span class="pill pill-mid">Pool</span>
+    </div>
+    <div class="big">
+      {% if team_summary and team_summary.stable_map_count is not none %}
+        {{ team_summary.stable_map_count }}
+      {% else %}
+        0
+      {% endif %}
+    </div>
+    <div class="subtle">Maps with &gt;= 5 games</div>
+  </div>
+</div>
+
+<div class="grid three" style="margin-top:14px;">
+  <div class="card">
+    <div class="card-title">
+      <h2 class="h2">Volatility</h2>
+      <span class="pill pill-mid">Win%</span>
+    </div>
+    <div class="big">
+      {% if team_summary and team_summary.win_volatility is not none %}
+        {{ "%.1f"|format(team_summary.win_volatility) }}
+      {% else %}
+        0.0
+      {% endif %}
+    </div>
+    <div class="subtle">Win% stdev across maps</div>
   </div>
 
   <div class="card">
@@ -111,7 +221,10 @@
 <!-- Scouting planner -->
 <div class="section-head" style="margin-top:18px;">
   <h2 class="section-title">Scouting Planner</h2>
-  <div class="subtle">Auto-generated priorities and tendencies.</div>
+  <div class="subtle">
+    Auto-generated priorities and tendencies. The pick list shows maps you should look to pick first, and the ban list shows maps you should look to ban first.
+    Uses your current queue + map filters.
+  </div>
 </div>
 
 <div class="grid two">
@@ -204,7 +317,7 @@
                   {% for a in c.agents %}
                     <span class="agent-chip {% if a.conflict %}warn{% endif %}" title="{{ a.player }}">
                       <span class="agent-name">{{ a.agent }}</span>
-                      {% if a.role and a.role != "Flex" %}
+                      {% if a.role and a.role != "Unknown" %}
                         <span class="agent-role">{{ a.role }}</span>
                       {% endif %}
                     </span>
@@ -274,10 +387,18 @@
                 {{ "%.1f"|format(r.get('win_rate_pct', 0.0)) }}%
               </span>
             </td>
-            <td class="center">{{ "%.2f"|format(r.get('kd', 0.0)) }}</td>
-            <td class="center">{{ "%.2f"|format(r.get('kill_round', 0.0)) }}</td>
-            <td class="center">{{ "%.0f"|format(r.get('dmg_round', 0.0)) }}</td>
-            <td class="center">{{ "%.0f"|format(r.get('score_round', 0.0)) }}</td>
+            <td class="center">
+              {% if r.get('kd') is not none %}{{ "%.2f"|format(r.get('kd', 0.0)) }}{% else %}-{% endif %}
+            </td>
+            <td class="center">
+              {% if r.get('kill_round') is not none %}{{ "%.2f"|format(r.get('kill_round', 0.0)) }}{% else %}-{% endif %}
+            </td>
+            <td class="center">
+              {% if r.get('dmg_round') is not none %}{{ "%.0f"|format(r.get('dmg_round', 0.0)) }}{% else %}-{% endif %}
+            </td>
+            <td class="center">
+              {% if r.get('score_round') is not none %}{{ "%.0f"|format(r.get('score_round', 0.0)) }}{% else %}-{% endif %}
+            </td>
           </tr>
         {% endfor %}
       </tbody>
@@ -323,10 +444,18 @@
                 {{ "%.1f"|format(s.win_rate_pct) }}%
               </span>
             </td>
-            <td class="center">{{ "%.2f"|format(s.kd) }}</td>
-            <td class="center">{{ "%.2f"|format(s.kill_round) }}</td>
-            <td class="center">{{ "%.1f"|format(s.dmg_round) }}</td>
-            <td class="center">{{ "%.1f"|format(s.score_round) }}</td>
+            <td class="center">
+              {% if s.kd is not none %}{{ "%.2f"|format(s.kd) }}{% else %}-{% endif %}
+            </td>
+            <td class="center">
+              {% if s.kill_round is not none %}{{ "%.2f"|format(s.kill_round) }}{% else %}-{% endif %}
+            </td>
+            <td class="center">
+              {% if s.dmg_round is not none %}{{ "%.1f"|format(s.dmg_round) }}{% else %}-{% endif %}
+            </td>
+            <td class="center">
+              {% if s.score_round is not none %}{{ "%.1f"|format(s.score_round) }}{% else %}-{% endif %}
+            </td>
             <td class="right">
               <a class="btn secondary" href="{{ url_for('player_view', team_key=team_key, riot_id=s.riot_id, seasonId=season_id) }}">View</a>
             </td>
@@ -389,4 +518,14 @@
   })();
 </script>
 {% endif %}
+<script>
+  (function() {
+    const btn = document.getElementById("mapFilterBtn");
+    const panel = document.getElementById("mapFilterPanel");
+    if (!btn || !panel) return;
+    btn.addEventListener("click", () => {
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+  })();
+</script>
 {% endblock %}

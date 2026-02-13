@@ -6,12 +6,13 @@ import shutil
 import threading
 import time
 import zipfile
+import calendar
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 import math
 import hashlib
-from datetime import datetime
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from flask import (
     Flask,
@@ -33,8 +34,9 @@ DATA_DIR = APP_DIR / "data"
 UPLOAD_DIR = DATA_DIR / "uploads"
 SNAPSHOT_DIR = DATA_DIR / "snapshots"
 TMP_DIR = DATA_DIR / "tmp"
+DEBUG_DIR = DATA_DIR / "debug"
 
-for d in (DATA_DIR, UPLOAD_DIR, SNAPSHOT_DIR, TMP_DIR):
+for d in (DATA_DIR, UPLOAD_DIR, SNAPSHOT_DIR, TMP_DIR, DEBUG_DIR):
     d.mkdir(parents=True, exist_ok=True)
 
 app = Flask(__name__)
@@ -81,10 +83,13 @@ AGENT_ROLES = {
     "Raze": "Duelist",
     "Reyna": "Duelist",
     "Yoru": "Duelist",
+    "Waylay": "Duelist",
+    "Vyse": "Sentinel",
 }
 
 AGENT_ROLE_BY_KEY = {_agent_key(k): v for k, v in AGENT_ROLES.items()}
-ROLE_ORDER = ["Controller", "Initiator", "Sentinel", "Duelist", "Flex"]
+ROLE_ORDER = ["Controller", "Initiator", "Sentinel", "Duelist", "Unknown"]
+CURRENT_COMP_POOL_MAPS = ["Abyss", "Bind", "Breeze", "Corrode", "Pearl", "Split", "Haven"]
 
 # ============================================================
 # Snapshot helpers
@@ -185,7 +190,52 @@ def _stdev(values):
 
 def agent_role(agent: str) -> str:
     key = _agent_key(agent)
-    return AGENT_ROLE_BY_KEY.get(key, "Flex")
+    return AGENT_ROLE_BY_KEY.get(key, "Unknown")
+
+
+def normalize_agent_name(name: str) -> str:
+    s = (name or "").strip()
+    if not s:
+        return ""
+    s = re.sub(r"\b(Duelist|Controller|Initiator|Sentinel)\b.*$", "", s, flags=re.IGNORECASE).strip()
+    if not s:
+        s = (name or "").strip()
+    return s.split()[0] if s.split() else s
+
+
+def _map_key(name: str) -> str:
+    return re.sub(r"\s+", " ", (name or "").strip()).lower()
+
+
+def _debug_file(prefix: str, suffix: str) -> Path:
+    safe = re.sub(r"[^a-zA-Z0-9._-]+", "_", prefix or "debug")
+    return DEBUG_DIR / f"{safe}{suffix}"
+
+def safe_filename(value: str, fallback: str = "snapshot") -> str:
+    safe = re.sub(r"[^a-zA-Z0-9._-]+", "_", value or "").strip("_")
+    return safe or fallback
+
+def capture_full_page_png(
+    url: str,
+    viewport_width: int = 1400,
+    viewport_height: int = 900,
+    wait_for_selector: Optional[str] = None,
+    delay_ms: int = 800,
+    timeout_ms: int = 30000,
+) -> bytes:
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        try:
+            page = browser.new_page(viewport={"width": viewport_width, "height": viewport_height})
+            page.set_default_timeout(timeout_ms)
+            page.goto(url, wait_until="networkidle")
+            if wait_for_selector:
+                page.wait_for_selector(wait_for_selector)
+            if delay_ms:
+                page.wait_for_timeout(delay_ms)
+            return page.screenshot(full_page=True, type="png")
+        finally:
+            browser.close()
 
 def map_confidence_label(games: int) -> str:
     if games >= 12:
@@ -216,7 +266,7 @@ def build_agent_pools(season_block: dict, roster: list) -> Tuple[Dict[str, list]
         entry = season_block.get(rid) or {}
         agents = []
         for a in (entry.get("agents") or []):
-            agent = (a.get("agent") or a.get("name") or "").strip()
+            agent = normalize_agent_name(a.get("agent") or a.get("name") or "")
             if not agent:
                 continue
             matches = to_int(a.get("matches", 0))
@@ -286,7 +336,7 @@ def pick_agents_for_players(player_ids: list, agent_pools: Dict[str, list]) -> T
             conflicts += 1
             picks.append({
                 "agent": "Unknown",
-                "role": "Flex",
+                "role": "Unknown",
                 "player": rid,
                 "matches": 0,
                 "win_rate": 0.0,
@@ -315,7 +365,7 @@ def build_expected_comps(
         picks, conflicts = pick_agents_for_players(player_ids, agent_pools)
         role_counts = {}
         for p in picks:
-            role = p.get("role") or "Flex"
+            role = p.get("role") or "Unknown"
             role_counts[role] = role_counts.get(role, 0) + 1
         conf = map_confidence_label(games)
         comps.append({
@@ -496,7 +546,13 @@ def generate_team_insights(summary: dict, agents_agg: list, role_counts: Dict[st
 
     return insights
 
-def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
+
+def summarize_team_snapshot(
+    snap: dict,
+    season_id: str,
+    mode: str = "comp",
+    map_filter: Optional[List[str]] = None,
+) -> dict:
     """
     Returns a rich summary suitable for scouting + comparisons.
     """
@@ -505,23 +561,46 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
     roster = snap.get("players") or []
     season_block = (snap.get("data") or {}).get(season_id, {}) or {}
 
-    # --- Aggregate maps across roster ---
-    players_maps = {}
+    map_filter_list = [m.strip() for m in (map_filter or []) if m and str(m).strip()]
+    allowed_map_keys = {_map_key(m) for m in map_filter_list} if map_filter_list else None
+
+    # --- Aggregate maps across roster (competitive only) ---
+    players_maps_raw = {}
     for rid in roster:
         entry = season_block.get(rid) or {}
-        players_maps[rid] = entry.get("maps") or []
+        players_maps_raw[rid] = entry.get("maps") or []
 
-    team_agg = aggregate_team_maps(players_maps)  # your existing function
+    available_maps = set(CURRENT_COMP_POOL_MAPS)
+    for rows in players_maps_raw.values():
+        for r in rows:
+            name = (r.get("map") or "").strip()
+            if name:
+                available_maps.add(name)
+    available_maps_list = sorted(available_maps)
+
+    players_maps = {}
+    for rid in roster:
+        maps = players_maps_raw.get(rid) or []
+        if allowed_map_keys:
+            maps = [m for m in maps if _map_key(m.get("map") or "") in allowed_map_keys]
+        players_maps[rid] = maps
+
+    team_agg = aggregate_team_maps(players_maps)
     map_rows = team_agg.get("by_map") or []
 
     agent_pools, role_counts_from_agents = build_agent_pools(season_block, roster)
     map_games_by_player = build_map_games_by_player(season_block, roster)
 
     total_games = sum(int(r.get("games", 0)) for r in map_rows)
-    avg_win = _weighted_avg(map_rows, "win_rate_pct", "games")
-    avg_kd = _weighted_avg(map_rows, "kd", "games")
-    avg_dmg = _weighted_avg(map_rows, "dmg_round", "games")
-    avg_score = _weighted_avg(map_rows, "score_round", "games")
+    total_wins = sum(int(r.get("wins", 0)) for r in map_rows)
+    kd_sum = sum(float(r.get("kd", 0.0)) * int(r.get("games", 0)) for r in map_rows)
+    dmg_sum = sum(float(r.get("dmg_round", 0.0)) * int(r.get("games", 0)) for r in map_rows)
+    score_sum = sum(float(r.get("score_round", 0.0)) * int(r.get("games", 0)) for r in map_rows)
+
+    avg_win = _safe_div(total_wins, total_games) * 100.0
+    avg_kd = _safe_div(kd_sum, total_games)
+    avg_dmg = _safe_div(dmg_sum, total_games)
+    avg_score = _safe_div(score_sum, total_games)
 
     # Pool breadth: how many maps above N games
     map_min_games = 5
@@ -540,10 +619,11 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
     for rid in roster:
         entry = season_block.get(rid) or {}
         maps = entry.get("maps") or []
+        if allowed_map_keys:
+            maps = [m for m in maps if _map_key(m.get("map") or "") in allowed_map_keys]
         wins = sum(int(m.get("wins", 0)) for m in maps)
         losses = sum(int(m.get("losses", 0)) for m in maps)
         games = wins + losses
-        win = _safe_div(wins, games) * 100.0
 
         # weighted perf from maps
         w_kd = w_kr = w_dmg = w_score = 0.0
@@ -558,21 +638,29 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
             w_dmg += float(m.get("dmg_round", 0.0)) * g
             w_score += float(m.get("score_round", 0.0)) * g
 
-        players.append({
-            "riot_id": rid,
-            "games": games,
-            "win_rate_pct": win,
-            "kd": _safe_div(w_kd, gsum),
-            "kill_round": _safe_div(w_kr, gsum),
-            "dmg_round": _safe_div(w_dmg, gsum),
-            "score_round": _safe_div(w_score, gsum),
-        })
+        win = _safe_div(wins, games) * 100.0 if games else 0.0
+        players.append(
+            {
+                "riot_id": rid,
+                "games": games,
+                "win_rate_pct": win,
+                "kd": _safe_div(w_kd, gsum),
+                "kill_round": _safe_div(w_kr, gsum),
+                "dmg_round": _safe_div(w_dmg, gsum),
+                "score_round": _safe_div(w_score, gsum),
+            }
+        )
 
-    players.sort(key=lambda p: (p["games"], p["score_round"]), reverse=True)
+    players.sort(
+        key=lambda p: (p.get("games", 0), (p.get("score_round") or 0.0)),
+        reverse=True,
+    )
 
     # Carry index (simple scouting heuristic): score_round * kd * log(games+1)
     for p in players:
-        p["impact_index"] = float(p["score_round"]) * max(0.5, float(p["kd"])) * math.log(p["games"] + 1.0)
+        score_round = float(p.get("score_round") or 0.0)
+        kd = float(p.get("kd") or 0.0)
+        p["impact_index"] = score_round * max(0.5, kd) * math.log(p.get("games", 0) + 1.0)
 
     top_impact = sorted(players, key=lambda p: p["impact_index"], reverse=True)[:3]
 
@@ -601,13 +689,15 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
     agents_agg = []
     for k, v in by_agent.items():
         m = v["matches"]
-        agents_agg.append({
-            "agent": k,
-            "matches": m,
-            "win_rate": _safe_div(v["sum_win"], m),
-            "acs": _safe_div(v["sum_acs"], m),
-            "dmg_round": _safe_div(v["sum_dmg"], m),
-        })
+        agents_agg.append(
+            {
+                "agent": k,
+                "matches": m,
+                "win_rate": _safe_div(v["sum_win"], m),
+                "acs": _safe_div(v["sum_acs"], m),
+                "dmg_round": _safe_div(v["sum_dmg"], m),
+            }
+        )
     agents_agg.sort(key=lambda x: x["matches"], reverse=True)
     top_agents = agents_agg[:5]
 
@@ -621,7 +711,7 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
             if not role:
                 continue
             # role share might exist as "62%" in rr["rate"] or similar; if not, count appearances
-    role_counts_profile[role] = role_counts_profile.get(role, 0) + 1
+            role_counts_profile[role] = role_counts_profile.get(role, 0) + 1
 
     role_counts = role_counts_from_agents or role_counts_profile
 
@@ -640,6 +730,7 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
     team_summary["top_agent"] = top_agent
 
     starting_roster = [p["riot_id"] for p in players[:5]]
+    expected_comps = []
     expected_comps = build_expected_comps(
         map_rows=map_rows,
         map_games_by_player=map_games_by_player,
@@ -655,6 +746,7 @@ def summarize_team_snapshot(snap: dict, season_id: str) -> dict:
         "team_name": team_name,
         "season_id": season_id,
         "roster": roster,
+        "available_maps": available_maps_list,
         "map_rows": map_rows,
         "players": players,
         "agents": agents_agg,
@@ -937,6 +1029,53 @@ def to_int(s: str) -> int:
         return 0
 
 
+def _try_float(val) -> Optional[float]:
+    if val is None:
+        return None
+    s = str(val).strip()
+    if not s or s.lower() in {"none", "null", "nan", "\u2014", "-", "n/a"}:
+        return None
+    s = s.replace("%", "").replace(",", "")
+    try:
+        return float(s)
+    except Exception:
+        return None
+
+
+def _try_int(val) -> Optional[int]:
+    if val is None:
+        return None
+    s = str(val).strip().replace(",", "")
+    if not s or s.lower() in {"none", "null", "nan", "\u2014", "-", "n/a"}:
+        return None
+    try:
+        return int(float(s))
+    except Exception:
+        return None
+
+
+_MONTH_NAME_LOOKUP = {
+    "jan": 1,
+    "feb": 2,
+    "mar": 3,
+    "apr": 4,
+    "may": 5,
+    "jun": 6,
+    "jul": 7,
+    "aug": 8,
+    "sep": 9,
+    "oct": 10,
+    "nov": 11,
+    "dec": 12,
+}
+
+_MONTH_PATTERN = (
+    r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+    r"Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Sept|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)"
+)
+
+
+
 # ============================================================
 # Scrapers (Playwright)
 # ============================================================
@@ -969,10 +1108,10 @@ def scrape_maps_page(context, url: str, debug_prefix: str) -> List[Dict[str, Any
             except PlaywrightTimeoutError as e:
                 last_err = e
         else:
-            Path(f"{debug_prefix}.html").write_text(page.content(), encoding="utf-8")
-            page.screenshot(path=f"{debug_prefix}.png", full_page=True)
+            _debug_file(debug_prefix, ".html").write_text(page.content(), encoding="utf-8")
+            page.screenshot(path=str(_debug_file(debug_prefix, ".png")), full_page=True)
             raise RuntimeError(
-                f"Timed out waiting for OP.GG maps table. Saved {debug_prefix}.png/.html"
+                f"Timed out waiting for OP.GG maps table. Saved {_debug_file(debug_prefix, '.png')} / {_debug_file(debug_prefix, '.html')}"
             ) from last_err
 
         html = page.content()
@@ -992,8 +1131,8 @@ def scrape_maps_page(context, url: str, debug_prefix: str) -> List[Dict[str, Any
             table = t
             break
     if table is None:
-        Path(f"{debug_prefix}_parsed.html").write_text(html, encoding="utf-8")
-        raise RuntimeError(f"Maps table not found. Saved {debug_prefix}_parsed.html")
+        _debug_file(f"{debug_prefix}_parsed", ".html").write_text(html, encoding="utf-8")
+        raise RuntimeError(f"Maps table not found. Saved {_debug_file(f'{debug_prefix}_parsed', '.html')}")
 
     rows: List[Dict[str, Any]] = []
     for tr in table.select("tbody tr"):
@@ -1157,319 +1296,6 @@ def scrape_agents_page(context, url: str, debug_prefix: str) -> List[Dict[str, A
     return agents
 
 
-def parse_profile_stats_and_roles(html: str) -> Dict[str, Any]:
-    """
-    Parses the "Stats" card (top metrics + breakdown) and "Roles" card.
-    Avoids Tailwind bracket class selectors that break soupsieve.
-    """
-    soup = BeautifulSoup(html, "html.parser")
-    out: Dict[str, Any] = {"stats_card": {"top": [], "breakdown": []}, "roles_card": []}
-
-    # Find "Stats" card by h3 text
-    stats_card = None
-    for h3 in soup.find_all(["h3", "h2"]):
-        if h3.get_text(strip=True).lower() == "stats":
-            stats_card = h3.find_parent("div")
-            break
-    if stats_card is None:
-        # Fallback for newer OP.GG layout: card with Dmg/round + KDA rows
-        best = None
-        best_len = 10**9
-        for div in soup.find_all("div"):
-            txt = div.get_text(" ", strip=True)
-            if "Stats" in txt and "Dmg/round" in txt and "KDA" in txt:
-                l = len(txt)
-                if l < best_len:
-                    best_len = l
-                    best = div
-        stats_card = best
-
-    if stats_card:
-        # In older layout: first UL has 6 items; second UL is breakdown.
-        uls = stats_card.find_all("ul")
-        if len(uls) >= 1:
-            items = []
-            for li in uls[0].find_all("li"):
-                spans = li.find_all("span")
-                if len(spans) >= 2:
-                    label = spans[0].get_text(" ", strip=True)
-                    value = spans[1].get_text(" ", strip=True)
-                    items.append({"label": label, "value": value})
-            out["stats_card"]["top"] = items
-
-        if len(uls) >= 2:
-            items2 = []
-            for li in uls[1].find_all("li"):
-                spans = li.find_all("span")
-                if len(spans) >= 2:
-                    label = spans[0].get_text(" ", strip=True)
-                    value = spans[1].get_text(" ", strip=True)
-                    items2.append({"label": label, "value": value})
-            out["stats_card"]["breakdown"] = items2
-
-        if not out["stats_card"]["top"] and not out["stats_card"]["breakdown"]:
-            # Fallback: gather all li rows in the card.
-            items = []
-            for li in stats_card.find_all("li"):
-                spans = li.find_all("span")
-                if len(spans) >= 2:
-                    label = spans[0].get_text(" ", strip=True)
-                    value = spans[1].get_text(" ", strip=True)
-                    if label and value:
-                        items.append({"label": label, "value": value})
-            if items:
-                if len(items) > 6:
-                    out["stats_card"]["top"] = items[:6]
-                    out["stats_card"]["breakdown"] = items[6:]
-                else:
-                    out["stats_card"]["top"] = items
-
-    if not out["stats_card"]["top"] and not out["stats_card"]["breakdown"]:
-        # If we latched onto a menu header, retry with content-based search.
-        best = None
-        best_len = 10**9
-        for div in soup.find_all("div"):
-            txt = div.get_text(" ", strip=True)
-            if "Stats" in txt and "Dmg/round" in txt and "KDA" in txt:
-                l = len(txt)
-                if l < best_len:
-                    best_len = l
-                    best = div
-        if best:
-            items = []
-            for li in best.find_all("li"):
-                spans = li.find_all("span")
-                if len(spans) >= 2:
-                    label = spans[0].get_text(" ", strip=True)
-                    value = spans[1].get_text(" ", strip=True)
-                    if label and value:
-                        items.append({"label": label, "value": value})
-            if items:
-                if len(items) > 6:
-                    out["stats_card"]["top"] = items[:6]
-                    out["stats_card"]["breakdown"] = items[6:]
-                else:
-                    out["stats_card"]["top"] = items
-
-    # Find "Roles" card by h3 text
-    roles_card = None
-    for h3 in soup.find_all(["h3", "h2"]):
-        if h3.get_text(strip=True).lower() == "roles":
-            roles_card = h3.find_parent("div")
-            break
-    if roles_card is None:
-        # Fallback for newer OP.GG layout
-        best = None
-        best_len = 10**9
-        for div in soup.find_all("div"):
-            txt = div.get_text(" ", strip=True)
-            if txt.startswith("Roles") and "KDA" in txt and "W / L" in txt:
-                l = len(txt)
-                if l < best_len:
-                    best_len = l
-                    best = div
-        if best is None:
-            for div in soup.find_all("div"):
-                txt = div.get_text(" ", strip=True)
-                if txt.startswith("Roles") and "KDA" in txt:
-                    l = len(txt)
-                    if l < best_len:
-                        best_len = l
-                        best = div
-        roles_card = best
-
-    roles: List[Dict[str, Any]] = []
-    def _parse_roles(card):
-        parsed: List[Dict[str, Any]] = []
-        if not card:
-            return parsed
-        for li in card.find_all("li"):
-            row_text = li.get_text(" ", strip=True)
-            if not row_text:
-                continue
-
-            # Role name: usually the first bold-ish label
-            role_name = ""
-            for cand in ["Sentinel", "Duelist", "Initiator", "Controller"]:
-                if cand.lower() in row_text.lower():
-                    role_name = cand
-                    break
-            if not role_name:
-                continue
-
-            # KDA appears like "1.38:1 KDA"
-            m_kda = re.search(r"(\d+(?:\.\d+)?\s*:\s*\d+)\s*KDA", row_text, re.IGNORECASE)
-            kda = m_kda.group(1).replace(" ", "") if m_kda else ""
-
-            # K/D/A counts: "185 / 171 / 51"
-            m_kda_counts = re.search(r"(\d+)\s*/\s*(\d+)\s*/\s*(\d+)", row_text)
-            kills = int(m_kda_counts.group(1)) if m_kda_counts else None
-            deaths = int(m_kda_counts.group(2)) if m_kda_counts else None
-            assists = int(m_kda_counts.group(3)) if m_kda_counts else None
-
-            # W/L: "10W / 3L"
-            m_wl = re.search(r"(\d+)\s*W\s*/\s*(\d+)\s*L", row_text, re.IGNORECASE)
-            wins = int(m_wl.group(1)) if m_wl else None
-            losses = int(m_wl.group(2)) if m_wl else None
-            win_rate = ""
-            m_wr = re.search(r"(\d+)%\s*\d+\s*W\s*/\s*\d+\s*L", row_text, re.IGNORECASE)
-            if m_wr:
-                win_rate = m_wr.group(1) + "%"
-
-            # Role %: "62%" near role label line
-            role_pct = ""
-            try:
-                idx = row_text.lower().index(role_name.lower())
-                tail = row_text[idx:]
-                m_pct = re.search(r"(\d+)%", tail)
-                role_pct = (m_pct.group(1) + "%") if m_pct else ""
-            except Exception:
-                role_pct = ""
-
-            parsed.append(
-                {
-                    "role": role_name,
-                    "role_pct": role_pct,
-                    "kda": kda,
-                    "kills": kills,
-                    "deaths": deaths,
-                    "assists": assists,
-                    "wins": wins,
-                    "losses": losses,
-                    "win_rate": win_rate,
-                }
-            )
-        return parsed
-
-    roles = _parse_roles(roles_card)
-    if not roles:
-        # Retry with content-based search if header-based selection failed.
-        best = None
-        best_len = 10**9
-        for div in soup.find_all("div"):
-            txt = div.get_text(" ", strip=True)
-            if txt.startswith("Roles") and "KDA" in txt:
-                l = len(txt)
-                if l < best_len:
-                    best_len = l
-                    best = div
-        roles = _parse_roles(best)
-
-    out["roles_card"] = roles
-    return out
-
-
-def scrape_profile_page(
-    context,
-    url: str,
-    debug_prefix: str,
-) -> Dict[str, Any]:
-    page = context.new_page()
-    try:
-        _goto_with_delay(page, url, extra_wait_ms=5000)
-        page.mouse.wheel(0, 1200)
-        page.wait_for_timeout(1200)
-
-        # Don’t hard-fail on exact selector; just try to ensure content exists
-        try:
-            page.wait_for_selector("main", timeout=20_000)
-        except PlaywrightTimeoutError:
-            pass
-
-        html = page.content()
-    finally:
-        try:
-            page.close()
-        except Exception:
-            pass
-
-    try:
-        return parse_profile_stats_and_roles(html)
-    except Exception as e:
-        Path(f"{debug_prefix}.html").write_text(html, encoding="utf-8")
-        raise RuntimeError(f"Failed parsing profile page. Saved {debug_prefix}.html") from e
-
-
-def normalize_maps(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    out = []
-    for r in rows:
-        out.append(
-            {
-                "map": r.get("map", ""),
-                "win_rate_pct": to_float(r.get("win_rate", "")),
-                "wins": to_int(r.get("wins", "")),
-                "losses": to_int(r.get("losses", "")),
-                "kd": to_float(r.get("kd", "")),
-                "kill_round": to_float(r.get("kill_round", "")),
-                "dmg_round": to_float(r.get("dmg_round", "")),
-                "score_round": to_float(r.get("score_round", "")),
-                "raw": r,
-            }
-        )
-    return out
-
-
-def normalize_agents(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    out: List[Dict[str, Any]] = []
-    for r in rows or []:
-        agent = r.get("agent") or r.get("name") or ""
-        raw = r.get("raw") or ""
-
-        matches = r.get("matches")
-        win_rate_pct = r.get("win_rate_pct")
-        win_rate = r.get("win_rate")
-        kda = r.get("kda")
-        kd = r.get("kd")
-        acs = r.get("acs")
-        dmg_round = r.get("dmg_round")
-
-        if (matches in (None, "", 0)) or win_rate_pct is None:
-            if raw:
-                m = re.search(r"(\d+)\s+(\d+(?:\.\d+)?)%", raw)
-                if m:
-                    if matches in (None, "", 0):
-                        matches = to_int(m.group(1))
-                    if win_rate_pct is None:
-                        win_rate_pct = to_float(m.group(2))
-
-        if win_rate_pct is None:
-            win_rate_pct = to_float(win_rate)
-
-        matches = to_int(matches)
-        win_rate_pct = to_float(win_rate_pct)
-
-        if not kda and raw:
-            m = re.search(r"(\d+(?:\.\d+)?)\s*:\s*1", raw)
-            if m:
-                kda = f"{m.group(1)}:1"
-
-        if raw and (kd in (None, "") or acs in (None, "") or dmg_round in (None, "")):
-            nums = [to_float(n) for n in re.findall(r"\d+(?:\.\d+)?", raw.replace(",", ""))]
-            if len(nums) >= 3:
-                if kd in (None, ""):
-                    kd = nums[-3]
-                if acs in (None, ""):
-                    acs = nums[-2]
-                if dmg_round in (None, ""):
-                    dmg_round = nums[-1]
-
-        out.append(
-            {
-                "agent": agent,
-                "matches": matches,
-                "win_rate": win_rate_pct,
-                "win_rate_pct": win_rate_pct,
-                "kda": kda,
-                "kd": kd,
-                "acs": acs,
-                "dmg_round": dmg_round,
-                "raw": raw,
-            }
-        )
-
-    return out
-
-
 # ============================================================
 # Aggregation / Insights
 # ============================================================
@@ -1616,6 +1442,7 @@ def build_team_snapshot(
             context = browser.new_context(viewport=None, locale="en-US")
             context.set_default_timeout(40_000)
 
+            existing_snap = load_snapshot(team_key)
             for season_label, season_id in seasons.items():
                 snap["data"][season_id] = {}
 
@@ -1624,7 +1451,6 @@ def build_team_snapshot(
                     profile_url = opgg_profile_url_from_slug(slug, season_id)
                     maps_url = opgg_maps_url_from_slug(slug, season_id)
                     agents_url = opgg_agents_url_from_slug(slug, season_id)
-
                     pref = f"{team_key}_{riot_id.replace('#','_')}_{season_id}"
 
                     bump(f"[{season_label}] {riot_id}: profile...")
@@ -1680,8 +1506,7 @@ def build_team_snapshot(
     return snap
 
 
-DASHBOARD_DIR = APP_DIR / "data" / "dashboards"
-DASHBOARD_DIR.mkdir(parents=True, exist_ok=True)
+# NOTE: DASHBOARD_DIR is defined near the top using DATA_DIR.
 
 def dashboard_path(dash_id: str) -> Path:
     return DASHBOARD_DIR / f"{dash_id}.json"
@@ -1718,6 +1543,11 @@ def bad_request(error):
         title="Bad Request",
         message=message,
     ), 400
+
+
+@app.get("/healthz")
+def healthz():
+    return "ok", 200
 
 
 def _resolve_season_id(requested: str, snap: dict) -> str:
@@ -1877,11 +1707,14 @@ def team_view(team_key: str):
         abort(404)
 
     season_id = _resolve_season_id(request.args.get("seasonId") or DEFAULT_SEASON_ID, snap)
+    selected_maps = [m.strip() for m in request.args.getlist("maps") if m and str(m).strip()]
+    if not selected_maps:
+        selected_maps = list(CURRENT_COMP_POOL_MAPS)
 
     team_name = snap.get("team_name") or team_key
     team_ids = snap.get("players") or []
     season_block = (snap.get("data") or {}).get(season_id, {})
-    summary = summarize_team_snapshot(snap, season_id)
+    summary = summarize_team_snapshot(snap, season_id, map_filter=selected_maps)
     map_rows = summary.get("map_rows") or []
     team_summary = summary.get("summary") or {}
     map_plan = summary.get("map_plan") or {}
@@ -1890,43 +1723,23 @@ def team_view(team_key: str):
 
     # Per-player summaries (roster table)
     summaries = []
-    for rid in team_ids:
+    for p in summary.get("players") or []:
+        rid = p.get("riot_id")
         entry = season_block.get(rid) or {}
-        maps = entry.get("maps") or []
-
-        wins = sum(int(m.get("wins", 0)) for m in maps)
-        losses = sum(int(m.get("losses", 0)) for m in maps)
-        games = wins + losses
-        win_rate = (wins / games * 100.0) if games else 0.0
-
-        total_g = 0
-        w_kd = w_kr = w_dmg = w_score = 0.0
-        for m in maps:
-            g = int(m.get("wins", 0)) + int(m.get("losses", 0))
-            if g <= 0:
-                continue
-            total_g += g
-            w_kd += float(m.get("kd", 0.0)) * g
-            w_kr += float(m.get("kill_round", 0.0)) * g
-            w_dmg += float(m.get("dmg_round", 0.0)) * g
-            w_score += float(m.get("score_round", 0.0)) * g
-
-        summaries.append({
-            "riot_id": rid,
-            "games": games,
-            "wins": wins,
-            "losses": losses,
-            "win_rate_pct": win_rate,
-            "kd": (w_kd / total_g) if total_g else 0.0,
-            "kill_round": (w_kr / total_g) if total_g else 0.0,
-            "dmg_round": (w_dmg / total_g) if total_g else 0.0,
-            "score_round": (w_score / total_g) if total_g else 0.0,
-            "profile_url": entry.get("profile_url"),
-            "maps_url": entry.get("maps_url"),
-            "agents_url": entry.get("agents_url"),
-        })
-
-    summaries.sort(key=lambda x: x["games"], reverse=True)
+        summaries.append(
+            {
+                "riot_id": rid,
+                "games": p.get("games", 0),
+                "win_rate_pct": p.get("win_rate_pct", 0.0),
+                "kd": p.get("kd"),
+                "kill_round": p.get("kill_round"),
+                "dmg_round": p.get("dmg_round"),
+                "score_round": p.get("score_round"),
+                "profile_url": entry.get("profile_url"),
+                "maps_url": entry.get("maps_url"),
+                "agents_url": entry.get("agents_url"),
+            }
+        )
 
     return render_template(
         "team.html",
@@ -1934,6 +1747,8 @@ def team_view(team_key: str):
         team_name=team_name,
         seasons=snap.get("seasons") or SEASONS,
         season_id=season_id,
+        map_filters=selected_maps,
+        available_maps=summary.get("available_maps") or [],
         team_ids=team_ids,
         summaries=summaries,
         map_rows=map_rows,
@@ -2020,6 +1835,37 @@ def download_snapshot(team_key: str):
     if not p.exists():
         abort(404)
     return send_file(p, as_attachment=True)
+
+
+@app.get("/team/<team_key>/snapshot.png")
+def export_team_png(team_key: str):
+    snap = load_snapshot(team_key)
+    if not snap:
+        abort(404)
+
+    season_id = _resolve_season_id(request.args.get("seasonId") or DEFAULT_SEASON_ID, snap)
+    selected_maps = [m.strip() for m in request.args.getlist("maps") if m and str(m).strip()]
+    if not selected_maps:
+        selected_maps = list(CURRENT_COMP_POOL_MAPS)
+
+    target_url = url_for(
+        "team_view",
+        team_key=team_key,
+        seasonId=season_id,
+        maps=selected_maps,
+        _external=True,
+    )
+    try:
+        png = capture_full_page_png(target_url, wait_for_selector="main")
+    except PlaywrightTimeoutError:
+        abort(504, "Timed out while capturing the dashboard screenshot. Try again.")
+    except Exception as exc:
+        abort(500, f"Screenshot failed: {exc}")
+
+    name = safe_filename(snap.get("team_name") or team_key, team_key)
+    mem = io.BytesIO(png)
+    mem.seek(0)
+    return send_file(mem, mimetype="image/png", as_attachment=True, download_name=f"{name}_dashboard.png")
 
 @app.post("/dashboard/<dash_id>/delete")
 def dashboard_delete(dash_id: str):
@@ -2283,10 +2129,15 @@ def compare_run():
     if season_id not in (snap_b.get("data") or {}):
         season_id = DEFAULT_SEASON_ID
 
-    A = summarize_team_snapshot(snap_a, season_id)
-    B = summarize_team_snapshot(snap_b, season_id)
+    selected_maps = [m.strip() for m in request.args.getlist("maps") if m and str(m).strip()]
+    if not selected_maps:
+        selected_maps = list(CURRENT_COMP_POOL_MAPS)
+
+    A = summarize_team_snapshot(snap_a, season_id, map_filter=selected_maps)
+    B = summarize_team_snapshot(snap_b, season_id, map_filter=selected_maps)
     insights = generate_comparison_insights(A, B)
     dash = save_comparison_dashboard(snap_a, snap_b, season_id, A, B, insights)
+    available_maps = sorted(set((A.get("available_maps") or []) + (B.get("available_maps") or [])))
 
     return render_template(
         "compare_view.html",
@@ -2296,6 +2147,52 @@ def compare_run():
         team_b=B,
         insights=insights,
         compare_id=dash["dash_id"],
+        available_maps=available_maps,
+        map_filters=selected_maps,
+    )
+
+
+@app.get("/compare/view/<compare_id>")
+def compare_view_saved(compare_id: str):
+    dash_path = DASHBOARD_DIR / f"{compare_id}.json"
+    if not dash_path.exists():
+        abort(404)
+
+    dash = json.loads(dash_path.read_text(encoding="utf-8"))
+    a_key = dash.get("team_a_key")
+    b_key = dash.get("team_b_key")
+    if not a_key or not b_key:
+        abort(400, "Missing team keys in dashboard.")
+
+    snap_a = load_snapshot(a_key)
+    snap_b = load_snapshot(b_key)
+    if not snap_a or not snap_b:
+        abort(404, "One or both snapshots not found.")
+
+    season_id = dash.get("season_id") or DEFAULT_SEASON_ID
+    if season_id not in (snap_a.get("data") or {}):
+        season_id = DEFAULT_SEASON_ID
+    if season_id not in (snap_b.get("data") or {}):
+        season_id = DEFAULT_SEASON_ID
+    selected_maps = [m.strip() for m in request.args.getlist("maps") if m and str(m).strip()]
+    if not selected_maps:
+        selected_maps = list(CURRENT_COMP_POOL_MAPS)
+
+    A = summarize_team_snapshot(snap_a, season_id, map_filter=selected_maps)
+    B = summarize_team_snapshot(snap_b, season_id, map_filter=selected_maps)
+    insights = generate_comparison_insights(A, B)
+    available_maps = sorted(set((A.get("available_maps") or []) + (B.get("available_maps") or [])))
+
+    return render_template(
+        "compare_view.html",
+        season_id=season_id,
+        seasons=SEASONS,
+        team_a=A,
+        team_b=B,
+        insights=insights,
+        compare_id=compare_id,
+        available_maps=available_maps,
+        map_filters=selected_maps,
     )
 
 
@@ -2323,5 +2220,28 @@ def export_comparison(compare_id: str):
     mem.seek(0)
     return send_file(mem, mimetype="application/zip", as_attachment=True, download_name=f"comparison_{compare_id}.zip")
 
+
+@app.get("/compare/<compare_id>/snapshot.png")
+def export_comparison_png(compare_id: str):
+    dash_path = DASHBOARD_DIR / f"{compare_id}.json"
+    if not dash_path.exists():
+        abort(404)
+
+    dash = json.loads(dash_path.read_text(encoding="utf-8"))
+    selected_maps = [m.strip() for m in request.args.getlist("maps") if m and str(m).strip()]
+    target_url = url_for("compare_view_saved", compare_id=compare_id, maps=selected_maps, _external=True)
+    try:
+        png = capture_full_page_png(target_url, wait_for_selector="main")
+    except PlaywrightTimeoutError:
+        abort(504, "Timed out while capturing the comparison screenshot. Try again.")
+    except Exception as exc:
+        abort(500, f"Screenshot failed: {exc}")
+
+    label = f"{dash.get('team_a_name') or 'teamA'}_vs_{dash.get('team_b_name') or 'teamB'}"
+    name = safe_filename(label, f"comparison_{compare_id}")
+    mem = io.BytesIO(png)
+    mem.seek(0)
+    return send_file(mem, mimetype="image/png", as_attachment=True, download_name=f"{name}.png")
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, threaded=True)

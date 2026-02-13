@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="valo">
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Valorant Scout{% endblock %}</title>
@@ -15,6 +15,15 @@
   <div class="header-inner">
     <div class="brand">VALORANT SCOUT</div>
     <div class="nav-actions">
+      <div class="row wrap" style="gap:8px;">
+        <span class="badge">Theme</span>
+        <select id="themeSelect" aria-label="Theme">
+          <option value="valo">Valo</option>
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+        </select>
+      </div>
+      <button class="btn secondary" id="tutorialReplayHeader">Tutorial</button>
       <button class="btn secondary" onclick="history.back()">&larr; Back</button>
       <a href="/" class="btn secondary">Home</a>
     </div>
@@ -51,6 +60,38 @@
   </div>
 </div>
 
+<!-- First-run tutorial -->
+<div class="modal-overlay" id="tutorialOverlay" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+    <div class="card-title">
+      <h2 class="h2" id="tutorialTitle">Welcome to Valorant Scout</h2>
+      <span class="pill pill-mid">Interactive Tutorial</span>
+    </div>
+    <div class="subtle" style="margin-top:8px;">
+      Follow the steps to learn the full workflow. You can replay this anytime.
+    </div>
+
+    <div class="tutorial-progress" id="tutorialProgress"></div>
+
+    <div class="tutorial-step">
+      <div class="tutorial-step-count" id="tutorialStepCount">Step 1 of 1</div>
+      <div class="tutorial-step-title" id="tutorialStepTitle">Step</div>
+      <div class="tutorial-step-body" id="tutorialStepBody"></div>
+    </div>
+
+    <div class="row" style="margin-top:16px; gap:10px; justify-content:space-between;">
+      <div class="row" style="gap:10px;">
+        <button class="btn ghost" id="tutorialBack">Back</button>
+        <button class="btn success" id="tutorialNext">Next</button>
+      </div>
+      <div class="row" style="gap:10px;">
+        <button class="btn secondary" id="tutorialReplay">Replay</button>
+        <button class="btn ghost" id="tutorialSkip">Skip</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 function showProgress() {
   document.getElementById("progressOverlay").style.display = "flex";
@@ -72,6 +113,24 @@ function showToast(msg) {
   el.classList.add("show");
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(() => el.classList.remove("show"), 1600);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+}
+
+const themeSelect = document.getElementById("themeSelect");
+const THEME_KEY = "valo_theme";
+const savedTheme = localStorage.getItem(THEME_KEY) || "valo";
+applyTheme(savedTheme);
+if (themeSelect) {
+  themeSelect.value = savedTheme;
+  themeSelect.addEventListener("change", (e) => {
+    const t = e.target.value || "valo";
+    applyTheme(t);
+    localStorage.setItem(THEME_KEY, t);
+    showToast(`Theme: ${t}`);
+  });
 }
 
 function _parseSortableValue(text) {
@@ -162,6 +221,162 @@ function makeTablesSortable() {
 }
 
 document.addEventListener("DOMContentLoaded", makeTablesSortable);
+
+// First-run tutorial modal
+document.addEventListener("DOMContentLoaded", () => {
+  const KEY = "valo_tutorial_seen";
+  const overlay = document.getElementById("tutorialOverlay");
+  const stepTitle = document.getElementById("tutorialStepTitle");
+  const stepBody = document.getElementById("tutorialStepBody");
+  const stepCount = document.getElementById("tutorialStepCount");
+  const progress = document.getElementById("tutorialProgress");
+  const backBtn = document.getElementById("tutorialBack");
+  const nextBtn = document.getElementById("tutorialNext");
+  const skipBtn = document.getElementById("tutorialSkip");
+  const replayBtn = document.getElementById("tutorialReplay");
+  const headerReplay = document.getElementById("tutorialReplayHeader");
+
+  if (!overlay || !stepTitle || !stepBody || !stepCount || !progress || !backBtn || !nextBtn || !skipBtn || !replayBtn) {
+    return;
+  }
+
+  const steps = [
+    {
+      title: "Get a Team List Ready",
+      body: `
+        <div class="tutorial-lead">Create a simple text file with the team name on line 1, then Riot IDs below.</div>
+        <div class="tutorial-example">
+          <div class="tutorial-example-title">Example Team File</div>
+          <pre class="tutorial-code">Nova Esports
+PlayerOne#NA1
+SecondEntry#EUW
+Fragger#123
+IGLName#777</pre>
+        </div>
+        <div class="tutorial-note">Tip: Use one Riot ID per line. Extra spaces are okay.</div>
+      `,
+    },
+    {
+      title: "Upload and Scrape",
+      body: `
+        <div class="tutorial-lead">On the home page, upload the team file and choose a season.</div>
+        <div class="tutorial-callout">
+          Click <span class="kbd">Start Scrape</span> to build the dashboard.
+        </div>
+        <div class="tutorial-note">Scraping can take a minute depending on roster size.</div>
+      `,
+    },
+    {
+      title: "Use Map Filters",
+      body: `
+        <div class="tutorial-lead">On the team dashboard, control which maps influence the stats.</div>
+        <div class="tutorial-list">
+          <div>Click <span class="kbd">Map Filters</span> to enable or disable maps.</div>
+        </div>
+        <div class="tutorial-note">The current competitive pool is pre-selected by default.</div>
+      `,
+    },
+    {
+      title: "Read the Pick/Ban Planner",
+      body: `
+        <div class="tutorial-lead">The pick list is what you should look to pick first. The ban list is what you should look to ban first.</div>
+        <div class="tutorial-callout">
+          These suggestions follow your current queue and map filters.
+        </div>
+      `,
+    },
+    {
+      title: "Review Map and Agent Insights",
+      body: `
+        <div class="tutorial-lead">Check map win rates, volatility, and top agents to understand tendencies.</div>
+        <div class="tutorial-note">Open individual player pages for deeper agent and map details.</div>
+      `,
+    },
+    {
+      title: "Compare Two Teams",
+      body: `
+        <div class="tutorial-lead">Use <span class="kbd">Compare Teams</span> from the home page.</div>
+        <div class="tutorial-note">You can use Map Filters on the comparison view too.</div>
+      `,
+    },
+    {
+      title: "Share Results",
+      body: `
+        <div class="tutorial-lead">Export a full-page snapshot or download raw data.</div>
+        <div class="tutorial-list">
+          <div><span class="kbd">Export Snapshot (.png)</span> for sharing in chat</div>
+          <div><span class="kbd">Download .json</span> or <span class="kbd">Export Dashboard (.zip)</span> for archive</div>
+        </div>
+      `,
+    },
+  ];
+
+  let step = 0;
+
+  const renderProgress = () => {
+    progress.innerHTML = "";
+    steps.forEach((_, i) => {
+      const dot = document.createElement("span");
+      dot.className = "tutorial-dot" + (i === step ? " active" : "");
+      progress.appendChild(dot);
+    });
+  };
+
+  const renderStep = () => {
+    const s = steps[step];
+    stepTitle.textContent = s.title;
+    stepBody.innerHTML = s.body;
+    stepCount.textContent = `Step ${step + 1} of ${steps.length}`;
+    backBtn.disabled = step === 0;
+    nextBtn.textContent = step === steps.length - 1 ? "Finish" : "Next";
+    renderProgress();
+  };
+
+  const openTutorial = (force = false) => {
+    if (!force && localStorage.getItem(KEY)) return;
+    overlay.style.display = "flex";
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    step = 0;
+    renderStep();
+  };
+
+  const closeTutorial = () => {
+    localStorage.setItem(KEY, "1");
+    overlay.style.display = "none";
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  nextBtn.addEventListener("click", () => {
+    if (step < steps.length - 1) {
+      step += 1;
+      renderStep();
+    } else {
+      closeTutorial();
+    }
+  });
+
+  backBtn.addEventListener("click", () => {
+    if (step > 0) {
+      step -= 1;
+      renderStep();
+    }
+  });
+
+  replayBtn.addEventListener("click", () => {
+    step = 0;
+    renderStep();
+  });
+
+  skipBtn.addEventListener("click", closeTutorial);
+
+  if (headerReplay) {
+    headerReplay.addEventListener("click", () => openTutorial(true));
+  }
+
+  openTutorial(false);
+});
 
 // Floating "back to top"
 const toTop = document.getElementById("toTop");

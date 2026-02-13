@@ -388,6 +388,13 @@
         const payload = JSON.parse(ev.data);
         updateProgress(payload.pct ?? 0, payload.msg ?? "Working...");
 
+        if (payload.error) {
+          evt.close();
+          hideProgress();
+          alert("Scrape failed: " + payload.error);
+          return;
+        }
+
         if (payload.done) {
           evt.close();
           updateProgress(100, "Done! Redirecting...");

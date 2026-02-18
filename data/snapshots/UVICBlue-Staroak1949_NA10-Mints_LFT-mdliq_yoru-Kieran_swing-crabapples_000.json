@@ -1,0 +1,1064 @@
+{
+  "team_key": "UVICBlue-Staroak1949_NA10-Mints_LFT-mdliq_yoru-Kieran_swing-crabapples_000",
+  "team_name": "UVICBlue",
+  "updated_ts": 1771379361,
+  "players": [
+    "Staroak1949#NA10",
+    "Mints#LFT",
+    "mdliq#yoru",
+    "Kieran#swing",
+    "crabapples#000"
+  ],
+  "seasons": {
+    "V26 - ACT 1": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d"
+  },
+  "data": {
+    "3ea2b318-423b-cf86-25da-7cbb0eefbe2d": {
+      "Staroak1949#NA10": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "Staroak1949#NA10",
+        "slug": "Staroak1949-NA10",
+        "profile_url": "https://op.gg/valorant/profile/Staroak1949-NA10?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/Staroak1949-NA10/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/Staroak1949-NA10/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {},
+        "maps": [
+          {
+            "map": "Split",
+            "win_rate": 56.0,
+            "win_rate_pct": 56.0,
+            "wins": 5,
+            "losses": 4,
+            "kd": 0.78,
+            "kill_round": 0.59,
+            "dmg_round": 119.0,
+            "score_round": 173.0
+          },
+          {
+            "map": "Breeze",
+            "win_rate": 63.0,
+            "win_rate_pct": 63.0,
+            "wins": 5,
+            "losses": 3,
+            "kd": 1.04,
+            "kill_round": 0.72,
+            "dmg_round": 139.0,
+            "score_round": 201.0
+          },
+          {
+            "map": "Haven",
+            "win_rate": 71.0,
+            "win_rate_pct": 71.0,
+            "wins": 5,
+            "losses": 2,
+            "kd": 0.87,
+            "kill_round": 0.64,
+            "dmg_round": 127.0,
+            "score_round": 184.0
+          },
+          {
+            "map": "Bind",
+            "win_rate": 60.0,
+            "win_rate_pct": 60.0,
+            "wins": 3,
+            "losses": 2,
+            "kd": 1.08,
+            "kill_round": 0.74,
+            "dmg_round": 143.0,
+            "score_round": 209.0
+          },
+          {
+            "map": "Pearl",
+            "win_rate": 29.0,
+            "win_rate_pct": 29.0,
+            "wins": 2,
+            "losses": 5,
+            "kd": 0.54,
+            "kill_round": 0.47,
+            "dmg_round": 94.0,
+            "score_round": 139.0
+          },
+          {
+            "map": "Corrode",
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "wins": 2,
+            "losses": 1,
+            "kd": 0.78,
+            "kill_round": 0.59,
+            "dmg_round": 118.0,
+            "score_round": 171.0
+          },
+          {
+            "map": "Abyss",
+            "win_rate": 17.0,
+            "win_rate_pct": 17.0,
+            "wins": 1,
+            "losses": 5,
+            "kd": 0.67,
+            "kill_round": 0.54,
+            "dmg_round": 118.0,
+            "score_round": 172.0
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Sova",
+            "matches": 9,
+            "win_rate": 44.0,
+            "win_rate_pct": 44.0,
+            "kda": "1.04:1",
+            "kd": 0.7,
+            "acs": 108.0,
+            "dmg_round": 151.0
+          },
+          {
+            "agent": "Viper",
+            "matches": 7,
+            "win_rate": 57.0,
+            "win_rate_pct": 57.0,
+            "kda": "1.36:1",
+            "kd": 1.1,
+            "acs": 137.0,
+            "dmg_round": 198.0
+          },
+          {
+            "agent": "Cypher",
+            "matches": 5,
+            "win_rate": 60.0,
+            "win_rate_pct": 60.0,
+            "kda": "1.54:1",
+            "kd": 1.1,
+            "acs": 144.0,
+            "dmg_round": 210.0
+          },
+          {
+            "agent": "Chamber",
+            "matches": 5,
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "kda": "0.93:1",
+            "kd": 0.8,
+            "acs": 100.0,
+            "dmg_round": 153.0
+          },
+          {
+            "agent": "Raze",
+            "matches": 4,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.16:1",
+            "kd": 0.7,
+            "acs": 134.0,
+            "dmg_round": 187.0
+          },
+          {
+            "agent": "Fade",
+            "matches": 4,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.03:1",
+            "kd": 0.8,
+            "acs": 112.0,
+            "dmg_round": 164.0
+          },
+          {
+            "agent": "Waylay",
+            "matches": 3,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.54:1",
+            "kd": 1.3,
+            "acs": 176.0,
+            "dmg_round": 273.0
+          },
+          {
+            "agent": "Clove",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.19:1",
+            "kd": 0.7,
+            "acs": 124.0,
+            "dmg_round": 181.0
+          },
+          {
+            "agent": "Reyna",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "0.74:1",
+            "kd": 0.5,
+            "acs": 91.0,
+            "dmg_round": 133.0
+          },
+          {
+            "agent": "Killjoy",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.45:1",
+            "kd": 0.4,
+            "acs": 71.0,
+            "dmg_round": 98.0
+          },
+          {
+            "agent": "Jett",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.16:1",
+            "kd": 0.9,
+            "acs": 151.0,
+            "dmg_round": 224.0
+          },
+          {
+            "agent": "Astra",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.22:1",
+            "kd": 0.7,
+            "acs": 116.0,
+            "dmg_round": 175.0
+          },
+          {
+            "agent": "Phoenix",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.00:1",
+            "kd": 0.5,
+            "acs": 96.0,
+            "dmg_round": 143.0
+          }
+        ]
+      },
+      "Mints#LFT": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "Mints#LFT",
+        "slug": "Mints-LFT",
+        "profile_url": "https://op.gg/valorant/profile/Mints-LFT?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/Mints-LFT/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/Mints-LFT/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {},
+        "maps": [
+          {
+            "map": "Breeze",
+            "win_rate": 53.0,
+            "win_rate_pct": 53.0,
+            "wins": 18,
+            "losses": 15,
+            "kd": 1.06,
+            "kill_round": 0.77,
+            "dmg_round": 140.0,
+            "score_round": 214.0
+          },
+          {
+            "map": "Abyss",
+            "win_rate": 52.0,
+            "win_rate_pct": 52.0,
+            "wins": 16,
+            "losses": 14,
+            "kd": 0.85,
+            "kill_round": 0.67,
+            "dmg_round": 130.0,
+            "score_round": 195.0
+          },
+          {
+            "map": "Haven",
+            "win_rate": 60.0,
+            "win_rate_pct": 60.0,
+            "wins": 15,
+            "losses": 10,
+            "kd": 0.96,
+            "kill_round": 0.74,
+            "dmg_round": 142.0,
+            "score_round": 212.0
+          },
+          {
+            "map": "Split",
+            "win_rate": 46.0,
+            "win_rate_pct": 46.0,
+            "wins": 13,
+            "losses": 15,
+            "kd": 0.95,
+            "kill_round": 0.75,
+            "dmg_round": 140.0,
+            "score_round": 213.0
+          },
+          {
+            "map": "Bind",
+            "win_rate": 59.0,
+            "win_rate_pct": 59.0,
+            "wins": 10,
+            "losses": 7,
+            "kd": 0.85,
+            "kill_round": 0.68,
+            "dmg_round": 137.0,
+            "score_round": 203.0
+          },
+          {
+            "map": "Pearl",
+            "win_rate": 45.0,
+            "win_rate_pct": 45.0,
+            "wins": 10,
+            "losses": 12,
+            "kd": 0.86,
+            "kill_round": 0.68,
+            "dmg_round": 130.0,
+            "score_round": 199.0
+          },
+          {
+            "map": "Corrode",
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "wins": 10,
+            "losses": 14,
+            "kd": 0.93,
+            "kill_round": 0.75,
+            "dmg_round": 137.0,
+            "score_round": 211.0
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Waylay",
+            "matches": 41,
+            "win_rate": 51.0,
+            "win_rate_pct": 51.0,
+            "kda": "1.11:1",
+            "kd": 0.9,
+            "acs": 130.0,
+            "dmg_round": 202.0
+          },
+          {
+            "agent": "Chamber",
+            "matches": 32,
+            "win_rate": 59.0,
+            "win_rate_pct": 59.0,
+            "kda": "1.32:1",
+            "kd": 1.1,
+            "acs": 146.0,
+            "dmg_round": 223.0
+          },
+          {
+            "agent": "Clove",
+            "matches": 23,
+            "win_rate": 30.0,
+            "win_rate_pct": 30.0,
+            "kda": "1.20:1",
+            "kd": 0.8,
+            "acs": 141.0,
+            "dmg_round": 214.0
+          },
+          {
+            "agent": "Yoru",
+            "matches": 19,
+            "win_rate": 58.0,
+            "win_rate_pct": 58.0,
+            "kda": "1.27:1",
+            "kd": 1.0,
+            "acs": 137.0,
+            "dmg_round": 207.0
+          },
+          {
+            "agent": "Sova",
+            "matches": 12,
+            "win_rate": 75.0,
+            "win_rate_pct": 75.0,
+            "kda": "1.41:1",
+            "kd": 1.1,
+            "acs": 147.0,
+            "dmg_round": 212.0
+          },
+          {
+            "agent": "Reyna",
+            "matches": 11,
+            "win_rate": 36.0,
+            "win_rate_pct": 36.0,
+            "kda": "1.05:1",
+            "kd": 0.9,
+            "acs": 141.0,
+            "dmg_round": 210.0
+          },
+          {
+            "agent": "Viper",
+            "matches": 11,
+            "win_rate": 36.0,
+            "win_rate_pct": 36.0,
+            "kda": "1.20:1",
+            "kd": 0.9,
+            "acs": 123.0,
+            "dmg_round": 186.0
+          },
+          {
+            "agent": "Raze",
+            "matches": 10,
+            "win_rate": 60.0,
+            "win_rate_pct": 60.0,
+            "kda": "1.05:1",
+            "kd": 0.8,
+            "acs": 140.0,
+            "dmg_round": 205.0
+          },
+          {
+            "agent": "Neon",
+            "matches": 7,
+            "win_rate": 43.0,
+            "win_rate_pct": 43.0,
+            "kda": "0.95:1",
+            "kd": 0.8,
+            "acs": 123.0,
+            "dmg_round": 192.0
+          },
+          {
+            "agent": "Jett",
+            "matches": 3,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "0.93:1",
+            "kd": 0.8,
+            "acs": 116.0,
+            "dmg_round": 185.0
+          },
+          {
+            "agent": "Phoenix",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.38:1",
+            "kd": 1.0,
+            "acs": 157.0,
+            "dmg_round": 239.0
+          },
+          {
+            "agent": "Fade",
+            "matches": 2,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.33:1",
+            "kd": 0.9,
+            "acs": 120.0,
+            "dmg_round": 178.0
+          },
+          {
+            "agent": "Tejo",
+            "matches": 2,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.58:1",
+            "kd": 1.2,
+            "acs": 126.0,
+            "dmg_round": 182.0
+          },
+          {
+            "agent": "Skye",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.41:1",
+            "kd": 0.9,
+            "acs": 115.0,
+            "dmg_round": 178.0
+          },
+          {
+            "agent": "Cypher",
+            "matches": 2,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.55:1",
+            "kd": 1.2,
+            "acs": 137.0,
+            "dmg_round": 224.0
+          },
+          {
+            "agent": "Omen",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.85:1",
+            "kd": 1.5,
+            "acs": 150.0,
+            "dmg_round": 249.0
+          },
+          {
+            "agent": "Killjoy",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.82:1",
+            "kd": 1.5,
+            "acs": 159.0,
+            "dmg_round": 232.0
+          },
+          {
+            "agent": "Astra",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.38:1",
+            "kd": 0.8,
+            "acs": 116.0,
+            "dmg_round": 169.0
+          }
+        ]
+      },
+      "mdliq#yoru": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "mdliq#yoru",
+        "slug": "mdliq-yoru",
+        "profile_url": "https://op.gg/valorant/profile/mdliq-yoru?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/mdliq-yoru/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/mdliq-yoru/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {},
+        "maps": [
+          {
+            "map": "Pearl",
+            "win_rate": 67.0,
+            "win_rate_pct": 67.0,
+            "wins": 10,
+            "losses": 5,
+            "kd": 1.16,
+            "kill_round": 0.81,
+            "dmg_round": 152.0,
+            "score_round": 227.0
+          },
+          {
+            "map": "Corrode",
+            "win_rate": 56.0,
+            "win_rate_pct": 56.0,
+            "wins": 9,
+            "losses": 7,
+            "kd": 0.92,
+            "kill_round": 0.7,
+            "dmg_round": 124.0,
+            "score_round": 192.0
+          },
+          {
+            "map": "Split",
+            "win_rate": 62.0,
+            "win_rate_pct": 62.0,
+            "wins": 8,
+            "losses": 5,
+            "kd": 0.92,
+            "kill_round": 0.67,
+            "dmg_round": 131.0,
+            "score_round": 195.0
+          },
+          {
+            "map": "Haven",
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "wins": 7,
+            "losses": 7,
+            "kd": 0.98,
+            "kill_round": 0.71,
+            "dmg_round": 136.0,
+            "score_round": 198.0
+          },
+          {
+            "map": "Breeze",
+            "win_rate": 46.0,
+            "win_rate_pct": 46.0,
+            "wins": 6,
+            "losses": 7,
+            "kd": 0.8,
+            "kill_round": 0.61,
+            "dmg_round": 117.0,
+            "score_round": 174.0
+          },
+          {
+            "map": "Abyss",
+            "win_rate": 29.0,
+            "win_rate_pct": 29.0,
+            "wins": 4,
+            "losses": 10,
+            "kd": 0.84,
+            "kill_round": 0.64,
+            "dmg_round": 125.0,
+            "score_round": 182.0
+          },
+          {
+            "map": "Bind",
+            "win_rate": 27.0,
+            "win_rate_pct": 27.0,
+            "wins": 3,
+            "losses": 8,
+            "kd": 0.81,
+            "kill_round": 0.66,
+            "dmg_round": 122.0,
+            "score_round": 192.0
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Chamber",
+            "matches": 28,
+            "win_rate": 61.0,
+            "win_rate_pct": 61.0,
+            "kda": "1.25:1",
+            "kd": 1.1,
+            "acs": 142.0,
+            "dmg_round": 209.0
+          },
+          {
+            "agent": "Yoru",
+            "matches": 19,
+            "win_rate": 47.0,
+            "win_rate_pct": 47.0,
+            "kda": "1.18:1",
+            "kd": 0.9,
+            "acs": 135.0,
+            "dmg_round": 208.0
+          },
+          {
+            "agent": "Clove",
+            "matches": 15,
+            "win_rate": 47.0,
+            "win_rate_pct": 47.0,
+            "kda": "1.28:1",
+            "kd": 0.8,
+            "acs": 118.0,
+            "dmg_round": 182.0
+          },
+          {
+            "agent": "Sova",
+            "matches": 11,
+            "win_rate": 18.0,
+            "win_rate_pct": 18.0,
+            "kda": "1.12:1",
+            "kd": 0.8,
+            "acs": 127.0,
+            "dmg_round": 185.0
+          },
+          {
+            "agent": "Tejo",
+            "matches": 8,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.43:1",
+            "kd": 1.1,
+            "acs": 135.0,
+            "dmg_round": 191.0
+          },
+          {
+            "agent": "Waylay",
+            "matches": 5,
+            "win_rate": 80.0,
+            "win_rate_pct": 80.0,
+            "kda": "1.14:1",
+            "kd": 0.9,
+            "acs": 125.0,
+            "dmg_round": 191.0
+          },
+          {
+            "agent": "Reyna",
+            "matches": 3,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.04:1",
+            "kd": 0.8,
+            "acs": 129.0,
+            "dmg_round": 195.0
+          },
+          {
+            "agent": "Skye",
+            "matches": 3,
+            "win_rate": 67.0,
+            "win_rate_pct": 67.0,
+            "kda": "1.60:1",
+            "kd": 0.9,
+            "acs": 116.0,
+            "dmg_round": 184.0
+          },
+          {
+            "agent": "Fade",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.25:1",
+            "kd": 0.9,
+            "acs": 104.0,
+            "dmg_round": 167.0
+          },
+          {
+            "agent": "Harbor",
+            "matches": 1,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.06:1",
+            "kd": 0.6,
+            "acs": 81.0,
+            "dmg_round": 132.0
+          },
+          {
+            "agent": "Viper",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.63:1",
+            "kd": 0.6,
+            "acs": 93.0,
+            "dmg_round": 132.0
+          },
+          {
+            "agent": "Cypher",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "0.60:1",
+            "kd": 0.4,
+            "acs": 65.0,
+            "dmg_round": 87.0
+          }
+        ]
+      },
+      "Kieran#swing": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "Kieran#swing",
+        "slug": "Kieran-swing",
+        "profile_url": "https://op.gg/valorant/profile/Kieran-swing?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/Kieran-swing/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/Kieran-swing/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {},
+        "maps": [
+          {
+            "map": "Split",
+            "win_rate": 71.0,
+            "win_rate_pct": 71.0,
+            "wins": 5,
+            "losses": 2,
+            "kd": 1.03,
+            "kill_round": 0.77,
+            "dmg_round": 138.0,
+            "score_round": 217.0
+          },
+          {
+            "map": "Abyss",
+            "win_rate": 63.0,
+            "win_rate_pct": 63.0,
+            "wins": 5,
+            "losses": 3,
+            "kd": 1.07,
+            "kill_round": 0.75,
+            "dmg_round": 146.0,
+            "score_round": 211.0
+          },
+          {
+            "map": "Breeze",
+            "win_rate": 40.0,
+            "win_rate_pct": 40.0,
+            "wins": 4,
+            "losses": 6,
+            "kd": 1.08,
+            "kill_round": 0.75,
+            "dmg_round": 146.0,
+            "score_round": 214.0
+          },
+          {
+            "map": "Corrode",
+            "win_rate": 67.0,
+            "win_rate_pct": 67.0,
+            "wins": 4,
+            "losses": 2,
+            "kd": 0.74,
+            "kill_round": 0.54,
+            "dmg_round": 122.0,
+            "score_round": 173.0
+          },
+          {
+            "map": "Bind",
+            "win_rate": 43.0,
+            "win_rate_pct": 43.0,
+            "wins": 3,
+            "losses": 4,
+            "kd": 0.9,
+            "kill_round": 0.69,
+            "dmg_round": 139.0,
+            "score_round": 206.0
+          },
+          {
+            "map": "Haven",
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "wins": 2,
+            "losses": 4,
+            "kd": 1.09,
+            "kill_round": 0.87,
+            "dmg_round": 162.0,
+            "score_round": 248.0
+          },
+          {
+            "map": "Pearl",
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "wins": 1,
+            "losses": 2,
+            "kd": 1.26,
+            "kill_round": 1.02,
+            "dmg_round": 189.0,
+            "score_round": 285.0
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Chamber",
+            "matches": 15,
+            "win_rate": 60.0,
+            "win_rate_pct": 60.0,
+            "kda": "1.29:1",
+            "kd": 1.1,
+            "acs": 149.0,
+            "dmg_round": 222.0
+          },
+          {
+            "agent": "Clove",
+            "matches": 8,
+            "win_rate": 38.0,
+            "win_rate_pct": 38.0,
+            "kda": "1.26:1",
+            "kd": 0.8,
+            "acs": 145.0,
+            "dmg_round": 215.0
+          },
+          {
+            "agent": "Jett",
+            "matches": 6,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.46:1",
+            "kd": 1.2,
+            "acs": 169.0,
+            "dmg_round": 251.0
+          },
+          {
+            "agent": "Fade",
+            "matches": 5,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.67:1",
+            "kd": 1.0,
+            "acs": 125.0,
+            "dmg_round": 181.0
+          },
+          {
+            "agent": "Sova",
+            "matches": 4,
+            "win_rate": 25.0,
+            "win_rate_pct": 25.0,
+            "kda": "1.45:1",
+            "kd": 1.0,
+            "acs": 149.0,
+            "dmg_round": 211.0
+          },
+          {
+            "agent": "Skye",
+            "matches": 4,
+            "win_rate": 75.0,
+            "win_rate_pct": 75.0,
+            "kda": "1.58:1",
+            "kd": 1.0,
+            "acs": 127.0,
+            "dmg_round": 204.0
+          },
+          {
+            "agent": "Viper",
+            "matches": 3,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.38:1",
+            "kd": 0.9,
+            "acs": 123.0,
+            "dmg_round": 178.0
+          },
+          {
+            "agent": "KAY/O",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "2.07:1",
+            "kd": 1.5,
+            "acs": 165.0,
+            "dmg_round": 267.0
+          },
+          {
+            "agent": "Omen",
+            "matches": 1,
+            "win_rate": 0.0,
+            "win_rate_pct": 0.0,
+            "kda": "1.80:1",
+            "kd": 0.9,
+            "acs": 152.0,
+            "dmg_round": 217.0
+          }
+        ]
+      },
+      "crabapples#000": {
+        "season_label": "V26 - ACT 1",
+        "season_id": "3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "riot_id": "crabapples#000",
+        "slug": "crabapples-000",
+        "profile_url": "https://op.gg/valorant/profile/crabapples-000?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "maps_url": "https://op.gg/valorant/profile/crabapples-000/maps?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "agents_url": "https://op.gg/valorant/profile/crabapples-000/agents?seasonId=3ea2b318-423b-cf86-25da-7cbb0eefbe2d",
+        "profile_stats": {},
+        "maps": [
+          {
+            "map": "Split",
+            "win_rate": 67.0,
+            "win_rate_pct": 67.0,
+            "wins": 12,
+            "losses": 6,
+            "kd": 1.0,
+            "kill_round": 0.76,
+            "dmg_round": 152.0,
+            "score_round": 222.0
+          },
+          {
+            "map": "Breeze",
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "wins": 9,
+            "losses": 9,
+            "kd": 0.96,
+            "kill_round": 0.75,
+            "dmg_round": 142.0,
+            "score_round": 212.0
+          },
+          {
+            "map": "Bind",
+            "win_rate": 38.0,
+            "win_rate_pct": 38.0,
+            "wins": 6,
+            "losses": 10,
+            "kd": 0.84,
+            "kill_round": 0.69,
+            "dmg_round": 138.0,
+            "score_round": 206.0
+          },
+          {
+            "map": "Abyss",
+            "win_rate": 46.0,
+            "win_rate_pct": 46.0,
+            "wins": 6,
+            "losses": 7,
+            "kd": 1.01,
+            "kill_round": 0.79,
+            "dmg_round": 146.0,
+            "score_round": 225.0
+          },
+          {
+            "map": "Pearl",
+            "win_rate": 55.0,
+            "win_rate_pct": 55.0,
+            "wins": 6,
+            "losses": 5,
+            "kd": 1.03,
+            "kill_round": 0.75,
+            "dmg_round": 139.0,
+            "score_round": 213.0
+          },
+          {
+            "map": "Corrode",
+            "win_rate": 35.0,
+            "win_rate_pct": 35.0,
+            "wins": 6,
+            "losses": 11,
+            "kd": 0.83,
+            "kill_round": 0.65,
+            "dmg_round": 126.0,
+            "score_round": 191.0
+          },
+          {
+            "map": "Haven",
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "wins": 5,
+            "losses": 9,
+            "kd": 0.94,
+            "kill_round": 0.76,
+            "dmg_round": 147.0,
+            "score_round": 220.0
+          }
+        ],
+        "agents": [
+          {
+            "agent": "Chamber",
+            "matches": 38,
+            "win_rate": 47.0,
+            "win_rate_pct": 47.0,
+            "kda": "1.22:1",
+            "kd": 1.1,
+            "acs": 144.0,
+            "dmg_round": 216.0
+          },
+          {
+            "agent": "Neon",
+            "matches": 22,
+            "win_rate": 50.0,
+            "win_rate_pct": 50.0,
+            "kda": "1.18:1",
+            "kd": 0.9,
+            "acs": 141.0,
+            "dmg_round": 215.0
+          },
+          {
+            "agent": "Raze",
+            "matches": 21,
+            "win_rate": 52.0,
+            "win_rate_pct": 52.0,
+            "kda": "1.09:1",
+            "kd": 0.8,
+            "acs": 145.0,
+            "dmg_round": 214.0
+          },
+          {
+            "agent": "Clove",
+            "matches": 9,
+            "win_rate": 22.0,
+            "win_rate_pct": 22.0,
+            "kda": "1.16:1",
+            "kd": 0.8,
+            "acs": 127.0,
+            "dmg_round": 192.0
+          },
+          {
+            "agent": "Reyna",
+            "matches": 9,
+            "win_rate": 33.0,
+            "win_rate_pct": 33.0,
+            "kda": "1.02:1",
+            "kd": 0.9,
+            "acs": 134.0,
+            "dmg_round": 199.0
+          },
+          {
+            "agent": "Jett",
+            "matches": 7,
+            "win_rate": 43.0,
+            "win_rate_pct": 43.0,
+            "kda": "1.11:1",
+            "kd": 0.9,
+            "acs": 151.0,
+            "dmg_round": 229.0
+          },
+          {
+            "agent": "Yoru",
+            "matches": 2,
+            "win_rate": 100.0,
+            "win_rate_pct": 100.0,
+            "kda": "1.41:1",
+            "kd": 1.1,
+            "acs": 132.0,
+            "dmg_round": 203.0
+          }
+        ]
+      }
+    }
+  }
+}

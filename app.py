@@ -2,17 +2,15 @@ import io
 import json
 import os
 import re
-import shutil
 import threading
 import time
 import zipfile
-import calendar
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 import math
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime
 from bs4 import BeautifulSoup
 from flask import (
     Flask,
@@ -201,6 +199,53 @@ def normalize_agent_name(name: str) -> str:
     if not s:
         s = (name or "").strip()
     return s.split()[0] if s.split() else s
+
+
+def normalize_maps(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for r in rows or []:
+        map_name = (r.get("map") or "").strip()
+        if not map_name:
+            continue
+        out.append(
+            {
+                "map": map_name,
+                "win_rate": to_float(r.get("win_rate")),
+                "wins": to_int(r.get("wins")),
+                "losses": to_int(r.get("losses")),
+                "kd": to_float(r.get("kd")),
+                "kill_round": to_float(r.get("kill_round")),
+                "dmg_round": to_float(r.get("dmg_round")),
+                "score_round": to_float(r.get("score_round")),
+            }
+        )
+    return out
+
+
+def normalize_agents(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for r in rows or []:
+        agent = normalize_agent_name(r.get("agent") or r.get("name") or "")
+        if not agent:
+            continue
+        win_rate_pct = r.get("win_rate_pct")
+        if win_rate_pct is None:
+            win_rate_pct = r.get("win_rate")
+        kda = (r.get("kda") or "").strip()
+        out.append(
+            {
+                "agent": agent,
+                "matches": to_int(r.get("matches")),
+                "win_rate": to_float(r.get("win_rate")),
+                "win_rate_pct": to_float(win_rate_pct),
+                "kda": kda,
+                "kd": to_float(r.get("kd")),
+                "acs": to_float(r.get("acs")),
+                "dmg_round": to_float(r.get("dmg_round")),
+            }
+        )
+    out.sort(key=lambda x: x.get("matches", 0), reverse=True)
+    return out
 
 
 def _map_key(name: str) -> str:
@@ -406,7 +451,15 @@ def recommend_map_plan(map_rows: list, min_games: int = 3, smoothing: int = 6, l
     if not viable:
         viable = rows
     picks = sorted(viable, key=lambda r: r["adj_win_rate_pct"], reverse=True)
-    bans = sorted(viable, key=lambda r: r["adj_win_rate_pct"])
+
+    def ban_score(r: dict) -> float:
+        win_rate = float(r.get("win_rate_pct", 0.0))
+        games = int(r.get("games", 0))
+        weakness = max(0.0, 100.0 - win_rate)
+        games_factor = min(1.0, games / 10.0)  # more games = higher confidence
+        return weakness * (0.65 + 0.35 * games_factor)
+
+    bans = sorted(viable, key=ban_score, reverse=True)
     return {
         "pick_targets": picks[:limit],
         "ban_targets": bans[:limit],
@@ -1084,6 +1137,27 @@ def _goto_with_delay(page, url: str, extra_wait_ms: int = 5000) -> None:
     # your request: always give it time to hydrate
     page.wait_for_timeout(extra_wait_ms)
 
+def scrape_profile_page(context, url: str, debug_prefix: str) -> Dict[str, Any]:
+    """
+    Best-effort scrape for profile stats. Returns empty dict if parsing is unclear.
+    """
+    if not url:
+        return {}
+    page = context.new_page()
+    try:
+        _goto_with_delay(page, url, extra_wait_ms=5000)
+        page.wait_for_timeout(1000)
+        html = page.content()
+    finally:
+        try:
+            page.close()
+        except Exception:
+            pass
+
+    # Parsing is intentionally conservative to avoid misleading data.
+    # If OP.GG layout changes, we simply return empty stats.
+    return {}
+
 
 def scrape_maps_page(context, url: str, debug_prefix: str) -> List[Dict[str, Any]]:
     page = context.new_page()
@@ -1639,6 +1713,7 @@ def upload_async():
 
     task_id = _new_task_id()
     TASKS[task_id] = TaskState(pct=2, msg="Starting...")
+    redirect_url = url_for("team_view", team_key=team_key, seasonId=default_season_id)
 
     def worker():
         try:
@@ -1652,7 +1727,7 @@ def upload_async():
                 progress_cb=lambda pct, msg: set_task(task_id, pct, msg),
             )
             save_snapshot(team_key, snap)
-            finish_task(task_id, url_for("team_view", team_key=team_key, seasonId=default_season_id))
+            finish_task(task_id, redirect_url)
         except Exception as e:
             fail_task(task_id, str(e))
 
@@ -1661,7 +1736,7 @@ def upload_async():
     return jsonify(
         {
             "task_id": task_id,
-            "redirect": url_for("team_view", team_key=team_key, seasonId=default_season_id),
+            "redirect": redirect_url,
         }
     )
 

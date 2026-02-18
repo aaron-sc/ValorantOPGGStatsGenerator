@@ -207,12 +207,21 @@ def normalize_maps(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         map_name = (r.get("map") or "").strip()
         if not map_name:
             continue
+        wins = to_int(r.get("wins"))
+        losses = to_int(r.get("losses"))
+        raw_win_rate_pct = r.get("win_rate_pct")
+        if raw_win_rate_pct is None:
+            raw_win_rate_pct = r.get("win_rate")
+        win_rate_pct = to_float(raw_win_rate_pct)
+        if raw_win_rate_pct is None and (wins + losses) > 0:
+            win_rate_pct = (wins / (wins + losses)) * 100.0
         out.append(
             {
                 "map": map_name,
                 "win_rate": to_float(r.get("win_rate")),
-                "wins": to_int(r.get("wins")),
-                "losses": to_int(r.get("losses")),
+                "win_rate_pct": win_rate_pct,
+                "wins": wins,
+                "losses": losses,
                 "kd": to_float(r.get("kd")),
                 "kill_round": to_float(r.get("kill_round")),
                 "dmg_round": to_float(r.get("dmg_round")),
@@ -246,6 +255,114 @@ def normalize_agents(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         )
     out.sort(key=lambda x: x.get("matches", 0), reverse=True)
     return out
+
+
+def _parse_kda_value(kda: Optional[str]) -> Optional[float]:
+    if not kda:
+        return None
+    m = re.search(r"(\d+(?:\.\d+)?)", str(kda))
+    return float(m.group(1)) if m else None
+
+
+def build_roles_from_agents(agents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    total_matches = sum(int(a.get("matches", 0)) for a in agents)
+    by_role: Dict[str, Dict[str, Any]] = {}
+    for a in agents:
+        role = agent_role(a.get("agent") or "")
+        matches = int(a.get("matches", 0))
+        if matches <= 0:
+            continue
+        win_rate_pct = to_float(a.get("win_rate_pct") or a.get("win_rate"))
+        kda_val = _parse_kda_value(a.get("kda"))
+
+        bucket = by_role.setdefault(
+            role,
+            {"matches": 0, "win_sum": 0.0, "kda_sum": 0.0, "kda_den": 0},
+        )
+        bucket["matches"] += matches
+        bucket["win_sum"] += win_rate_pct * matches
+        if kda_val is not None:
+            bucket["kda_sum"] += kda_val * matches
+            bucket["kda_den"] += matches
+
+    roles_card: List[Dict[str, Any]] = []
+    for role, v in by_role.items():
+        matches = int(v["matches"])
+        if matches <= 0:
+            continue
+        win_rate_pct = _safe_div(v["win_sum"], matches)
+        wins = int(round(matches * win_rate_pct / 100.0))
+        losses = max(0, matches - wins)
+        role_pct = (_safe_div(matches, total_matches) * 100.0) if total_matches else 0.0
+        kda_avg = _safe_div(v["kda_sum"], v["kda_den"]) if v["kda_den"] else 0.0
+        roles_card.append(
+            {
+                "role": role,
+                "role_pct": f"{role_pct:.0f}%",
+                "kda": f"{kda_avg:.2f}:1" if kda_avg else None,
+                "kills": None,
+                "deaths": None,
+                "assists": None,
+                "wins": wins,
+                "losses": losses,
+                "win_rate": f"{win_rate_pct:.0f}%",
+            }
+        )
+
+    roles_card.sort(key=lambda r: r.get("wins", 0) + r.get("losses", 0), reverse=True)
+    return roles_card
+
+
+def build_profile_stats_fallback(
+    maps: List[Dict[str, Any]],
+    agents: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    total_wins = sum(int(m.get("wins", 0)) for m in maps)
+    total_losses = sum(int(m.get("losses", 0)) for m in maps)
+    total_games = total_wins + total_losses
+
+    avg_kd = _weighted_avg(maps, "kd")
+    avg_kill_round = _weighted_avg(maps, "kill_round")
+    avg_dmg_round = _weighted_avg(maps, "dmg_round")
+    avg_score_round = _weighted_avg(maps, "score_round")
+    win_rate_pct = (_safe_div(total_wins, total_games) * 100.0) if total_games else 0.0
+
+    # Approximate KDA from agent pool if available.
+    kda_wt = 0.0
+    kda_den = 0
+    for a in agents:
+        kda_val = _parse_kda_value(a.get("kda"))
+        matches = int(a.get("matches", 0))
+        if kda_val is None or matches <= 0:
+            continue
+        kda_wt += kda_val * matches
+        kda_den += matches
+    avg_kda = _safe_div(kda_wt, kda_den) if kda_den else 0.0
+
+    top = []
+    if total_games:
+        top.append({"label": "Win rate", "value": f"{win_rate_pct:.1f}%"})
+    if avg_kd:
+        top.append({"label": "K/D ratio", "value": f"{avg_kd:.2f}"})
+    if avg_kda:
+        top.append({"label": "Avg KDA", "value": f"{avg_kda:.2f}:1"})
+    if avg_kill_round:
+        top.append({"label": "Kills/round", "value": f"{avg_kill_round:.2f}"})
+    if avg_dmg_round:
+        top.append({"label": "Dmg/round", "value": f"{avg_dmg_round:.1f}"})
+    if avg_score_round:
+        top.append({"label": "Score/round", "value": f"{avg_score_round:.1f}"})
+
+    breakdown = []
+    if total_games:
+        breakdown.append({"label": "Wins", "value": str(total_wins)})
+        breakdown.append({"label": "Losses", "value": str(total_losses)})
+        breakdown.append({"label": "Games", "value": str(total_games)})
+
+    return {
+        "stats_card": {"top": top, "breakdown": breakdown},
+        "roles_card": build_roles_from_agents(agents),
+    }
 
 
 def _map_key(name: str) -> str:
@@ -1851,6 +1968,10 @@ def player_view(team_key: str, riot_id: str):
     entry = (snap.get("data") or {}).get(season_id, {}).get(riot_id) or {}
 
     agents = normalize_agents(entry.get("agents") or [])
+    maps = normalize_maps(entry.get("maps") or [])
+    profile_stats = entry.get("profile_stats") or {}
+    if not profile_stats:
+        profile_stats = build_profile_stats_fallback(maps, agents)
 
     return render_template(
         "player.html",
@@ -1862,9 +1983,9 @@ def player_view(team_key: str, riot_id: str):
         profile_url=entry.get("profile_url"),
         agents_url=entry.get("agents_url"),
         maps_url=entry.get("maps_url"),
-        profile_stats=entry.get("profile_stats") or {},
+        profile_stats=profile_stats,
         agents=agents,
-        maps=entry.get("maps") or [],
+        maps=maps,
         snapshot_updated_ts=snap.get("updated_ts"),
     )
 

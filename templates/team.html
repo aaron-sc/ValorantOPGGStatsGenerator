@@ -222,7 +222,7 @@
 <div class="section-head" style="margin-top:18px;">
   <h2 class="section-title">Scouting Planner</h2>
   <div class="subtle">
-    Auto-generated priorities and tendencies. The pick list shows maps you should look to pick first, and the ban list shows maps you should look to ban first.
+    Auto-generated priorities and tendencies from the opponent perspective. The pick list shows maps opponents should look to pick first against this team, and the ban list shows maps opponents should look to ban first (this team’s strongest maps).
     Uses your current queue + map filters.
   </div>
 </div>
@@ -230,15 +230,15 @@
 <div class="grid two">
   <div class="card">
     <div class="card-title">
-      <h2 class="h2">Map Pick/Ban Priorities</h2>
+      <h2 class="h2">Opponent Map Pick/Ban Priorities</h2>
       <span class="pill pill-mid">Adjusted</span>
     </div>
     {% if map_plan and (map_plan.pick_targets or map_plan.ban_targets) %}
       <div class="map-plan-grid">
         <div class="map-plan-col">
-          <div class="muted small">Pick Order</div>
+          <div class="muted small">Opponent Pick Order</div>
           <div class="map-rec-list">
-            {% for m in map_plan.pick_targets %}
+            {% for m in map_plan.ban_targets %}
               <div class="map-rec-item">
                 <span class="pill pill-mid">P{{ loop.index }}</span>
                 <span class="strong">{{ m.map }}</span>
@@ -249,9 +249,9 @@
           </div>
         </div>
         <div class="map-plan-col">
-          <div class="muted small">Ban Order</div>
+          <div class="muted small">Opponent Ban Order</div>
           <div class="map-rec-list">
-            {% for m in map_plan.ban_targets %}
+            {% for m in map_plan.pick_targets %}
               <div class="map-rec-item">
                 <span class="pill pill-bad">B{{ loop.index }}</span>
                 <span class="strong">{{ m.map }}</span>
@@ -262,7 +262,7 @@
           </div>
         </div>
       </div>
-      <div class="subtle" style="margin-top:8px;">Adjusted win% smooths small samples.</div>
+      <div class="subtle" style="margin-top:8px;">Adjusted win% smooths small samples. Opponents pick into weak maps and ban away strong maps.</div>
     {% else %}
       <div class="muted">No map plan available.</div>
     {% endif %}
